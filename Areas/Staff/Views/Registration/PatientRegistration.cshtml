@@ -1,0 +1,223 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+
+
+
+@model PatientViewModel
+@inject CommonUtility utils
+
+<div class="page-wrapper">
+    <div class="content">
+<div class="row">
+    <div class="col-md-12">
+                <form asp-action="PatientRegistration" asp-controller="Registration" asp-area="Staff" method="post">
+                    @Html.AntiForgeryToken()
+            <div class="card-box">
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-md-6">
+                        <h4 class="card-title">Patient Registration</h4>
+                        <div class="form-group row">
+
+                                    <input type="checkbox" class="col-xs-5" id="toggleInsidCheckbox">
+
+                            <label class="col-lg-3 col-form-label">Ins.ID:</label>
+                            <div class="col-lg-3">
+                                        <input type="number" class="form-control" id="insid" onkeydown="HandleKeyDownEvent(event)" readonly>
+                            </div>
+                                    <label class="col-md-2 col-form-label">UHID:</label>
+                                    <div class="col-lg-3">
+                                        <input type="number" class="form-control" readonly>
+                                    </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">First Name:</label>
+                            <div class="col-lg-9">
+                                <input asp-for="FirstName" type="text" id="fName" class="form-control" >
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                               
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Last Name:</label>
+                                    <div class="col-lg-9"> 
+                                        <input asp-for="LastName" type="text" id="lName" class="form-control" >
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Contact No.:</label>
+                                    <div class="col-lg-9">
+                                        <input asp-for="Contactno" type="number" class="form-control">
+                                        <span asp-validation-for="Contactno" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Email ID:</label>
+                                    <div class="col-lg-9">
+                                        <input asp-for="Email" type="text" class="form-control">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-form-label">Claim ID.:</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="card-title">Detail Information</h4>
+                        <div class="form-group row">
+                            <div class="col-lg-9">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                                <label class="col-lg-3 col-form-label">Date:</label>
+                                        <input asp-for="CreatedDate" type="date" value="@utils.GetTodayDate()" class="form-control" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                                <label class="col-lg-3 col-form-label">Time:</label>
+                                                <input asp-for="CreatedTime" type="text" value="@utils.GetCurrenTime()" class="form-control" readonly>
+                                    </div>
+                                    <input type="hidden" asp-for="CreatedByUser" value="@User.Identity.Name" />
+                                </div>
+                            </div>
+                        </div>
+                                 <div class="form-group row">
+                                <label class="col-lg-2 col-form-label">Address:</label>
+                                <div class="col-lg-5">
+                                        <input asp-for="Address" type="text" class="form-control" >
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+
+                                </div>
+                            
+                                <div class="col-lg-5">
+                                        <select asp-for="District" asp-items="@utils.GetDistricts()" class="form-control">
+                                            <option disabled selected>Select Districts</option>
+
+                                        </select>
+                                        <span asp-validation-for="District" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                    <label class="col-lg-2 col-form-label">DOB::</label>
+                                    <div class="col-lg-4">
+                                        <input asp-for="Dob" type="date" id="BirthDate" class="form-control DOB" onchange="ShowAge(this)" >
+                                        <span asp-validation-for="Dob" class="text-danger"></span>
+
+                                    </div>
+                                <label class="col-lg-1 col-form-label">Age:</label>
+                                <div class="col-lg-2">
+                                        <input asp-for="Age" type="text" id="Age" class="form-control Age" onchange="calculateBirthDate(this)">
+                                        <span asp-validation-for="Age" class="text-danger"></span>
+
+                                </div>
+                                    <div class="col-md-3">
+                                        <select asp-for="AgeType" id="AgeType" class="form-control AgeType" onchange="calculateBirthDate(this)">
+                                            <option value="years">Years</option>
+                                            <option value="months">Months</option>
+                                            <option value="days">Days</option>
+                                        </select>
+                                        <span asp-validation-for="AgeType" class="text-danger"></span>
+
+                                    </div>
+                                
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-form-label">Gender:</label>
+                                <div class="col-lg-3">
+                                    <select asp-for="Gender" id="Gender" class="form-control">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                        <span asp-validation-for="Gender" class="text-danger"></span>
+
+                                    </div>
+                                <label class="col-lg-2 col-form-label">Ethnicity:</label>
+                                <div class="col-lg-5">
+                                        <select asp-for="Ethnicity" asp-items="@utils.GetEthnicity()" class="form-control">
+                                            <option disabled selected>Select Ethnicity</option>
+
+                                        </select>
+                                        <span asp-validation-for="Ethnicity" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                              <div class="form-group row">
+                            <label class="col-lg-2 col-form-label">PAN NO.:</label>
+                            <div class="col-lg-7">
+                                <input asp-for="Panno" type="text" class="form-control">
+                                 <span asp-validation-for="Panno" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                              
+                      
+                      
+                         </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+        </form>
+     </div>
+ </div>
+</div>
+</div>
+@section Scripts {
+    @{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // Check if alert message exists
+                if ('@TempData["SucessRegisterMsg"]' !== '') {
+                    // Display SweetAlert
+                    Swal.fire({
+                        title: '@TempData["SucessRegisterMsg"]',
+                        showCancelButton: true,
+                        confirmButtonText: 'OK',
+                        CancelButtonText: 'Cancel',
+                    }).then((result) => {
+                        // Redirect when OK button is clicked
+                        if (result.isConfirmed) {
+                            window.location.href = '@Url.Action("OPDRegistration", "OPDTransaction")';
+                        }
+                    });
+                }
+            });
+            function HandleKeyDownEvent(e) {
+                if (event.key === "Enter" || event.keyCode === 13) {
+                    event.preventDefault();
+                    var insid = event.target.value;
+                    $.ajax({
+                        url: "@Url.Action("GetInsureePersonalInfo", "Appointment")",
+                        method: "GET",
+                        data: { insid: insid },
+                        success: function (result) {
+                            $("#fName").val(result.entry[0].resource.name[0].given[0]);
+                            $("#lName").val(result.entry[0].resource.name[0].family);
+                            $("#BirthDate").val(result.entry[0].resource.birthDate);
+                            $("#Gender").val(result.entry[0].resource.gender);
+                            console.log(result.entry[0].resource.id);
+                            ShowAge(e);
+                        },
+                        error: function (error) {
+                            alert(eror);
+                        }
+                    });
+                }
+            }
+
+
+        </script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

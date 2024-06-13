@@ -1,0 +1,36 @@
+﻿
+@inject CommonUtility utils
+@model DoctorSetupViewModel
+@using (Html.BeginCollectionItem("FeeDetails"))
+{
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label>FeeType </label>
+                <select asp-items="@utils.GetFeeType()" class="form-control" asp-for="FeeTypeId" required>
+                </select>
+                <span asp-validation-for="FeeTypeId" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label>Fee Amount</label>
+                <input class="form-control" type="number" asp-for="Fee" required>
+                <span asp-validation-for="Fee" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <button onclick="RemoveView(this)"><i class="fa fa-trash"></i></button>
+
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function RemoveView(e) {
+        $(e).closest(".row").remove();
+    }
+</script>

@@ -1,0 +1,98 @@
+﻿<link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            fixedHeader: true;
+        });
+    });
+</script>
+@model IEnumerable<OPDViewModel>
+@inject CommonUtility utils
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row filter-row">
+            <div class="col-sm-2">
+                <div class="form-group">               
+                    <select class="form-control paymode">
+                        <option disabled selected>Pay Mode</option>
+                        <option>Cash</option>
+                        <option>Insurance</option>
+                        <option>Credit</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <select class="form-control users" asp-items="@utils.GetUsers()">
+                        <option disabled selected>Users</option>
+                    </select>
+                </div>
+            </div>
+          
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="focus-label fromDate">From</label>
+                    <div class="cal-icon">
+                        <input class="form-control" type="date">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="focus-label toDate">To</label>
+                    <div class="cal-icon">
+                        <input class="form-control" type="date">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <a href="#" class="btn btn-success btn-block searchButton ">Search</a>
+            </div>
+        </div>
+        <table id="myTable" class="table table-bordered " style="width:100%">
+            <thead>
+                <tr>
+                 <th> Reg No</th>
+                    <th> Patient Name</th>
+                    <th> Pay Type </th>
+                    <th> Amount </th>
+                    <th> Doctor Name</th>
+                    <th> Fee Type </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem=> item.SrNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)  @Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PayType)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>    
+                        @{
+                            var DoctorName = utils.GetDoctorName(item.ConsultantDr);
+                            var FeeType = utils.GetFeeTypeName(item.FeeType);
+                        }
+                        <td>@DoctorName</td>
+                       
+                        <td>@FeeType</td>
+                    </tr>
+                }
+            
+         </tbody>
+        </table>
+</div>
+</div>
+@section Scripts {
+    @{
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+                </script>
+                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js">
+                </script>
+                <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js">
+                </script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

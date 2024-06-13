@@ -1,0 +1,90 @@
+﻿@model OPDBookingViewModel
+@inject CommonUtility utils
+    <script>
+        $(document).ready(function () {
+            // Check if alert message exists
+        if ('@TempData["PaymentMessage"]' !== '') {
+                // Display SweetAlert
+            Swal.fire({
+                icon: "success",
+                title: '@TempData["PaymentMessage"]',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            }
+        });
+    </script>
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-7 col-6">
+                <h4 class="page-title">OPD Booking Card</h4>
+            </div>
+
+        </div>
+        <div class="card-box profile-header">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="profile-view">
+@*                         <div class="profile-img-wrap">
+                            <div class="profile-img">
+                                <a href="#"><img class="avatar" src="assets/img/doctor-03.jpg" alt=""></a>
+                            </div>
+                        </div> *@
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="profile-info-left">
+                                        <h3 class="user-name m-t-0 mb-0" > @Model.FirstName  @Model.LastName                                        
+                                            </h3>
+                                         <small class="text-muted"> BookingId: @Model.OpdbookingId</small>
+                                        <div class="staff-id">Contact No.: @Model.Contactno</div>
+                                        <div class="staff-id">Age : @Model.Age @Model.AgeType</div>
+                                        <div class="staff-id">Gender : @Model.Gender</div>
+
+                                        <div class="staff-id">Adress : @Model.Address, @Model.District</div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <ul class="personal-info">
+
+                                        <li>
+                                            <span class="title">Department:</span>
+                                            <span class="text">@utils.GetDepartmentName(Int32.Parse(Model.Department))</span>
+                                        </li>
+                                        <li>
+                                            <span class="title">Booked Date:</span>
+                                            <span class="text">@Model.BookingDate</span>
+                                        </li>
+
+                                        <li>
+                                            <span class="title">RefId:</span>
+                                            @if (Model.PayStatus==0)
+                                            {
+
+                                                <a class="link" asp-action="InitiateEsewa" asp-controller="Appointment" asp-route-id="@Model.OpdbookingId" asp-route-amount="50">PayNow (Esewa)</a>
+                                                <a class="link" asp-action="InitiateKhalti" asp-controller="Appointment" asp-route-id="@Model.OpdbookingId">PayNow (Khalti)</a>
+
+                                            }
+                                            @if (Model.PayStatus == 1)
+                                            {
+                                                <span class="text"><a href="#">@Model.refid</a></span>
+                                                <span class="text" style="color:green">(PAID)</span>
+                                            }
+
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

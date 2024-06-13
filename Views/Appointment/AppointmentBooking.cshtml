@@ -1,0 +1,319 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+
+
+@model OPDBookingViewModel
+@inject CommonUtility utils
+@if (TempData["BookingMsg"] != null)
+{
+    <script>
+        alert('@TempData["BookingMsg"]');
+    </script>
+}
+
+
+
+<div class="content mt-5 pt-2">
+        <div class="row">
+
+            <div class="col-md-12">
+            <form asp-action="OpdBooking" asp-controller="Appointment" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="card-box">
+                        <b><h4 class="card-title" style="text-align:center">OPD Booking Form</h4></b>
+                   @*  <center> Current DateTime: @utils.GetCurrentDateTime()</center> *@
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+
+                                <input type="checkbox" class="col-xs-5" id="toggleReadonlyCheckbox" >
+
+                                    <label class="col-md-3 col-form-label">Ins. ID:</label>
+                                    <div class="col-md-3">
+                                        <input asp-for="InsuranceId" type="number" id="targetInput" class="form-control" onkeydown="HandleKeyevent(event)" readonly>
+                                </div>
+
+                                </div>
+                           
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">First Name</label>
+                                    <div class="col-md-9">
+                                        <input asp-for="FirstName" type="text" id="firstName" class="form-control">
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Last Name</label>
+                                    <div class="col-md-9">
+                                        <input asp-for="LastName" type=" text" id="lastName" class="form-control">
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label"></label>
+                                <div class="col-md-8">
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Booking Date:</label>
+                                    <div class="col-md-8">
+                                        <input asp-for="BookingDate" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")"  class="form-control datetimepicker ">
+                                        <span asp-validation-for="BookingDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                             
+                                <div class="form-group row">
+                                    <b><label class="col-md-3 col-form-label">Department</label></b>
+                                    <div class="col-md-8">
+                                        <select asp-for="Department" asp-items="@utils.GetDepartments()" class="form-control">
+                                            <option disabled selected>Select Department</option>
+   
+                                         </select>
+                                        <span asp-validation-for="Department" class="text-danger"></span>
+                                    </div>
+                                </div>                               
+                            </div>
+                        </div>
+                        <h4 class="card-title">Detail Information</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Address</label>
+                                    <div class="col-md-9">
+                                        <input asp-for ="Address" type="text" class="form-control">
+                                        <span asp-validation-for="Address" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Contact No:</label>
+                                    <div class="col-md-9">
+                                        <input asp-for="Contactno" type="number" class="form-control">
+                                        <span asp-validation-for="Contactno" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Email ID:</label>
+                                    <div class="col-md-9">
+                                        <input asp-for="Email" type="text" class="form-control">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label">PAN NO.:</label>
+                                <div class="col-md-6">
+                                        <input asp-for="Panno" type="text" class="form-control">
+                                        <span asp-validation-for="Panno" class="text-danger"></span>
+                                </div>
+                            </div>
+                            </div>
+                          
+
+
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label">District</label>
+                                    <div class="col-md-9">
+                                        <select asp-for="District" asp-items="@utils.GetDistricts()" class="form-control">
+                                        <option disabled selected>Select Districts</option>
+
+                                    </select>
+                                        <span asp-validation-for="District" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label">DOB:</label>
+                                    <div class="col-md-4">
+                                        <input asp-for="Dob" type="date" id="DOB" class="form-control" onchange="CalculateAge(this)">
+                                        <span asp-validation-for="Dob" class="text-danger"></span>
+                                    </div>
+                              
+                                    <label class="col-md-1 col-form-label">Age:</label>
+                                    <div class="col-md-2">
+                                        <input asp-for="Age" type="text" id="AgeInput" class="form-control" onchange="calculateDOB(this)">
+                                        </div>
+                                        <div class="col-md-3">
+                                        <select asp-for="AgeType" id="AgeTypeInput" class="form-control" onchange="calculateDOB(this)">
+                                            <option value="years">Years</option>
+                                            <option value="months">Months</option>
+                                            <option value="days">Days</option>
+                                        </select>
+                                    </div>
+                               
+                                </div>
+
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-form-label">Gender:</label>
+                                <div class="col-lg-3">
+                                        <select asp-for="Gender" id="Gender" class="form-control">
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <label class="col-lg-2 col-form-label">Ethnicity:</label>
+                                <div class="col-lg-5">
+                                        <select asp-for="Ethnicity" asp-items="@utils.GetEthnicity()" class="form-control">
+                                        <option disabled selected>Select Ethnicity</option>
+
+                                    </select>
+                                        <span asp-validation-for="Ethnicity" class="text-danger"></span>
+                                </div>
+                            </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label"></label>
+                                    <div class="col-md-9">
+                                        <br/><br/>
+                                    </div>
+                                </div>
+                               
+
+                            </div>
+
+                      
+                        </div>
+                
+                <div class="text-center">
+                            <button type="submit" name="button" value="Register" class="btn btn-primary">Submit</button>
+
+                </div>
+               
+            </div>
+            </form>
+
+        
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        <script type="text/javascript">
+            function HandleKeyevent(e) {
+
+                if (event.key === "Enter" || event.keyCode === 13) {
+                    event.preventDefault();
+                    var insid = $(e.target).val();
+
+                    $.ajax({
+                        url: "@Url.Action("GetInsureePersonalInfo", "Appointment")",
+                        method: "GET",
+                        data: { insid: insid },
+                        success: function (result) {
+                            $("#firstName").val(result.entry[0].resource.name[0].given[0]);
+                            $("#lastName").val(result.entry[0].resource.name[0].family);
+                            $("#DOB").val(result.entry[0].resource.birthDate);
+                            $("#gender").val(result.entry[0].resource.gender);
+                            console.log(result.entry[0].resource.id);
+                            CalculateAge(e);
+                        },
+                        error: function (error) {
+                            alert(error);
+                        }
+                    });
+
+
+                }
+
+            }
+            function CalculateAge(e) {
+                var data = $("#DOB").val();
+                var today = new Date();
+                var dob = new Date(data);
+                var ageInYears = today.getFullYear() - dob.getFullYear();
+                var monthDiff = today.getMonth() - dob.getMonth();
+                var dayDiff = today.getDate() - dob.getDate();
+
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    ageInYears--;
+                    monthDiff += 12; // Correct month difference
+                }
+
+                // Adjust for the case where current day is before birth day in the same month
+                if (dayDiff < 0) {
+                    monthDiff--;
+                    let daysInLastMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                    dayDiff += daysInLastMonth;
+                }
+
+                var ageInMonths = ageInYears * 12 + monthDiff;
+
+                // Calculate age in days if age is less than a month
+                if (ageInMonths === 0) {
+                    var ageInDays = Math.floor((today - dob) / (1000 * 60 * 60 * 24));
+                    $("#AgeInput").val(ageInDays);
+                    $("#AgeTypeInput").val("days");
+                    return ageInDays;
+                } else if (ageInYears < 1) {
+                    $("#AgeInput").val(ageInMonths);
+                    $("#AgeTypeInput").val("months");
+                    return ageInMonths;
+                } else {
+                    $("#AgeInput").val(ageInYears);
+                    $("#AgeTypeInput").val("years");
+                    return ageInYears;
+                }
+
+            }
+            function calculateDOB(e) {
+                var age = $("#AgeInput").val();
+                var ageType = $("#AgeTypeInput").val();
+
+                var today = new Date();
+                var dob = new Date();
+
+                if (ageType == "years") {
+                    dob.setFullYear(today.getFullYear() - age);
+                } else if (ageType == "months") {
+                    let totalMonths = (today.getFullYear() * 12 + today.getMonth()) - age;
+                    dob.setFullYear(Math.floor(totalMonths / 12));
+                    dob.setMonth(totalMonths % 12);
+                } else if (ageType == "days") {
+                    dob.setDate(today.getDate() - age);
+                }
+
+                // Parse the input date string into a Date object
+                var inputDate = new Date(dob);
+
+
+                // Extract year, month, and day from the Date object
+                var year = inputDate.getFullYear();
+                var month = (inputDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+                var day = inputDate.getDate().toString().padStart(2, '0');
+
+                // Return the formatted date string
+                var data = `${year}-${month}-${day}`;
+                $("#DOB").val(data);
+
+            }
+            $(document).ready(function () {
+                $('#toggleReadonlyCheckbox').on('click', function () {
+                    if ($(this).is(':checked')) {
+                        $('#targetInput').removeAttr('readonly');
+                    } else {
+                        $('#targetInput').attr('readonly', 'readonly');
+                    }
+
+                });
+            });
+
+
+
+        </script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

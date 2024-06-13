@@ -1,0 +1,79 @@
+﻿
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Check if alert message exists
+        if ('@TempData["AddDoctorMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                title: '@TempData["AddDoctorMsge"]',
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                CancelButtonText: 'Cancel',
+            });
+        }
+    });
+    </script>
+    @model DoctorSetupViewModel
+@inject CommonUtility utils
+ <div class="page-wrapper">
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <h4 class="page-title">Add Doctor</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                     <form asp-action="DoctorSetup" asp-controller="Components" asp-area="Staff">
+                      <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">                       
+                        <label>Full Name: <span class="text-danger">*</span></label>
+                        <input asp-for=DoctorName class="form-control" type="text" required>
+                        <span asp-validation-for="DoctorName" class="text-danger"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label>Department <span class="text-danger">*</span></label>
+                        <select asp-for=DepartmentId asp-items="@utils.GetDepartments()" class="form-control" required>
+                            <option disabled selected>Select Department</option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+
+                    </div>
+                    <h4 class="page-item">Fee Type Setup &nbsp;&nbsp; <button type="button" class="btn btn-primary" id="AddMore">Add</button> </h4>
+                     <div class="FeeType">
+
+                     </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary submit-btn">Create Doctor</button>
+                    </div>
+                     </form>
+                    </div>
+                </div>
+            </div>
+			
+ </div>
+
+@section Scripts {
+    @{
+        <!--Add Partial View-->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#AddMore").click(function () {
+                    $.ajax({
+                        url: "@Url.Action("GetFeeTypeViews", "Components")",
+                        method: "Get",
+                        success: function (result) {
+                            $(".FeeType").append(result);
+                        },
+                        error: function () {
+                            alert('failed');
+                        }
+                    });
+                });
+            })
+        </script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
