@@ -23,6 +23,9 @@ builder.Services.AddTransient<ApiService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IOPDBookingService, OPDBookingService>();
 builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRespository>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRespository>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptRepository>();
+
 builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IRegistrationRepo, AppointmentBooking.Areas.Staff.Services.Repository.RegistrationRepo>();
 builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IComponentSetupRepo, AppointmentBooking.Areas.Staff.Services.Repository.ComponentSetupRepo>();
 builder.Services.AddHttpContextAccessor();
@@ -67,7 +70,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=LogIn}/{id?}"
+      pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}"
     );
     endpoints.MapControllerRoute(
          name: "default",

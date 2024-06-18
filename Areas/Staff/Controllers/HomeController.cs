@@ -46,7 +46,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("UserShift", user.Shift);
                     HttpContext.Session.SetString("UserDept", user.Department);
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
 
             }
@@ -59,6 +59,11 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         {
             
             return View();
+        }
+        [Authorize]
+        public IActionResult Dashboard()
+        {
+            return RedirectToAction("Index");
         }
         [Authorize]
         public async Task<IActionResult> LogOut()

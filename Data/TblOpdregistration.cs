@@ -29,7 +29,7 @@ namespace AppointmentBooking.Data
         public double? Amount { get; set; }
         public double? PaidAmt { get; set; }
         public int? RefererName { get; set; }
-        public string? CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string? CreatedTime { get; set; }
         public string? CreatedByUser { get; set; }
 

@@ -58,10 +58,13 @@ namespace AppointmentBooking.Areas.Staff.Models
         public double? Amount { get; set; }
         public double? PaidAmt { get; set; }
         public int? RefererName { get; set; }
-        public string? CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string? CreatedTime { get; set; }
         public string? CreatedByUser { get; set; }
 
+        public string? PatientName { get; set; }
+        public string? DoctorName { get; set; }
+        public string? FeeTypeName { get; set; }
         public virtual TblCaseType? CaseTypeNavigation { get; set; }
         public virtual TblDoctorSetup? ConsultantDrNavigation { get; set; }
         public virtual TblDepartment? DepartmentNavigation { get; set; }

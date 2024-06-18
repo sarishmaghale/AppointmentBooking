@@ -1,16 +1,10 @@
 ﻿
-
-
 @model OPDViewModel
 @inject CommonUtility utils
 @{
-    if (TempData["OPDMSge"] != null)
-    {
-            <script> alert('@TempData["OPDMSge"]')</script>
-    }
+    var date = utils.GetTodayDate();
+  
 }
-
-
 <div class="page-wrapper">
     <div class="content">
         <div class="row">
@@ -32,7 +26,7 @@
 
                                    </div>
                                     <div class="col-md-4">
-                                        <input asp-for="CreatedDate" type="date" class="form-control" value="@utils.GetTodayDate()" readonly>
+                                        <input asp-for="CreatedDate" type="datetime" class="form-control" value="@date.ToShortDateString()" readonly>
 
                                     </div>
                                     <div class="col-md-3">
@@ -65,9 +59,7 @@
                                     </div>
                                     <label class="col-md-3 col-form-label">OPD Queue:</label>
                                     <div class="col-md-3">
-                                        @{
-                                            var date = utils.GetTodayDate();
-                                        }
+                                      
                                         <input class="form-control" type="text" asp-for="Opdqueue" value="@utils.GetOPDQueue(date)" placeholder="@utils.GetOPDQueue(date)" readonly/>
                                     </div>
                                 </div>
@@ -273,8 +265,20 @@
     </div>
 </div>
 @section Scripts {
-    @{
+   
         <script type="text/javascript">
+        $(document).ready(function () {
+            // Check if alert message exists
+            if ('@TempData["OPDMSge"]' !== '') {
+                // Display SweetAlert
+                Swal.fire({
+                    title: '@TempData["OPDMSge"]',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    CancelButtonText: 'Cancel',
+                });
+            }
+        });
             function HandleUhidKeyEvent(e) {
                 if (event.key === "Enter" || event.keyCode === 13) {
                     event.preventDefault();
@@ -346,6 +350,7 @@
                 });
             }
         </script>
+    @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

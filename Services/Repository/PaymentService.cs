@@ -148,7 +148,7 @@ namespace AppointmentBooking.Services.Repository
             var responseContent = await response.Content.ReadAsStringAsync();
             dynamic jsonObject = JsonConvert.DeserializeObject(responseContent);
             string status = jsonObject.status;
-            if (status == "COMPLETE")
+            if (status == "Completed")
             {
 
                 OPDBookingViewModel model = new OPDBookingViewModel()

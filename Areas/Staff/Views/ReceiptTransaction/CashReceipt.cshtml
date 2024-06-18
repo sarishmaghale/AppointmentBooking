@@ -1,0 +1,302 @@
+﻿@inject CommonUtility utils
+<div class="page-wrapper">
+    <div class="content">
+<div class="row">
+    <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-md-2">UHID:</label>
+                           <input type="number" class="col-md-2"/>
+                         <label class="col-md-2">OPD:</label>
+                                <input type="number" class="col-md-2" />
+                          <label class="col-md-2 ">IPD:</label>
+                                <input type="number" class="col-md-2" />
+                    </div>
+                            <div class="form-group row">
+                                <label class="col-md-2">PayType:</label>
+                                <input type="text" id="firstName" class="col-md-3">
+                            <label class="col-md-2">Name:</label>
+                            <input type="text" id="firstName" class="col-md-5">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3">Consultant Dr.:</label>
+                                <input type="text" id="lastName" class="col-md-6">
+                            </div>
+                </div>
+                <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-2">Date:</label>
+                                <input class="col-md-3" type="datetime" value="@utils.GetTodayDate().ToShortDateString()" />
+                                <label class="col-md-2">Rec.No:</label>
+                                <input class="col-md-3" type="text" readonly />
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2">Age:</label>
+                                <input class="col-md-3" type="text" />
+                                <label class="col-md-2">Gender:</label>
+                                <input class="col-md-3" type="text" readonly />
+                            </div>
+                        <div class="form-group row">
+                            <label class="col-md-2">Address:</label>
+                            <input class="col-md-5" type="text" />
+                        </div>
+                </div>
+            </div>
+    </div>
+</div>
+     <div class="row">
+    <div class="col-sm-8">
+            <table class="table table-bordered">
+                <caption> Cash Receipt </caption>
+                <tr align="center">
+                        <input type="hidden" class="form-control" placeholder="pro_price" size="35px" id="pro_price" name="pro_price">
+                        <input type="hidden" class="form-control" placeholder="total_cost" size="35px" id="total_cost" name="total_cost">
+
+                    <td>
+                            <select class="form-control" id="testGroup" name="testGroup" asp-items="@utils.GetTestGroup()" onchange="TestGroupChange(this)" required>
+                                <option selected disabled>TestGroup</option>
+                            </select>
+                       
+                    </td>
+                    <td>
+                        <select class="form-control" id="testname" name="testname" onchange="TestChange(this)" required>
+                            <option disabled selected>Test</option>
+                        </select>                                       
+                    </td>
+                   
+                    
+                    <td>
+                        <input type="number" class="form-control pro_price" id="qty" name="qty" placeholder="qty" min="1" style="width:50px" onchange="QuantityChange(this)" required>
+                    </td>
+                
+                    <td>
+                        <button class="btn btn-success" type="button" onclick="addproduct()">
+                            Add
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        
+        <table class="table table-bordered" id="product_list">
+            <thead>
+                <tr>
+                    <th style="width: 40px">Remove</th>
+                    <th>Test Group</th>
+                    <th>Test Name</th>
+                    <th>Unit price</th>
+                    <th>Qty</th>
+                    <th>Discount</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="col-sm-4">
+        <div class="col s12 m6 offset-m4">
+            <div class="form-group" align="left">
+                <label class="form-label">Total</label>
+                <input type="text" class="form-control" placeholder="Total" id="total" name="total" size="30px" required disabled>
+            </div>
+            <div class="card" align="right">
+
+                <button type="button" id="save" class="btn btn-info" onclick="addProject()">
+                    Print Invoice
+                </button>
+                <button type="button" id="clear" class="btn btn-warning" onclick="reSet()">Reset</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+     </div>
+</div>
+<hr />
+
+
+@section scripts {
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    <script>
+        var totalAmt = 0;
+        var discount = 0;
+        var grosstotal = 0;
+        var cost = 0;
+        var qtye = 0;
+        var barcode = 0;
+            function TestGroupChange(e) {
+                var grpId = $(e).val();
+                $.ajax({
+                    url: "@Url.Action("GetTestOfGroup", "ReceiptTransaction")",
+                    method: "Get",
+                    data: { TestGroupId: grpId },
+                    success: function (result) {
+                        $("#testname").empty();
+                        $("#pro_price").val("");
+                        $("#total_cost").val("");
+                        $("#testname").append("<option disabled selected> - </option>");
+                        $.each(result, function (index, row) {
+                            $("#testname").append("<option value='" + row.testId + "'>" + row.testName + "</option>");
+                        });
+                    },
+                    error: function () {
+                        alert('failed');
+                    },
+                });
+            }
+
+            function TestChange(e) {
+                var testid = $(e).val();
+                $.ajax({
+                    url: "@Url.Action("GetTestPrice", "ReceiptTransaction")",
+                    method: "Get",
+                    data: { TestId: testid },
+                    success: function (result) {
+                        $("#pro_price").val("");
+                        $("#qty").val("");
+                        $("#pro_price").val(result);
+                    },
+                    error: function () {
+                        alert(error.message);
+                    },
+                })
+            }
+            function QuantityChange(e) {
+                var qty = $(e).val();
+                var price = $("#pro_price").val();
+                var total = Number(price * qty);
+                $("#total_cost").val(total);
+            }
+
+            getProductcode();
+        
+
+
+
+            function addproduct() {
+                var sum1 = (
+                    Number($("#pro_price").val()) * Number($("#qty").val())
+                );
+
+                var product = {
+                    testGroup: $("#testGroup option:selected").text(),
+                    testname: $("#testname option:selected").text(),
+                    pro_price: $("#pro_price").val(),
+                    qty: $("#qty").val(),
+                    discount: 0,
+                    total_cost: $("#total_cost").val(),
+                    button: '<button  type="button" class="btn btn-warning btn-xs")">delete</button>'
+                };
+                addRow(product);
+                //$('#frmInvoice')[0].reset();
+            }
+        
+
+            function addRow(product) {
+                var qty = Number($("#qty").val());
+                if ($('#testGroup').val().length === 0) {
+                    $.alert({
+                        title: 'Error!',
+                        content: "Please Enter the data",
+                        type: 'red',
+                        autoClose: 'ok|2000'
+                    });
+                    return false;
+                } 
+                else {
+                    var $tableB = $('#product_list tbody');
+                    var $row = $(
+                        "<tr><td><Button type='button' class='btn btn-warning btn-xs' name='record' id='deleterow' >Delete</td>" +
+                        "<td>" +
+                        product.testGroup +
+                        "</td><td class=\"price\">" +
+                        product.testname +
+                        "</td><td>" +
+                        product.pro_price +
+                        "</td>  <td>" +
+                        product.qty +
+                        "</td>  <td>" +
+                        product.discount +
+                        "</td> <td>" +
+                        product.total_cost +
+                        "</td></tr>");
+                    $row.data("testGroup", product.product_code);
+                    $row.data("testname", product.product_name);
+                    $row.data("pro_price", product.price);
+                    $row.data("qty", product.qty);
+                    $row.data("discount", product.discount);
+                    $row.data("total_cost", product.total_cost);
+                    var cost = Number(product.total_cost);
+                    totalAmt += cost;
+                    $('#total').val(totalAmt);
+                    discount += Number(product.discount);
+                    $('#discounttotal').val(discount);
+                    console.log(product.total_cost);
+                    grandtotal = totalAmt - discount;
+                    $('#grandtotal').val(grandtotal);
+                    qtye += Number(product.qty);
+                    $row.find('#deleterow').click(function (event) {
+                    //var $tableB = $('#product_list tbody');
+                    var cost = Number($row.data("total_cost"));
+                    debugger;
+                    var newCost = totalAmt - cost;
+                     totalAmt = newCost;
+                    $("#total").val(newCost);
+                        deleteRow($row);
+                    });
+                    $tableB.append($row);
+                    $("#testGroup").focus();
+                    return true;
+                }
+            }
+
+            function addProject() {
+                var table_data = new Array();
+                $('#product_list tbody tr').each(function (row, tr) {
+                    var testGroup = parseInt($(tr).find('td:eq(1)').text());
+                    var testname = $(tr).find('td:eq(2)').text();
+                    var sum = {
+                        //these records i am going to add into sales table
+                        'testGroup': testGroup,
+                        'testname': testname,
+                        'pro_price': $(tr).find('td:eq(3)').text(),
+                        'qty': $(tr).find('td:eq(4)').text(),
+                        'total_cost': $(tr).find('td:eq(6)').text()
+                    };
+                    table_data.push(sum);
+                });
+                //these records i am going to add into sales
+                var total = $("#total").val();
+                console.log(table_data);
+                $.post("/home/SaveNew",
+                    {
+                        data: JSON.stringify({
+                            total: $("#total").val(),
+                            data: table_data
+                        })
+                    },
+                    function (data, status) {
+                        console.log(data);
+                        alert("Status: " + status + "\nMessage: " + data.message);
+                        window.location.href = "@Url.Action("Print", "Home")"
+                    });
+
+            }
+            function deleteRow($row) {
+
+                $row.remove();
+            }
+        
+       
+
+    </script>
+
+
+}

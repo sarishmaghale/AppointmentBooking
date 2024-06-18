@@ -33,12 +33,7 @@ namespace AppointmentBooking.Controllers
      
         public async Task<IActionResult> GetInsureePersonalInfo(string insid)
         {
-            string url = "https://imis.hib.gov.np/api/api_fhir/Patient/?identifier="+ insid;
-            string login = "baghaudahf";
-            string psw = "jJPEQmFdT0zX3KE6S4ct";
-            string HKeyword = "remote-user";
-            string HValue = "bhfhir";
-            var result = await apiService.GetInsureePersonalInfo(url, login, psw, HKeyword, HValue);
+            var result = await apiService.GetInsureePersonalInfo(insid);
             return Json(result);
         }
 

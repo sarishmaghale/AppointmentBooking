@@ -20,20 +20,15 @@ namespace AppointmentBooking.Services
             db = _db;
         }
 
-        public string GetTodayDate()
+        public DateTime GetTodayDate()
         {
-           return DateTime.Now.ToShortDateString();
+           var date= DateTime.Now.Date;
+            return date;
         }
         public string GetCurrenTime()
         {
-            return DateTime.Now.ToString("HH:mm:ss tt");
-        }
-        public int CalculateAge(DateOnly Date)
-        {
-            int today = DateTime.Now.Year;
-            return today - Date.Year;
-        }
-
+            return DateTime.Now.ToString("hh:mm tt");
+        }      
         public SelectList GetDepartments()
         {
             var dept = db.TblDepartments.ToList();
@@ -60,7 +55,22 @@ namespace AppointmentBooking.Services
             var data = new SelectList(ethnicity, "ItemValue", "ItemValue");
             return data;
         }
-
+        public SelectList GetTestGroup()
+        {
+            var group = db.TblTestGroupSetups.ToList();
+            var data = new SelectList(group, "TestGroupId", "TestGroupName");
+            return data;
+        }
+        public string GetTestGroupName(int TestGroupId)
+        {
+            var testGroupName =db.TblTestGroupSetups.Where(x=> x.TestGroupId==TestGroupId).Select(x=> x.TestGroupName).FirstOrDefault();
+            return testGroupName;
+        }
+        public string GetTestName(int TestId)
+        {
+            var testName = db.TblTestSetups.Where(x => x.TestId == TestId).Select(x => x.TestName).FirstOrDefault();
+            return testName;
+        }
         public async Task<IEnumerable<PatientViewModel>> GetValuesOnDepartment(int DepartmentId)
         {
             var result = await (from doctors in db.TblDoctorSetups
@@ -95,12 +105,16 @@ namespace AppointmentBooking.Services
             return data;
         }
 
-        public int GetOPDQueue(string Date)
+        public int GetOPDQueue(DateTime? Date)
         {
            int maxQueue=db.TblOpdregistrations.Where(item=> item.CreatedDate==Date).Max(item => item.Opdqueue)??0;
             return (maxQueue + 1);
         }
-
+        public decimal GetMaximumUhid()
+        {
+            decimal maxUhid = db.TblOpdregistrations.Max(item => item.Uhid) ?? 0;
+            return (maxUhid + 1);
+        }
         public SelectList GetCaseType()
         {
             var cases = db.TblCaseTypes.ToList();

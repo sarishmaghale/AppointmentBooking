@@ -26,6 +26,8 @@ namespace AppointmentBooking.Data
         public virtual DbSet<TblOpdbooking> TblOpdbookings { get; set; } = null!;
         public virtual DbSet<TblOpdregistration> TblOpdregistrations { get; set; } = null!;
         public virtual DbSet<TblPatientRegistration> TblPatientRegistrations { get; set; } = null!;
+        public virtual DbSet<TblTestGroupSetup> TblTestGroupSetups { get; set; } = null!;
+        public virtual DbSet<TblTestSetup> TblTestSetups { get; set; } = null!;
         public virtual DbSet<TblTransactionStatus> TblTransactionStatuses { get; set; } = null!;
         public virtual DbSet<TblUserAccount> TblUserAccounts { get; set; } = null!;
 
@@ -233,7 +235,7 @@ namespace AppointmentBooking.Data
 
                 entity.Property(e => e.CreatedByUser).HasMaxLength(50);
 
-                entity.Property(e => e.CreatedDate).HasMaxLength(50);
+                entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.CreatedTime).HasMaxLength(50);
 
@@ -361,6 +363,29 @@ namespace AppointmentBooking.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.Panno).HasColumnName("PANNo");
+            });
+
+            modelBuilder.Entity<TblTestGroupSetup>(entity =>
+            {
+                entity.HasKey(e => e.TestGroupId);
+
+                entity.ToTable("tblTestGroupSetup");
+
+                entity.Property(e => e.TestGroupName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblTestSetup>(entity =>
+            {
+                entity.HasKey(e => e.TestId);
+
+                entity.ToTable("tblTestSetup");
+
+                entity.Property(e => e.TestName).HasMaxLength(50);
+
+                entity.HasOne(d => d.TestGroup)
+                    .WithMany(p => p.TblTestSetups)
+                    .HasForeignKey(d => d.TestGroupId)
+                    .HasConstraintName("FK__tblTestSe__TestG__2A164134");
             });
 
             modelBuilder.Entity<TblTransactionStatus>(entity =>

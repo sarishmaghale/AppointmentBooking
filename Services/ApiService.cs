@@ -15,8 +15,13 @@ namespace AppointmentBooking.Services
         {
             client = _client;
         }
-        public async Task<InsureePatientInfo> GetInsureePersonalInfo(string url, string login, string psw, string HKeyword, string HValue)
+        public async Task<InsureePatientInfo> GetInsureePersonalInfo(string insid)
         {
+            string url = "https://imis.hib.gov.np/api/api_fhir/Patient/?identifier=" + insid;
+            string login = "baghaudahf";
+            string psw = "jJPEQmFdT0zX3KE6S4ct";
+            string HKeyword = "remote-user";
+            string HValue = "bhfhir";
             InsureePatientInfo data = new InsureePatientInfo();
             var byteArray = Encoding.ASCII.GetBytes($"{login}:{psw}");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));

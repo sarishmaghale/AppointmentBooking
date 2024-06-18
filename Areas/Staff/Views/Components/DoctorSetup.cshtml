@@ -1,18 +1,4 @@
 ﻿
-<script type="text/javascript">
-    $(document).ready(function () {
-        // Check if alert message exists
-        if ('@TempData["AddDoctorMsge"]' !== '') {
-            // Display SweetAlert
-            Swal.fire({
-                title: '@TempData["AddDoctorMsge"]',
-                showCancelButton: true,
-                confirmButtonText: 'OK',
-                CancelButtonText: 'Cancel',
-            });
-        }
-    });
-    </script>
     @model DoctorSetupViewModel
 @inject CommonUtility utils
  <div class="page-wrapper">
@@ -56,24 +42,40 @@
  </div>
 
 @section Scripts {
-    @{
-        <!--Add Partial View-->
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#AddMore").click(function () {
-                    $.ajax({
-                        url: "@Url.Action("GetFeeTypeViews", "Components")",
-                        method: "Get",
-                        success: function (result) {
-                            $(".FeeType").append(result);
-                        },
-                        error: function () {
-                            alert('failed');
-                        }
-                    });
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Check if alert message exists
+            if ('@TempData["AddDoctorMsge"]' !== '') {
+                // Display SweetAlert
+                Swal.fire({
+                    title: '@TempData["AddDoctorMsge"]',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    CancelButtonText: 'Cancel',
                 });
-            })
-        </script>
+            }
+        });
+    </script>
+    <!--Add Partial View-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#AddMore").click(function () {
+                $.ajax({
+                    url: "@Url.Action("GetFeeTypeViews", "Components")",
+                    method: "Get",
+                    success: function (result) {
+                        $(".FeeType").append(result);
+                    },
+                    error: function () {
+                        alert('failed');
+                    }
+                });
+            });
+        })
+    </script>
+    @{
+       
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

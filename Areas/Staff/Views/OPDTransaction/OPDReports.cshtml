@@ -1,57 +1,59 @@
 ﻿<link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
-
-<script>
-    $(document).ready(function () {
-        $('#myTable').DataTable({
-            fixedHeader: true;
-        });
-    });
-</script>
 @model IEnumerable<OPDViewModel>
 @inject CommonUtility utils
 
 <div class="page-wrapper">
     <div class="content">
-        <div class="row filter-row">
-            <div class="col-sm-2">
-                <div class="form-group">               
-                    <select class="form-control paymode">
-                        <option disabled selected>Pay Mode</option>
-                        <option>Cash</option>
-                        <option>Insurance</option>
-                        <option>Credit</option>
-                    </select>
-                </div>
-            </div>
+        @* <form asp-action="FilterOPDReports" asp-controller="OPDTransaction" asp-area="Staff" method="POST"> *@
 
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <select class="form-control users" asp-items="@utils.GetUsers()">
-                        <option disabled selected>Users</option>
-                    </select>
-                </div>
-            </div>
-          
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="focus-label fromDate">From</label>
-                    <div class="cal-icon">
-                        <input class="form-control" type="date">
+        <div class="row filter-row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select class="form-control paymode" name="paytype" id="paytype" >
+                       
+                            <option disabled selected>Pay Mode</option>
+                        <option value="all">All</option>
+                            <option>Cash</option>
+                            <option>Insurance</option>
+                            <option>Credit</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="focus-label toDate">To</label>
-                    <div class="cal-icon">
-                        <input class="form-control" type="date">
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select class="form-control users" asp-items="@utils.GetUsers()" name="user" id="user" >
+                            <option disabled selected>Users</option>
+                            <option value="all">All</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-4">
-                <a href="#" class="btn btn-success btn-block searchButton ">Search</a>
-            </div>
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="focus-label fromDate">From</label>
+                        <div class="">
+                            <input class="form-control" type="date" name="fromDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="focus-label toDate">To</label>
+                        <div class="">
+                            <input class="form-control" type="date" name="toDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-success btn-block searchButton ">Search</button>
+                </div>
+           
+            
         </div>
+        @* </form> *@
+
+        <button type="submit" id="exportButton" class="btn btn-primary">Export to Excel</button>
         <table id="myTable" class="table table-bordered " style="width:100%">
             <thead>
                 <tr>
@@ -64,20 +66,16 @@
                 </tr>
             </thead>
             <tbody>
+                
                 @foreach(var item in Model)
                 {
                     <tr>
                         <td>@Html.DisplayFor(modelItem=> item.SrNo)</td>
-                        <td>@Html.DisplayFor(modelItem => item.FirstName)  @Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PatientName)</td>
                         <td>@Html.DisplayFor(modelItem => item.PayType)</td>
                         <td>@Html.DisplayFor(modelItem => item.Amount)</td>    
-                        @{
-                            var DoctorName = utils.GetDoctorName(item.ConsultantDr);
-                            var FeeType = utils.GetFeeTypeName(item.FeeType);
-                        }
-                        <td>@DoctorName</td>
-                       
-                        <td>@FeeType</td>
+                        <td>@Html.DisplayFor(modelItem=> item.DoctorName)</td>
+                        <td>@Html.DisplayFor(modelItem=> item.FeeTypeName)</td>
                     </tr>
                 }
             
@@ -85,14 +83,115 @@
         </table>
 </div>
 </div>
-@section Scripts {
-    @{
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
-                </script>
-                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js">
-                </script>
-                <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js">
-                </script>
+
+@* <div class="modal" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+             <div id="modalContent">
+
+             </div>
+
+            </div>
+        </div>
+    </div>
+</div> *@
+    @section Scripts {
+      <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>     
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+     <script>
+            $(document).ready(function () {
+                var table = $('#myTable').DataTable({
+                    ordering: true,
+                    info: false, // Disable info display for simplicity
+                    serverSide: true,   
+                     searching: false,
+
+                    ajax: {
+                        url: '@Url.Action("FilterOPDReports", "OPDTransaction", new { area = "Staff" })',
+                        type: 'POST',
+                        data: function (d) {
+                            // Pass filter parameters from form inputs
+                            d.paytype = $('#paytype').val();
+                            d.user = $('#user').val();
+                            d.fromDate = $('input[name="fromDate"]').val();
+                            d.toDate = $('input[name="toDate"]').val();
+                        },
+                        error: function (xhr, error, thrown) {
+                            console.log('AJAX error:', error);
+                        }
+                    },
+                    columns: [
+                        { data: 'srNo', name: 'SrNo' },
+                        { data: 'patientName', name: 'PatientName' },
+                        { data: 'payType', name: 'PayType' },
+                        { data: 'amount', name: 'Amount' },
+                        { data: 'doctorName', name: 'DoctorName' },
+                        { data: 'feeTypeName', name: 'FeeTypeName' }
+                        // {data: null,                  
+                        // render: function (data, type, row) {
+                        // return '<button class="btn btn-secondary viewOPDdetails" id="viewOPDdetails data-id="' + row.srNo + '">View</button>';
+                        // }
+                    
+                    ]
+                });
+
+               
+
+                // Event listener for the search button click
+                $('.searchButton').on('click', function (e) {
+                    e.preventDefault();
+                    // Reload DataTable with new filters
+                    table.ajax.reload();
+                });
+
+                $('#exportButton').on('click', function () {
+                    var columnsToExport = ['srNo', 'patientName', 'payType', 'amount', 'doctorName', 'feeTypeName'];
+                    // Get DataTable data
+                    var tableData = table.rows().data().toArray();
+                    // Extract only the columns you want to export
+                    var dataToExport = tableData.map(function (row) {
+                        return columnsToExport.map(function (col) {
+                            return row[col];
+                        });
+                    });
+                    // Create workbook
+                    var wb = XLSX.utils.book_new();
+                    var ws = XLSX.utils.aoa_to_sheet([columnsToExport].concat(dataToExport)); // Concatenate headers with data
+                    // Add worksheet to workbook
+                    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                    // Export workbook to Excel file
+                    var fileName = "OPDReports.xlsx";
+                    XLSX.writeFile(wb, fileName);
+                });
+                // $('#myTable tbody').on('click', '.viewOPDdetails', function () {
+                // var srNo = $(this).data('id');
+                //     alert(srNo);
+
+                // $.ajax({
+                //     url: '@Url.Action("ViewOPDDetails", "OPDTransaction", new { area = "Staff" })',
+                //     type: 'GET',
+                //     data: { srNo: srNo },
+                //     success: function (data) {
+                        
+                //         $("#myModal").modal('show');
+                //     },
+                //     error: function (xhr, status, error) {
+                //         console.error('Error fetching details:', error);
+                //     }
+                // });
+                    
+                // });
+            });
+        </script>
+        @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+
+        }
 }
