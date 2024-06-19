@@ -7,6 +7,7 @@ namespace AppointmentBooking.Data
     {
         public TblPatientRegistration()
         {
+            TblCashReceipts = new HashSet<TblCashReceipt>();
             TblOpdregistrations = new HashSet<TblOpdregistration>();
         }
 
@@ -28,6 +29,7 @@ namespace AppointmentBooking.Data
         public string? CreatedByUser { get; set; }
         public string? AgeType { get; set; }
 
+        public virtual ICollection<TblCashReceipt> TblCashReceipts { get; set; }
         public virtual ICollection<TblOpdregistration> TblOpdregistrations { get; set; }
     }
 }

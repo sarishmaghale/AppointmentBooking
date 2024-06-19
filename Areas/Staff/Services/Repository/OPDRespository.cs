@@ -159,5 +159,20 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
           }).ToListAsync();
             return data;
         }
+
+        public async Task<OPDViewModel> GetPatientsByOPD(int OPDNo)
+        {
+          var data=  await db.TblOpdregistrations.Where(x => x.SrNo == OPDNo).Select(m => new OPDViewModel()
+            {
+                PatientName = m.FirstName + " " + m.LastName,
+                Address = m.Address,
+                Age = m.Age,
+                AgeType=m.AgeType,
+                Uhid=m.Uhid,
+                Gender = m.Gender,
+                DoctorName = db.TblDoctorSetups.Where(y => y.DoctorId == m.ConsultantDr).Select(y => y.DoctorName).FirstOrDefault(),
+            }).FirstOrDefaultAsync();
+            return data;
+        }
     }
 }

@@ -1,0 +1,115 @@
+﻿
+@model ReceiptViewModel
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-7 col-8 text-right m-b-30">
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-white">CSV</button>
+                    <button class="btn btn-white">PDF</button>
+                    <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row custom-invoice">
+                            <div class="col-6 col-sm-6 m-b-20">
+                                <img src="~/assets/img/logo.png" class="inv-logo" alt="">
+                                <ul class="list-unstyled">
+                                    <li>Hospital</li>
+                                    <li>Bharatpur-12,Chitwan</li>
+                                    <li>987806584</li>
+                                </ul>
+                            </div>
+                            <div class="col-6 col-sm-6 m-b-20">
+                                <div class="invoice-details">
+                                    <h3 class="text-uppercase">ReceiptNo #@Model.ReceiptNo</h3>
+                                    <ul class="list-unstyled">
+                                        <li>Date: <span>@Model.CreatedDate</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-6 m-b-20">
+                                <div class="invoices-view">
+                                    <ul class="list-unstyled invoice-payment-details">
+                                        <li>Patient name: <span>@Model.PatientName</span></li>
+                                        <li>Address: <span>@Model.Address</span></li>
+                                        <li>Age <span>@Model.Age</span></li>
+                                        <li>Consultant Dr.: <span>@Model.DoctorName</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table" style="background-color: #f2f2f2">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ITEM</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>UNIT COST</th>
+                                        <th>QUANTITY</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var item in Model.ReceiptDetails)
+                                    {
+                                        <tr>
+                                            <td>1</td>
+                                            <td>@Html.DisplayFor(modelItem=> item.TestGroup)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.TestName)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.TestPrice)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <div class="row invoice-payment">
+                                <div class="col-sm-7">
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="m-b-20">
+                                        <h6>Total due</h6>
+                                        <div class="table-responsive no-border">
+                                            <table class="table mb-0">
+                                                <tbody>
+                                                    <tr>
+                                                        <th>Subtotal:</th>
+                                                        <td class="text-right">@Model.TotalAmount</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Tax: <span class="text-regular">(10%)</span></th>
+                                                        <td class="text-right"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Total:</th>
+                                                        <td class="text-right text-primary">
+                                                            <h5>@Model.TotalAmount</h5>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>

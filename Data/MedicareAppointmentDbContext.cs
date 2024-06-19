@@ -18,6 +18,7 @@ namespace AppointmentBooking.Data
 
         public virtual DbSet<OpdviewTable> OpdviewTables { get; set; } = null!;
         public virtual DbSet<TblCaseType> TblCaseTypes { get; set; } = null!;
+        public virtual DbSet<TblCashReceipt> TblCashReceipts { get; set; } = null!;
         public virtual DbSet<TblDepartment> TblDepartments { get; set; } = null!;
         public virtual DbSet<TblDoctorFeeTypeSetup> TblDoctorFeeTypeSetups { get; set; } = null!;
         public virtual DbSet<TblDoctorSetup> TblDoctorSetups { get; set; } = null!;
@@ -26,6 +27,7 @@ namespace AppointmentBooking.Data
         public virtual DbSet<TblOpdbooking> TblOpdbookings { get; set; } = null!;
         public virtual DbSet<TblOpdregistration> TblOpdregistrations { get; set; } = null!;
         public virtual DbSet<TblPatientRegistration> TblPatientRegistrations { get; set; } = null!;
+        public virtual DbSet<TblReceiptDetail> TblReceiptDetails { get; set; } = null!;
         public virtual DbSet<TblTestGroupSetup> TblTestGroupSetups { get; set; } = null!;
         public virtual DbSet<TblTestSetup> TblTestSetups { get; set; } = null!;
         public virtual DbSet<TblTransactionStatus> TblTransactionStatuses { get; set; } = null!;
@@ -112,6 +114,35 @@ namespace AppointmentBooking.Data
                 entity.ToTable("tblCaseType");
 
                 entity.Property(e => e.CaseTypeName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblCashReceipt>(entity =>
+            {
+                entity.HasKey(e => e.ReceiptNo);
+
+                entity.ToTable("tblCashReceipt");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("date");
+
+                entity.Property(e => e.Ipdno).HasColumnName("IPDNo");
+
+                entity.Property(e => e.Opdno).HasColumnName("OPDNo");
+
+                entity.Property(e => e.PayType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Uhid).HasColumnType("numeric(18, 0)");
+
+                entity.HasOne(d => d.OpdnoNavigation)
+                    .WithMany(p => p.TblCashReceipts)
+                    .HasForeignKey(d => d.Opdno)
+                    .HasConstraintName("FK__tblCashRe__OPDNo__3587F3E0");
+
+                entity.HasOne(d => d.Uh)
+                    .WithMany(p => p.TblCashReceipts)
+                    .HasForeignKey(d => d.Uhid)
+                    .HasConstraintName("FK__tblCashRec__Uhid__3493CFA7");
             });
 
             modelBuilder.Entity<TblDepartment>(entity =>
@@ -363,6 +394,22 @@ namespace AppointmentBooking.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.Panno).HasColumnName("PANNo");
+            });
+
+            modelBuilder.Entity<TblReceiptDetail>(entity =>
+            {
+                entity.HasKey(e => e.DetailsId);
+
+                entity.ToTable("tblReceiptDetails");
+
+                entity.Property(e => e.TestGroup).HasMaxLength(50);
+
+                entity.Property(e => e.TestName).HasMaxLength(50);
+
+                entity.HasOne(d => d.ReceiptNoNavigation)
+                    .WithMany(p => p.TblReceiptDetails)
+                    .HasForeignKey(d => d.ReceiptNo)
+                    .HasConstraintName("FK__tblReceip__Recei__3864608B");
             });
 
             modelBuilder.Entity<TblTestGroupSetup>(entity =>

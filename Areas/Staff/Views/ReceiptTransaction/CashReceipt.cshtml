@@ -1,45 +1,55 @@
 ﻿@inject CommonUtility utils
 <div class="page-wrapper">
-    <div class="content">
+ <div class="content">
 <div class="row">
     <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
+                            <a asp-action="ReceiptDetailsMain" asp-controller="ReceiptTransaction" asp-area="Staff">fszfse</a>
                         <label class="col-md-2">UHID:</label>
-                           <input type="number" class="col-md-2"/>
+                            <input class="col-md-2 Uhid" type="number" id="Uhid" />
                          <label class="col-md-2">OPD:</label>
-                                <input type="number" class="col-md-2" />
+                            <input class="col-md-2" type="number" id="OPD" onkeydown="HandleOPDKeyEvent(event)" />
                           <label class="col-md-2 ">IPD:</label>
-                                <input type="number" class="col-md-2" />
+                            <input class="col-md-2" type="number" id="IPD" />
                     </div>
                             <div class="form-group row">
                                 <label class="col-md-2">PayType:</label>
-                                <input type="text" id="firstName" class="col-md-3">
+                               <select class="col-md-3 payType">
+                                   <option value="cash">Cash</option>
+                                   <option value="insurance">Insurance</option>
+                                   <option value="credit">Credit</option>
+                            </select>
+
                             <label class="col-md-2">Name:</label>
-                            <input type="text" id="firstName" class="col-md-5">
+                            <input class="col-md-5 PatientName" type="text">
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3">Consultant Dr.:</label>
-                                <input type="text" id="lastName" class="col-md-6">
+                            <input class="col-md-6 ConsultantDr" type="text">
                             </div>
                 </div>
                 <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-md-2">Date:</label>
-                                <input class="col-md-3" type="datetime" value="@utils.GetTodayDate().ToShortDateString()" />
+                                <input class="col-md-3 date" type="datetime" value="@utils.GetTodayDate().ToShortDateString()" />
                                 <label class="col-md-2">Rec.No:</label>
-                                <input class="col-md-3" type="text" readonly />
+                                <input class="col-md-3" type="text" value="@utils.GetMaximumReceiptNo()" readonly />
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-2">Age:</label>
-                                <input class="col-md-3" type="text" />
+                                <input class="col-md-3 Age" type="text" />
                                 <label class="col-md-2">Gender:</label>
-                                <input class="col-md-3" type="text" readonly />
+                               <select class="col-md-3 Gender">
+                                   <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                               </select>
                             </div>
                         <div class="form-group row">
                             <label class="col-md-2">Address:</label>
-                            <input class="col-md-5" type="text" />
+                            <input class="col-md-5 Address" type="text" />
                         </div>
                 </div>
             </div>
@@ -50,8 +60,8 @@
             <table class="table table-bordered">
                 <caption> Cash Receipt </caption>
                 <tr align="center">
-                        <input type="hidden" class="form-control" placeholder="pro_price" size="35px" id="pro_price" name="pro_price">
-                        <input type="hidden" class="form-control" placeholder="total_cost" size="35px" id="total_cost" name="total_cost">
+                        <input type="hidden" class="form-control" placeholder="pro_price"  id="pro_price" name="pro_price">
+                        <input type="hidden" class="form-control" placeholder="total_cost"  id="total_cost" name="total_cost">
 
                     <td>
                             <select class="form-control" id="testGroup" name="testGroup" asp-items="@utils.GetTestGroup()" onchange="TestGroupChange(this)" required>
@@ -98,12 +108,12 @@
         <div class="col s12 m6 offset-m4">
             <div class="form-group" align="left">
                 <label class="form-label">Total</label>
-                <input type="text" class="form-control" placeholder="Total" id="total" name="total" size="30px" required disabled>
+                <input type="text" class="form-control" placeholder="Total" id="total" name="total"  required disabled>
             </div>
             <div class="card" align="right">
 
                 <button type="button" id="save" class="btn btn-info" onclick="addProject()">
-                    Print Invoice
+                   Save Data
                 </button>
                 <button type="button" id="clear" class="btn btn-warning" onclick="reSet()">Reset</button>
             </div>
@@ -117,21 +127,54 @@
 
 
 @section scripts {
-
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-    <script src="~/Scripts/jquery.validate.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script>
+        $(document).ready(function () {
+            // Check if alert message exists
+            if ('@TempData["CashReceiptMsge"]' !== '') {
+                // Display SweetAlert
+                Swal.fire({
+                    title: '@TempData["CashReceiptMsge"]',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    CancelButtonText: 'Cancel',
+                });
+            }
+        });
         var totalAmt = 0;
         var discount = 0;
         var grosstotal = 0;
         var cost = 0;
         var qtye = 0;
         var barcode = 0;
-            function TestGroupChange(e) {
+
+        function HandleOPDKeyEvent(e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var opd = $(e.target).val();
+                $.ajax({
+                    url: "@Url.Action("GetPatientInfoByOPD", "ReceiptTransaction")",
+                    method: "GET",
+                    data: { opd: opd },
+                    success: function (result) {
+                        $(".PatientName").val(result.patientName);                
+                        $(".Address").val(result.address);                      
+                        $(".Age").val(result.age+" "+result.ageType);
+                        $(".Gender").val(result.gender);
+                        $(".ConsultantDr").val(result.doctorName);
+                        $(".Uhid").val(result.uhid);
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+
+        }
+
+        function TestGroupChange(e) {
                 var grpId = $(e).val();
                 $.ajax({
                     url: "@Url.Action("GetTestOfGroup", "ReceiptTransaction")",
@@ -146,13 +189,14 @@
                             $("#testname").append("<option value='" + row.testId + "'>" + row.testName + "</option>");
                         });
                     },
-                    error: function () {
+                    error: function (error) {
+                        console.log(error.message);
                         alert('failed');
                     },
                 });
             }
 
-            function TestChange(e) {
+        function TestChange(e) {
                 var testid = $(e).val();
                 $.ajax({
                     url: "@Url.Action("GetTestPrice", "ReceiptTransaction")",
@@ -163,28 +207,23 @@
                         $("#qty").val("");
                         $("#pro_price").val(result);
                     },
-                    error: function () {
+                    error: function (error) {
                         alert(error.message);
                     },
                 })
             }
-            function QuantityChange(e) {
+
+        function QuantityChange(e) {
                 var qty = $(e).val();
                 var price = $("#pro_price").val();
                 var total = Number(price * qty);
                 $("#total_cost").val(total);
             }
 
-            getProductcode();
-        
-
-
-
-            function addproduct() {
+        function addproduct() {
                 var sum1 = (
                     Number($("#pro_price").val()) * Number($("#qty").val())
                 );
-
                 var product = {
                     testGroup: $("#testGroup option:selected").text(),
                     testname: $("#testname option:selected").text(),
@@ -195,11 +234,9 @@
                     button: '<button  type="button" class="btn btn-warning btn-xs")">delete</button>'
                 };
                 addRow(product);
-                //$('#frmInvoice')[0].reset();
             }
         
-
-            function addRow(product) {
+        function addRow(product) {
                 var qty = Number($("#qty").val());
                 if ($('#testGroup').val().length === 0) {
                     $.alert({
@@ -257,45 +294,56 @@
                 }
             }
 
-            function addProject() {
-                var table_data = new Array();
+        function addProject() {
+            var ReceiptDetails = new Array();
                 $('#product_list tbody tr').each(function (row, tr) {
-                    var testGroup = parseInt($(tr).find('td:eq(1)').text());
-                    var testname = $(tr).find('td:eq(2)').text();
-                    var sum = {
-                        //these records i am going to add into sales table
-                        'testGroup': testGroup,
-                        'testname': testname,
-                        'pro_price': $(tr).find('td:eq(3)').text(),
-                        'qty': $(tr).find('td:eq(4)').text(),
-                        'total_cost': $(tr).find('td:eq(6)').text()
+                    var sum = {                      
+                    'TestGroup': $(tr).find('td:eq(1)').text(),
+                    'TestName': $(tr).find('td:eq(2)').text(),
+                    'TestPrice': parseFloat($(tr).find('td:eq(3)').text()),
+                     'Quantity': parseInt($(tr).find('td:eq(4)').text()),
+                    'Amount': parseFloat($(tr).find('td:eq(6)').text())
                     };
-                    table_data.push(sum);
+                ReceiptDetails.push(sum);
                 });
-                //these records i am going to add into sales
-                var total = $("#total").val();
-                console.log(table_data);
-                $.post("/home/SaveNew",
-                    {
-                        data: JSON.stringify({
-                            total: $("#total").val(),
-                            data: table_data
-                        })
+                var ReceiptViewModel = {
+                    Opdno: parseInt($("#OPD").val()),
+                    Uhid: parseFloat($("#Uhid").val()),
+                    Ipdno: parseInt($("#IPD").val()),
+                    TotalAmount: parseFloat($("#total").val()),
+                    PayType: $(".payType").val(),
+                    CreatedDate: $(".date").val(),
+                    ReceiptDetails: ReceiptDetails
+                };            
+                $.ajax({
+                    url: "@Url.Action("AddCashReceipt","ReceiptTransaction")",
+                    type: "POST",
+                    data: JSON.stringify(ReceiptViewModel),
+                    contentType: "application/json",
+                   
+                    success: function (response) {       
+                        if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                        } 
                     },
-                    function (data, status) {
-                        console.log(data);
-                        alert("Status: " + status + "\nMessage: " + data.message);
-                        window.location.href = "@Url.Action("Print", "Home")"
-                    });
-
+                    error: function (error) {
+                        alert(error.message);
+                    },
+                });
+               
             }
-            function deleteRow($row) {
+
+        function deleteRow($row) {
 
                 $row.remove();
             }
-        
-       
 
+        function reSet(){
+                 $('#product_list tbody').empty();
+                 $("#total").val("");
+                 cost = 0;
+                 totalAmt = 0;
+            }
     </script>
 
 

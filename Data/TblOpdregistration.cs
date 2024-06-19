@@ -5,6 +5,11 @@ namespace AppointmentBooking.Data
 {
     public partial class TblOpdregistration
     {
+        public TblOpdregistration()
+        {
+            TblCashReceipts = new HashSet<TblCashReceipt>();
+        }
+
         public int SrNo { get; set; }
         public decimal? Uhid { get; set; }
         public string? FirstName { get; set; }
@@ -37,5 +42,6 @@ namespace AppointmentBooking.Data
         public virtual TblDoctorSetup? ConsultantDrNavigation { get; set; }
         public virtual TblDepartment? DepartmentNavigation { get; set; }
         public virtual TblPatientRegistration? Uh { get; set; }
+        public virtual ICollection<TblCashReceipt> TblCashReceipts { get; set; }
     }
 }

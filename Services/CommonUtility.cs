@@ -94,6 +94,7 @@ namespace AppointmentBooking.Services
             {
                 FirstName = m.FirstName,
                 LastName = m.LastName,
+                PatientName=m.FirstName+" "+m.LastName,
                 Dob = m.Dob,
                 Age = m.Age,
                 AgeType = m.AgeType,
@@ -114,6 +115,11 @@ namespace AppointmentBooking.Services
         {
             decimal maxUhid = db.TblOpdregistrations.Max(item => item.Uhid) ?? 0;
             return (maxUhid + 1);
+        }
+        public int GetMaximumReceiptNo()
+        {
+            int maxRecNo = db.TblCashReceipts.Max(item => item.ReceiptNo);
+            return (maxRecNo + 1);
         }
         public SelectList GetCaseType()
         {
