@@ -65,6 +65,10 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? PatientName { get; set; }
         public string? DoctorName { get; set; }
         public string? FeeTypeName { get; set; }
+        public DateTime? FromDateFilter { get; set; }
+        public DateTime? ToDateFilter { get; set; }
+      
+        public List<OPDViewModel>? opdReports { get; set; }
         public virtual TblCaseType? CaseTypeNavigation { get; set; }
         public virtual TblDoctorSetup? ConsultantDrNavigation { get; set; }
         public virtual TblDepartment? DepartmentNavigation { get; set; }

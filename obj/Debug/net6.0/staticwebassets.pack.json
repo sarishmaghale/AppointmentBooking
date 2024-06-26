@@ -65,96 +65,12 @@
       "PackagePath": "staticwebassets\\assets\\img\\attachment.png"
     },
     {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-01.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-01.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-02.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-02.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-03.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-03.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-04.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-04.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-thumb-01.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-thumb-01.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-thumb-02.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-thumb-02.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-thumb-03.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-thumb-03.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\blog\\blog-thumb-04.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\blog\\blog-thumb-04.jpg"
-    },
-    {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\calander.png",
       "PackagePath": "staticwebassets\\assets\\img\\calander.png"
     },
     {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\clock.png",
       "PackagePath": "staticwebassets\\assets\\img\\clock.png"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-03.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-03.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-01.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-01.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-02.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-02.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-03.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-03.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-04.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-04.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-05.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-05.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-06.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-06.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-07.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-07.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-08.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-08.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-09.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-09.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-10.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-10.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-11.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-11.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\doctor-thumb-12.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\doctor-thumb-12.jpg"
     },
     {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\favicon.ico",
@@ -169,14 +85,6 @@
       "PackagePath": "staticwebassets\\assets\\img\\logo.png"
     },
     {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\patient-thumb-01.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\patient-thumb-01.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\patient-thumb-02.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\patient-thumb-02.jpg"
-    },
-    {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\placeholder-thumb.jpg",
       "PackagePath": "staticwebassets\\assets\\img\\placeholder-thumb.jpg"
     },
@@ -189,32 +97,8 @@
       "PackagePath": "staticwebassets\\assets\\img\\sent.png"
     },
     {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user-02.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\user-02.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user-03.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\user-03.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user-04.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\user-04.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user-05.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\user-05.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user-06.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\user-06.jpg"
-    },
-    {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\user.jpg",
       "PackagePath": "staticwebassets\\assets\\img\\user.jpg"
-    },
-    {
-      "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\img\\video-call.jpg",
-      "PackagePath": "staticwebassets\\assets\\img\\video-call.jpg"
     },
     {
       "Id": "C:\\Users\\acer\\Desktop\\Project\\HospitalManagementSystem\\AppointmentBooking\\wwwroot\\assets\\js\\Chart.bundle.js",

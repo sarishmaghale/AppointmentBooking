@@ -26,12 +26,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcQ29tcG9uZW50c1xfRmVlVHlwZVBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/Element/Doctors.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcRWxlbWVudFxEb2N0b3JzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/Home/LogIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcSG9tZVxMb2dJbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/IPDTransaction/IPDRegistration.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcSVBEVHJhbnNhY3Rpb25cSVBEUmVnaXN0cmF0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/OPDTransaction/OPDRegistration.cshtml]
@@ -42,12 +50,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcT1BEVHJhbnNhY3Rpb25cT1BEUmVwb3J0cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/OPDTransaction/_OPDReportsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcT1BEVHJhbnNhY3Rpb25cX09QRFJlcG9ydHNQYXJ0aWFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/ReceiptTransaction/CashReceipt.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcUmVjZWlwdFRyYW5zYWN0aW9uXENhc2hSZWNlaXB0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/ReceiptTransaction/CashSummary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcUmVjZWlwdFRyYW5zYWN0aW9uXENhc2hTdW1tYXJ5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/ReceiptTransaction/ReceiptDetailsMain.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcUmVjZWlwdFRyYW5zYWN0aW9uXFJlY2VpcHREZXRhaWxzTWFpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/ReceiptTransaction/_CashSummaryPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcUmVjZWlwdFRyYW5zYWN0aW9uXF9DYXNoU3VtbWFyeVBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/ReceiptTransaction/_ReceiptDetailsPartial.cshtml]

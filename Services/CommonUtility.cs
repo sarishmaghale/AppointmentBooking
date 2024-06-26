@@ -160,5 +160,27 @@ namespace AppointmentBooking.Services
             return db.TblFeeTypes.Where(x => x.FeeTypeId == FeeeTypeId).Select(x => x.FeeTypeName).FirstOrDefault();
         }
 
+        public IEnumerable<DoctorSetupViewModel> GetDoctorList()
+        {
+            var data = db.TblDoctorSetups.Select(x => new DoctorSetupViewModel()
+            {
+                DoctorId = x.DoctorId,
+                DoctorName = x.DoctorName,
+                DepartmentName = db.TblDepartments.Where(d => d.DepartmentId == x.DepartmentId).Select(d => d.DepartmentName).FirstOrDefault(),
+                FeeDetails = db.TblDoctorFeeTypeSetups.Where(f => f.DoctorId == x.DoctorId).Select(f => new DoctorFeeViewModel
+                {
+                    FeeTypeName = db.TblFeeTypes.Where(y => y.FeeTypeId == f.FeeTypeId).Select(y => y.FeeTypeName).FirstOrDefault(),
+                    Fee = f.Fee,
+                }).ToList()
+            }).ToList();
+            return data;
+        }
+        public SelectList GetBedCategory()
+        {
+            var beds = db.TblIpdbedTypes.ToList();
+            var data = new SelectList(beds, "BedTypeId", "BedTypeName");
+            return data;
+        }
+
     }
 }

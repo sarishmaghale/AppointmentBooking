@@ -17,6 +17,7 @@ namespace AppointmentBooking.Data
         public string? PayType { get; set; }
         public DateTime? CreatedDate { get; set; }
         public double? TotalAmount { get; set; }
+        public string? CreatedByUser { get; set; }
 
         public virtual TblOpdregistration? OpdnoNavigation { get; set; }
         public virtual TblPatientRegistration? Uh { get; set; }

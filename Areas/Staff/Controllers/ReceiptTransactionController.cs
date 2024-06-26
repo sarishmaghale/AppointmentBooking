@@ -1,6 +1,9 @@
 ﻿using AppointmentBooking.Areas.Staff.Models;
 using AppointmentBooking.Areas.Staff.Services.Interface;
 using AppointmentBooking.Services;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
@@ -10,9 +13,9 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     [Area("Staff")]
     [Authorize]
     public class ReceiptTransactionController : Controller
-    { 
+    {
 
-        private IReceiptRepository receiptProvider;private IOPDRepository opdProvider;
+        private IReceiptRepository receiptProvider; private IOPDRepository opdProvider;
         public ReceiptTransactionController(IReceiptRepository _receiptProvider, IOPDRepository _opdProvider)
         {
             receiptProvider = _receiptProvider;
@@ -41,28 +44,85 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCashReceipt([FromBody] ReceiptViewModel model)
         {
-            bool res = await receiptProvider.AddCashReceipt(model);
-            if (res)
+            int result = await receiptProvider.AddCashReceipt(model);
+            if (result != 0)
             {
                 TempData["CashReceiptMsge"] = "Successfully Added";
-                string redirectUrl = Url.Action("CashReceipt", "ReceiptTransaction");
-                return Json(new { redirectUrl });
+                return Json(new { result });
             }
-            TempData["CashReceiptMsge"] ="Failed to add";
+            TempData["CashReceiptMsge"] = "Failed to add";
             return RedirectToAction("CashReceipt");
         }
 
         public async Task<IActionResult> ReceiptDetailsPartial(int ReceiptNo)
         {
-            var data = await receiptProvider.ReceiptDetails(3);
+            var data = await receiptProvider.GetReceiptDetails(ReceiptNo);
             return PartialView("_ReceiptDetailsPartial", data);
         }
         public async Task<IActionResult> ReceiptDetailsMain(int ReceiptNo)
         {
-            var data = await receiptProvider.ReceiptDetails(3);
+            var data = await receiptProvider.GetReceiptDetails(ReceiptNo);
             return View(data);
         }
-            
+
+        public IActionResult CashSummary()
+        {
+            var model = new ReceiptViewModel();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CashSummary(ReceiptViewModel model)
+        {
+           var results= await receiptProvider.GetFilterCashSummary(model);
+            model.Results = results;
+            return View("CashSummary", model);
+        }
+
+        [HttpPost]
+        public IActionResult ExportCashSummary(ReceiptViewModel model)
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Cash Summary Reports");
+                worksheet.Cell(1, 1).Value = "Receipt No";
+                worksheet.Cell(1, 2).Value = "Pay Type";
+                worksheet.Cell(1, 3).Value = "Patient Name";
+                worksheet.Cell(1, 4).Value = "Total Amount";
+                worksheet.Cell(1, 5).Value = "Doctor Name";
+                worksheet.Cell(1, 6).Value = "Created Date";
+
+                var headerRange = worksheet.Range(1, 1, 1, 6);
+                headerRange.Style.Font.Bold = true;
+                headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+                int row = 2;
+                foreach (var group in model.Results)
+                {
+                    worksheet.Cell(row, 4).Value = group.TestGroupDept;
+                    row++;
+                    foreach (var receipt in group.Receipts)
+                    {
+                        worksheet.Cell(row, 1).Value = receipt.ReceiptNo;
+                        worksheet.Cell(row, 2).Value = receipt.PayType;
+                        worksheet.Cell(row, 3).Value = receipt.PatientName;
+                        worksheet.Cell(row, 4).Value = receipt.TotalAmount;
+                        worksheet.Cell(row, 5).Value = receipt.DoctorName;
+                        worksheet.Cell(row, 6).Value = receipt.CreatedDate;
+                        row++;
+                    }
+                    worksheet.Cell(row, 3).Value = "--TOTAL AMOUNT--";
+                    worksheet.Cell(row, 4).Value = group.ReceiptTotal;
+                    row++;
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Position = 0;
+                    string excelName = $"CashSummary-{System.DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+                }
+                
+            }
+        }
 
     }
 }

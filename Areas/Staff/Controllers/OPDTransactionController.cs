@@ -3,6 +3,7 @@ using AppointmentBooking.Areas.Staff.Services.Interface;
 using AppointmentBooking.Services;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -81,48 +82,52 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         [HttpGet]
         public async Task<IActionResult> OPDReports()
         {
+            var model = new OPDViewModel();
             var data = await opdRegistration.GetOPDReports();
-            return View(data);
+            model.opdReports = data;
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> FilterOPDReports(string paytype, string user, DateTime? fromDate, DateTime? toDate, List<DataTablesOrder> order)
+        public async Task<IActionResult> OPDReports(OPDViewModel data)
         {
-           var data= await opdRegistration.GetFilterOPDReports(paytype, user, fromDate, toDate,order);
-            int totalCount = data.Count();
-            int draw = int.Parse(Request.Form["draw"].FirstOrDefault());           
-            var result = new
-            {
-                draw = draw,              
-                recordsFiltered = totalCount,
-              data=data
-            };
-            return Json(result);
+           var results= await opdRegistration.GetFilterOPDReports(data);
+            data.opdReports = results;
+            return View("OPDReports", data);
             
         }
-       
+
         [HttpPost]
-        public IActionResult ExportToExcel([FromBody] List<OPDViewModel> data)
+        public IActionResult ExportOPDReports(OPDViewModel model)
         {
             using (var workbook = new XLWorkbook())
             {
+                var totalAmount = 0.0;
                 var worksheet = workbook.Worksheets.Add("OPD Reports");
                 worksheet.Cell(1, 1).Value = "SrNo";
-                worksheet.Cell(1, 2).Value = "PatientName";
-                worksheet.Cell(1, 3).Value = "Paytype";
+                worksheet.Cell(1, 2).Value = "Pay Type";
+                worksheet.Cell(1, 3).Value = "Patient Name";
                 worksheet.Cell(1, 4).Value = "Amount";
-                worksheet.Cell(1, 5).Value = "DoctorName";
-                worksheet.Cell(1, 6).Value = "FeeType";
+                worksheet.Cell(1, 5).Value = "Fee Type";
+                worksheet.Cell(1, 6).Value = "Doctor Name";
 
-                for(int i = 0; i < data.Count; i++)
+                var headerRange = worksheet.Range(1, 1, 1, 6);
+                headerRange.Style.Font.Bold = true;
+                headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+                int row = 2;
+                foreach (var result in model.opdReports)
                 {
-                    worksheet.Cell(i + 2, 1).Value = data[i].SrNo;
-                    worksheet.Cell(i + 2, 2).Value = data[i].FirstName;
-                    worksheet.Cell(i + 2, 3).Value = data[i].PayType;
-                    worksheet.Cell(i + 2, 4).Value = data[i].Amount;
-                    worksheet.Cell(i + 2, 5).Value = data[i].ConsultantDr;
-                    worksheet.Cell(i + 2, 6).Value = data[i].FeeType;
+                    worksheet.Cell(row, 1).Value = result.SrNo;
+                    worksheet.Cell(row, 2).Value = result.PayType;
+                    worksheet.Cell(row, 3).Value = result.PatientName;
+                    worksheet.Cell(row, 4).Value = result.Amount;
+                    worksheet.Cell(row, 5).Value = result.FeeTypeName;
+                    worksheet.Cell(row, 6).Value = result.DoctorName;
+                    totalAmount = totalAmount +(double) result.Amount;
+                    row++;
                 }
+                worksheet.Cell(row, 3).Value = "--TOTAL AMOUNT--";
+                worksheet.Cell(row, 4).Value = totalAmount;
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
@@ -130,6 +135,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
                     string excelName = $"OPDReports-{System.DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
                 }
+
             }
         }
 

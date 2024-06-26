@@ -1,2 +1,42 @@
 ﻿@model ReceiptViewModel
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-7 col-8 text-right m-b-30">
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-white">CSV</button>
+                    <button class="btn btn-white">PDF</button>
+                    <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
 @await Html.PartialAsync("_ReceiptDetailsPartial", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            if ('@TempData["CashReceiptMsge"]' !== '') {
+                // Display SweetAlert
+                Swal.fire({
+                    title: '@TempData["CashReceiptMsge"]',
+                    showCancelButton: true,
+                    confirmButtonText: 'Print',
+                    CancelButtonText: 'Back',
+                }).then((result) => {
+                    // Redirect when OK button is clicked
+                    if (result.isDismissed) {
+                        window.location.href = '@Url.Action("CashReceipt", "ReceiptTransaction")';
+                    }
+                });
+            }
+        });
+    </script>
+}

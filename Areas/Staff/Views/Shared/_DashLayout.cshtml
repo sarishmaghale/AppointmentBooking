@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/css/dataTables.bootstrap4.min.css"> 
     <link rel="stylesheet" type="text/css" href="~/assets/css/select2.min.css">
-  
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -25,39 +24,8 @@
             -webkit-appearance: none;
         }
     </style>
-    <script>
-        $(document).ready(function () {
-            // Get the current URL pathname
-            var path = window.location.pathname;
-
-            // Function to check if a path matches the href attribute
-            function checkActive(path, href) {
-                return path === href;
-            }
-
-            // Loop through each <a> element in the sidebar menu
-            $('#sidebar-menu a').each(function () {
-                // Get the href attribute of the <a> element
-                var href = $(this).attr('href');
-
-                // Check if the href attribute matches the current URL pathname
-                if (checkActive(path, href)) {
-                    // Remove 'active' class from all <li> elements
-                    $('#sidebar-menu li').removeClass('active');
-
-                    // Add the 'active' class to the parent <li> element
-                    $(this).closest('li').addClass('active');
-
-                    // If the <li> element is inside a submenu, add the 'open' class to the submenu
-                    var submenu = $(this).closest('.submenu');
-                    if (submenu.length) {
-                        submenu.addClass('open');
-                        submenu.children('ul').show(); // Ensure the submenu is displayed
-                    }
-                }
-            });
-        });
-        </script>
+    
+    @RenderSection("Styles", required: false)
 </head>
 <body>
 
@@ -123,13 +91,22 @@
                                 <li><a asp-action="OPDReports" asp-controller="OPDTransaction" asp-area="Staff">OPD Reports</a></li>
                             </ul>
 						</li>
+                      
 						<li class="submenu">
 							<a href="#"><i class="fa fa-money"></i> <span> Receipt Transaction </span> <span class="menu-arrow"></span></a>
 							<ul style="display: none;">
                                 <li><a asp-action="CashReceipt" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Receipt</a></li>
-								<li><a asp-action="">Cash Summary</a></li>
+								<li><a asp-action="CashSummary" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Summary</a></li>
 							</ul>
 						</li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-bed"></i> <span> IPD Transaction </span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li><a asp-action="IPDRegistration" asp-controller="IPDTransaction" asp-area="Staff">IPD Registration</a></li>
+                                <li><a asp-action="RoomBedStatus" asp-controller="IPDTransaction" asp-area="Staff">Room/Bed Status</a></li>
+                                <li><a asp-action="IPDPatientList" asp-controller="IPDTransaction" asp-area="Staff">IPD Patient List</a></li>
+                            </ul>
+                        </li>
                         <li class="menu-title">SetUp</li>
                         <li class="submenu">
                             <a href="#"><i class="fa fa-laptop"></i> <span> Components</span> <span class="menu-arrow"></span></a>
@@ -138,7 +115,10 @@
                                
                             </ul>
                         </li>
-               
+                        <li class="menu-title">Elements</li>
+                        <li >
+                            <a asp-action="Doctors" asp-controller="Element" asp-area="Staff"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -157,7 +137,39 @@
         @await RenderSectionAsync("Scripts", required: false)
 
        </div>
-        
+    <script>
+        $(document).ready(function () {
+            // Get the current URL pathname
+            var path = window.location.pathname;
+
+            // Function to check if a path matches the href attribute
+            function checkActive(path, href) {
+                return path === href;
+            }
+
+            // Loop through each <a> element in the sidebar menu
+            $('#sidebar-menu a').each(function () {
+                // Get the href attribute of the <a> element
+                var href = $(this).attr('href');
+
+                // Check if the href attribute matches the current URL pathname
+                if (checkActive(path, href)) {
+                    // Remove 'active' class from all <li> elements
+                    $('#sidebar-menu li').removeClass('active');
+
+                    // Add the 'active' class to the parent <li> element
+                    $(this).closest('li').addClass('active');
+
+                    // If the <li> element is inside a submenu, add the 'open' class to the submenu
+                    var submenu = $(this).closest('.submenu');
+                    if (submenu.length) {
+                        submenu.addClass('open');
+                        submenu.children('ul').show(); // Ensure the submenu is displayed
+                    }
+                }
+            });
+        });
+    </script>
     <div class="sidebar-overlay" data-reff=""></div>
     <script src="~/assets/js/jquery-3.2.1.min.js"></script>
     <script src="~/assets/js/popper.min.js"></script>
@@ -165,7 +177,7 @@
     <script src="~/assets/js/jquery.slimscroll.js"></script>
     <script src="~/assets/js/jquery.dataTables.min.js"></script>
     <script src="~/assets/js/dataTables.bootstrap4.min.js"></script>
- 
+ <script src="~/assets/js/select2.min.js"></script>
     <script src="~/assets/js/app.js"></script>
     <script src="~/js/custom.js"></script>
    

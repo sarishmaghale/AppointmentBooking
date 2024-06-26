@@ -6,7 +6,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group row">
-                            <a asp-action="ReceiptDetailsMain" asp-controller="ReceiptTransaction" asp-area="Staff">fszfse</a>
+                            <input  type="hidden" id="CreatedByUser" value="@User.Identity.Name" />
+
                         <label class="col-md-2">UHID:</label>
                             <input class="col-md-2 Uhid" type="number" id="Uhid" />
                          <label class="col-md-2">OPD:</label>
@@ -33,7 +34,7 @@
                 <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-md-2">Date:</label>
-                                <input class="col-md-3 date" type="datetime" value="@utils.GetTodayDate().ToShortDateString()" />
+                                <input class="col-md-3 date" type="datetime" value="@utils.GetTodayDate().ToShortDateString()" readonly />
                                 <label class="col-md-2">Rec.No:</label>
                                 <input class="col-md-3" type="text" value="@utils.GetMaximumReceiptNo()" readonly />
                             </div>
@@ -131,18 +132,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            // Check if alert message exists
-            if ('@TempData["CashReceiptMsge"]' !== '') {
-                // Display SweetAlert
-                Swal.fire({
-                    title: '@TempData["CashReceiptMsge"]',
-                    showCancelButton: true,
-                    confirmButtonText: 'OK',
-                    CancelButtonText: 'Cancel',
-                });
-            }
-        });
+       
         var totalAmt = 0;
         var discount = 0;
         var grosstotal = 0;
@@ -302,7 +292,7 @@
                     'TestName': $(tr).find('td:eq(2)').text(),
                     'TestPrice': parseFloat($(tr).find('td:eq(3)').text()),
                      'Quantity': parseInt($(tr).find('td:eq(4)').text()),
-                    'Amount': parseFloat($(tr).find('td:eq(6)').text())
+                    'Amount': parseFloat($(tr).find('td:eq(6)').text()),
                     };
                 ReceiptDetails.push(sum);
                 });
@@ -313,6 +303,7 @@
                     TotalAmount: parseFloat($("#total").val()),
                     PayType: $(".payType").val(),
                     CreatedDate: $(".date").val(),
+                    CreatedByUser: $("#CreatedByUser").val(),
                     ReceiptDetails: ReceiptDetails
                 };            
                 $.ajax({
@@ -321,11 +312,10 @@
                     data: JSON.stringify(ReceiptViewModel),
                     contentType: "application/json",
                    
-                    success: function (response) {       
-                        if (response.redirectUrl) {
-                        window.location.href = response.redirectUrl;
-                        } 
-                    },
+                    success: function (response) {
+                    var redirectUrl = '@Url.Action("ReceiptDetailsMain", "ReceiptTransaction")' + '?ReceiptNo=' + response.result;
+                    window.location.href = redirectUrl;
+                },
                     error: function (error) {
                         alert(error.message);
                     },

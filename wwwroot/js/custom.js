@@ -71,15 +71,3 @@ function ShowAge(e) {
     }
 
 }
-
-function ShowMessage(string? message) {
-    if (message !== '') {
-        // Display SweetAlert
-        Swal.fire({
-            title: message,
-            showCancelButton: true,
-            confirmButtonText: 'OK',
-            CancelButtonText: 'Cancel',
-        });
-    }
-}

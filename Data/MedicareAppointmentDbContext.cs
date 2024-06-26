@@ -24,6 +24,9 @@ namespace AppointmentBooking.Data
         public virtual DbSet<TblDoctorSetup> TblDoctorSetups { get; set; } = null!;
         public virtual DbSet<TblDropDownItem> TblDropDownItems { get; set; } = null!;
         public virtual DbSet<TblFeeType> TblFeeTypes { get; set; } = null!;
+        public virtual DbSet<TblIpdbedStatus> TblIpdbedStatuses { get; set; } = null!;
+        public virtual DbSet<TblIpdbedType> TblIpdbedTypes { get; set; } = null!;
+        public virtual DbSet<TblIpdregistration> TblIpdregistrations { get; set; } = null!;
         public virtual DbSet<TblOpdbooking> TblOpdbookings { get; set; } = null!;
         public virtual DbSet<TblOpdregistration> TblOpdregistrations { get; set; } = null!;
         public virtual DbSet<TblPatientRegistration> TblPatientRegistrations { get; set; } = null!;
@@ -122,6 +125,8 @@ namespace AppointmentBooking.Data
 
                 entity.ToTable("tblCashReceipt");
 
+                entity.Property(e => e.CreatedByUser).HasMaxLength(50);
+
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.Ipdno).HasColumnName("IPDNo");
@@ -205,6 +210,111 @@ namespace AppointmentBooking.Data
                 entity.ToTable("tblFeeType");
 
                 entity.Property(e => e.FeeTypeName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblIpdbedStatus>(entity =>
+            {
+                entity.HasKey(e => e.BedId)
+                    .HasName("PK_tblBedStatus");
+
+                entity.ToTable("tblIPDBedStatus");
+
+                entity.Property(e => e.BedName).HasMaxLength(50);
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.HasOne(d => d.BedType)
+                    .WithMany(p => p.TblIpdbedStatuses)
+                    .HasForeignKey(d => d.BedTypeId)
+                    .HasConstraintName("FK__tblBedSta__BedTy__40058253");
+            });
+
+            modelBuilder.Entity<TblIpdbedType>(entity =>
+            {
+                entity.HasKey(e => e.BedTypeId)
+                    .HasName("PK_tblBedType");
+
+                entity.ToTable("tblIPDBedType");
+
+                entity.Property(e => e.BedTypeName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblIpdregistration>(entity =>
+            {
+                entity.HasKey(e => e.IpdregNo);
+
+                entity.ToTable("tblIPDRegistration");
+
+                entity.Property(e => e.IpdregNo).HasColumnName("IPDRegNo");
+
+                entity.Property(e => e.Address).HasMaxLength(50);
+
+                entity.Property(e => e.AgeType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Complain).HasMaxLength(100);
+
+                entity.Property(e => e.Contactno).HasMaxLength(10);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("date");
+
+                entity.Property(e => e.Diagnosis).HasMaxLength(50);
+
+                entity.Property(e => e.District).HasMaxLength(50);
+
+                entity.Property(e => e.Dob)
+                    .HasMaxLength(50)
+                    .HasColumnName("DOB");
+
+                entity.Property(e => e.FirstName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Gaddress)
+                    .HasMaxLength(50)
+                    .HasColumnName("GAddress");
+
+                entity.Property(e => e.Gcontact)
+                    .HasMaxLength(10)
+                    .HasColumnName("GContact");
+
+                entity.Property(e => e.Gender)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Gname)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("GName");
+
+                entity.Property(e => e.Grelation)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("GRelation");
+
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PayType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Religion)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Remark).HasMaxLength(50);
+
+                entity.Property(e => e.Uhid)
+                    .HasColumnType("numeric(18, 0)")
+                    .HasColumnName("UHID");
+
+                entity.HasOne(d => d.Uh)
+                    .WithMany(p => p.TblIpdregistrations)
+                    .HasForeignKey(d => d.Uhid)
+                    .HasConstraintName("FK__tblIPDRegi__UHID__3B40CD36");
             });
 
             modelBuilder.Entity<TblOpdbooking>(entity =>

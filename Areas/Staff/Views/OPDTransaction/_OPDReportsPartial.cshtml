@@ -1,0 +1,64 @@
+﻿@model List<OPDViewModel>
+
+<form asp-action="ExportOPDReports" asp-controller="OPDTransaction" asp-area="Staff" method="post">
+    @if (Model != null)
+    {
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            <input type="hidden" name="opdReports[@i].SrNo" value="@item.SrNo" />
+            <input type="hidden" name="opdReports[@i].PayType" value="@item.PayType" />
+            <input type="hidden" name="opdReports[@i].PatientName" value="@item.PatientName" />
+            <input type="hidden" name="opdReports[@i].Amount" value="@item.Amount" />
+            <input type="hidden" name="opdReports[@i].FeeTypeName" value="@item.FeeTypeName" />
+            <input type="hidden" name="opdReports[@i].DoctorName" value="@item.DoctorName" />
+        }
+    }
+
+    <button type="submit" class="btn btn-primary">Export to Excel</button>
+</form>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped custom-table ">
+                <thead>
+                    <tr>
+                        <th>SrNo</th>
+                        <th>PayType</th>
+                        <th>PatientName</th>
+                        <th> Amount</th>
+                        <th>Fee Type</th>
+                        <th>DoctorName</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        var opdTotal = 0.0;
+                        @foreach (var item in Model)
+                        {
+
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.SrNo)  </td>
+                                    <td>@Html.DisplayFor(modelItem => item.PayType)  </td>
+                                    <td>@Html.DisplayFor(modelItem => item.PatientName)  </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Amount)  </td>
+                                    <td>@Html.DisplayFor(modelItem => item.FeeTypeName)  </td>
+                                    <td>@Html.DisplayFor(modelItem => item.DoctorName)  </td>
+                                @{
+                                    opdTotal = opdTotal +(double) item.Amount;
+                                }
+                                </tr>
+                            }    
+                            <tr>
+                            <td colspan="3" style="font-weight:bold">--Total Amount--</td>
+                            <td style="font-weight:bold">@opdTotal</td>
+                            </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

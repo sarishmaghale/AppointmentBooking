@@ -100,9 +100,10 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                     switch (o.Column)
                     {
                         case 0:
-                            query = o.Dir == DataTablesOrderDir.Asc ?
-                                query.OrderBy(t => t.SrNo) :
+                            query = o.Dir == DataTablesOrderDir.Desc ?                             
+                            query.OrderBy(t => t.SrNo) :
                                 query.OrderByDescending(t => t.SrNo);
+
                             break;
                         case 1:
                             query = o.Dir == DataTablesOrderDir.Asc ?
@@ -145,7 +146,41 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
             return results;
         }
 
-        public async Task<IEnumerable<OPDViewModel>> GetOPDReports()
+        public async Task<List<OPDViewModel>> GetFilterOPDReports(OPDViewModel model)
+        {
+           
+            var query = db.TblOpdregistrations.AsQueryable();
+            string? user = model.CreatedByUser;
+            string? payType = model.PayType;
+            DateTime? fromDate = model.FromDateFilter;
+            DateTime? toDate = model.ToDateFilter;
+
+            if (!string.IsNullOrEmpty(payType) && !payType.Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(t => t.PayType.Contains(payType));
+            }
+            if (!string.IsNullOrEmpty(user) && !user.Equals("all", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(t => t.CreatedByUser.Contains(user));
+            }
+            if (fromDate != null && toDate != null)
+            {
+                // Filter by date range
+                query = query.Where(t => t.CreatedDate >= fromDate && t.CreatedDate <= toDate);
+            }
+            var results = await query.Select(t => new OPDViewModel
+            {
+                SrNo = t.SrNo,
+                PayType=t.PayType,
+                PatientName=t.FirstName+" "+t.LastName,
+                Amount=t.Amount,
+                FeeTypeName=db.TblFeeTypes.Where(f=> f.FeeTypeId==t.FeeType).Select(f=>f.FeeTypeName).FirstOrDefault(),
+                DoctorName=db.TblDoctorSetups.Where(d=> d.DoctorId==t.ConsultantDr).Select(d=> d.DoctorName).FirstOrDefault(),
+            }).OrderByDescending(t=>t.SrNo).ToListAsync();
+            return results;
+        }
+
+        public async Task<List<OPDViewModel>> GetOPDReports()
         {
             var date =DateTime.Now.Date;
           var data= await db.TblOpdregistrations.Where(x => x.CreatedDate == date).Select(m=> new OPDViewModel()
@@ -154,8 +189,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
              PatientName= m.FirstName+" "+m.LastName,
               PayType=m.PayType,
               Amount=m.Amount,
-              ConsultantDr=m.ConsultantDr,
-              FeeType=m.FeeType,
+              DoctorName=db.TblDoctorSetups.Where(d=> d.DoctorId==m.ConsultantDr).Select(d=>d.DoctorName).FirstOrDefault(),
+              FeeTypeName=db.TblFeeTypes.Where(f=> f.FeeTypeId==m.FeeType).Select(f=>f.FeeTypeName).FirstOrDefault(),
           }).ToListAsync();
             return data;
         }

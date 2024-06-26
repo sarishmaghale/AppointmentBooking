@@ -1,4 +1,5 @@
 ﻿using AppointmentBooking.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppointmentBooking.Areas.Staff.Models
 {
@@ -10,13 +11,26 @@ namespace AppointmentBooking.Areas.Staff.Models
         public int? Opdno { get; set; }
         public int? Ipdno { get; set; }
         public string? PayType { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? CreatedDate { get; set; }
+        public string? CreatedByUser { get; set; }
         public double? TotalAmount { get; set; }
         public string? PatientName { get; set; }
         public string? Address { get; set; }
         public string? Age { get; set; }
         public string? DoctorName { get; set; }
         public List<ReceiptDetails> ReceiptDetails { get; set; }
+
+        //for cash summary form
+        public int? GroupFilter { get; set; }
+        public string? UserFilter { get; set; }
+        public string? PayTypeFilter { get; set; }
+        public DateTime? FromDateFilter { get; set; }
+        public DateTime? ToDateFilter { get; set; }
+        public string? TestGroupDept { get; set; }
+        public List<ReceiptViewModel>? Receipts { get; set; }
+        public double? ReceiptTotal { get; set; }
+        public List<ReceiptViewModel>? Results { get; set; }
        
        }
     public class ReceiptDetails

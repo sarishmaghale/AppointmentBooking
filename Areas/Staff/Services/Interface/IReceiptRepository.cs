@@ -7,7 +7,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
     {
         public Task<IEnumerable<ReceiptDetails>> GetTestsDataOnTestGroup(int TestGroupId);
         public Task<double> GetTestPrice(int TestId);
-        public Task<bool> AddCashReceipt(ReceiptViewModel model);
-        public Task<ReceiptViewModel> ReceiptDetails(int ReceiptNo);
+        public Task<int> AddCashReceipt(ReceiptViewModel model);
+        public Task<ReceiptViewModel> GetReceiptDetails(int ReceiptNo);
+        public Task<List<ReceiptViewModel>> GetFilterCashSummary(ReceiptViewModel model);
     }
 }
