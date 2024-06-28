@@ -81,6 +81,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 Dob = m.Dob,
                 Age = m.Age,
                 AgeType = m.AgeType,
+                District=m.District,
                 Address = m.Address,
                 Contactno = m.Contactno,
                 Gender = m.Gender,

@@ -22,10 +22,10 @@ builder.Services.AddTransient<CommonUtility>();
 builder.Services.AddTransient<ApiService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IOPDBookingService, OPDBookingService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRespository>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRespository>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptRepository>();
-
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRepo>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRepo>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptRepo>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IIPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.IPDRepo>();
 builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IRegistrationRepo, AppointmentBooking.Areas.Staff.Services.Repository.RegistrationRepo>();
 builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IComponentSetupRepo, AppointmentBooking.Areas.Staff.Services.Repository.ComponentSetupRepo>();
 builder.Services.AddHttpContextAccessor();

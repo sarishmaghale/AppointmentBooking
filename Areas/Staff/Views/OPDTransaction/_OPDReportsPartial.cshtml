@@ -46,7 +46,7 @@
                                     <td>@Html.DisplayFor(modelItem => item.FeeTypeName)  </td>
                                     <td>@Html.DisplayFor(modelItem => item.DoctorName)  </td>
                                 @{
-                                    opdTotal = opdTotal +(double) item.Amount;
+                                    opdTotal = opdTotal +Convert.ToDouble(item.Amount??0);
                                 }
                                 </tr>
                             }    

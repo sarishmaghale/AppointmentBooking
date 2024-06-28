@@ -32,6 +32,8 @@ namespace AppointmentBooking.Data
         public string? Remark { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? IsDischarged { get; set; }
+        public string? CreatedByUser { get; set; }
+        public int? OpdSrNo { get; set; }
 
         public virtual TblPatientRegistration? Uh { get; set; }
     }

@@ -32,9 +32,11 @@ namespace AppointmentBooking.Areas.Staff.Models
         public DateTime? CreatedDate { get; set; }
         public int? IsDischarged { get; set; }
         public int? IPDBedTypeId { get; set; }
-        public int? IPDBedId { get; set; }
-        public int? IPDBedPrice { get; set; }
+        public string? IPDBedName { get; set; }
+        public double? IPDBedPrice { get; set; }
         public int? IPDStatus { get; set; }
+        public string? CreatedByUser { get; set; }
+        public int? OpdSrNo { get; set; }
         public virtual TblPatientRegistration? Uh { get; set; }
     }
     public class IDPBedViewModel

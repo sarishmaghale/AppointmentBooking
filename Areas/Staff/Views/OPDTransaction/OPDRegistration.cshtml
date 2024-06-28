@@ -280,6 +280,7 @@
                             $(".FirstName").val(result.firstName);
                             $(".LastName").val(result.lastName);
                             $(".Address").val(result.address);
+                        $(".District").append("<option selected value='" + result.district + "'>" + result.district + "</option>");
                             $(".DOB").val(result.dob);
                             $(".Age").val(result.age);
                             $(".AgeType").val(result.ageType);

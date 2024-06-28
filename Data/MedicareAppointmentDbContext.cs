@@ -257,6 +257,8 @@ namespace AppointmentBooking.Data
 
                 entity.Property(e => e.Contactno).HasMaxLength(10);
 
+                entity.Property(e => e.CreatedByUser).HasMaxLength(50);
+
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.Diagnosis).HasMaxLength(50);

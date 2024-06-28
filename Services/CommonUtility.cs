@@ -121,6 +121,11 @@ namespace AppointmentBooking.Services
             int maxRecNo = db.TblCashReceipts.Max(item => item.ReceiptNo);
             return (maxRecNo + 1);
         }
+        public int GetIPDRegNo()
+        {
+            int maxRecNo = db.TblIpdregistrations.Max(item => item.IpdregNo);
+            return (maxRecNo + 1);
+        }
         public SelectList GetCaseType()
         {
             var cases = db.TblCaseTypes.ToList();

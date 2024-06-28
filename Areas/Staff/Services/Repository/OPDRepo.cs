@@ -8,10 +8,10 @@ using System.Globalization;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class OPDRespository:IOPDRepository
+    public class OPDRepo:IOPDRepository
     {
         private MedicareAppointmentDbContext db;
-        public OPDRespository(MedicareAppointmentDbContext _db)
+        public OPDRepo(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }
@@ -177,6 +177,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 FeeTypeName=db.TblFeeTypes.Where(f=> f.FeeTypeId==t.FeeType).Select(f=>f.FeeTypeName).FirstOrDefault(),
                 DoctorName=db.TblDoctorSetups.Where(d=> d.DoctorId==t.ConsultantDr).Select(d=> d.DoctorName).FirstOrDefault(),
             }).OrderByDescending(t=>t.SrNo).ToListAsync();
+           
             return results;
         }
 
@@ -200,11 +201,16 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
           var data=  await db.TblOpdregistrations.Where(x => x.SrNo == OPDNo).Select(m => new OPDViewModel()
             {
                 PatientName = m.FirstName + " " + m.LastName,
+                FirstName=m.FirstName,
+                LastName=m.LastName,
                 Address = m.Address,
+                District=m.District,
+                Dob=m.Dob,
                 Age = m.Age,
                 AgeType=m.AgeType,
                 Uhid=m.Uhid,
                 Gender = m.Gender,
+                ConsultantDr=m.ConsultantDr,
                 DoctorName = db.TblDoctorSetups.Where(y => y.DoctorId == m.ConsultantDr).Select(y => y.DoctorName).FirstOrDefault(),
             }).FirstOrDefaultAsync();
             return data;

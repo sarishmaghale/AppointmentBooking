@@ -13,14 +13,13 @@
 
                     <div class="card-box">
                         <b><h4 class="card-title" style="text-align:center">IPD Registration Form</h4></b>
-                        @*  <center> Current DateTime: @utils.GetCurrentDateTime()</center> *@
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">UHID:</label>
                                     <div class="col-md-3">
-                                        <input asp-for="Uhid" type="number" class="form-control form-control-sm" onkeydown="HandleUhidKeyEvent(event)">
+                                        <input asp-for="Uhid" type="number" class="form-control form-control-sm Uhid" onkeydown="HandleUhidKeyEvent(event)">
                                         <span asp-validation-for="Uhid" class="text-danger"></span>
 
                                     </div>
@@ -28,12 +27,7 @@
                                         <input asp-for="CreatedDate" type="datetime" class="form-control form-control-sm" value="@date.ToShortDateString()" readonly>
 
                                     </div>
-@*                                     <div class="col-md-3">
-                                        <input asp-for="CreatedTime" class="form-control" value="@utils.GetCurrenTime()" readonly>
-
-                                    </div> *@
                                 </div>
-                              @*   <input type="hidden" asp-for="CreatedByUser" value="@User.Identity.Name" /> *@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">Name </label>
                                     <div class="col-md-5">
@@ -65,12 +59,12 @@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">OPD No:</label>
                                     <div class="col-md-2">
-                                        <input type="text" class="form-control form-control-sm" />
+                                        <input asp-for="OpdSrNo" type="text" class="form-control form-control-sm" onkeydown="HandleOPDKeyEvent(event)" />
+                                        <span asp-validation-for="OpdSrNo" class="text-danger"></span>
                                     </div>
                                     <label class="col-md-2 col-form-label col-form-label-sm">IPD Reg:</label>
                                     <div class="col-md-2">
-
-                                        <input type="text" class="form-control form-control-sm" readonly />
+                                        <input type="text" class="form-control form-control-sm" value="@utils.GetIPDRegNo()" readonly />
                                     </div>
                                     <label class="col-md-2 col-form-label col-form-label-sm">Counter:</label>
                                     <div class="col-md-2">
@@ -88,7 +82,7 @@
                                     <label class="col-md-3 col-form-label col-form-label-sm">Admission Charge:</label>
                                     <div class="col-md-3">
                                         <input type="text" asp-for="AdmCharge" class="form-control form-control-sm" />
-                                        <span asp-validation-for="CaseType" class="text-danger"></span>
+                                        <span asp-validation-for="AdmCharge" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -96,7 +90,7 @@
                                     <div class="col-md-8">
                                         <select asp-for="CaseType" asp-items="@utils.GetCaseType()"  class="form-control form-control-sm">
                                             </select>
-                                        <span asp-validation-for="AdmCharge" class="text-danger"></span>
+                                        <span asp-validation-for="CaseType" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -117,13 +111,14 @@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">DOB:</label>
                                     <div class="col-md-4">
-                                        <input asp-for="Dob" type="date" id="DOB" class="form-control form-control-sm DOB" onchange="ShowAge(this)">
+                                        <input asp-for="Dob" type="date"  class="form-control form-control-sm DOB " onchange="ShowAge(this)">
                                         <span asp-validation-for="Dob" class="text-danger"></span>
                                     </div>
 
                                     <label class="col-md-1 col-form-label col-form-label-sm">Age:</label>
                                     <div class="col-md-2">
                                         <input asp-for="Age" type="text" id="AgeInput" class="form-control form-control-sm Age" onchange="calculateBirthDate(this)">
+                                        <span asp-validation-for="Age" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-3">
                                         <select asp-for="AgeType" id="AgeTypeInput" class="form-control form-control-sm AgeType" onchange="calculateBirthDate(this)">
@@ -131,6 +126,7 @@
                                             <option value="months">Months</option>
                                             <option value="days">Days</option>
                                         </select>
+                                        <span asp-validation-for="AgeType" class="text-danger"></span>
                                     </div>
 
                                 </div>
@@ -156,15 +152,15 @@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">Guardian Name:</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control form-control-sm" asp-for="Gname">
-                                        <span class="text-danger"></span>
+                                        <input asp-for="Gname" type="text" class="form-control form-control-sm">
+                                        <span asp-validation-for="Gname" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">Guardian Contact:</label>
                                     <div class="col-md-5">
                                         <input type="text" asp-for=Gcontact class="form-control form-control-sm">
-                                        <span class="text-danger"></span>
+                                        <span asp-validation-for="Gcontact" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-3">
                                         <select  asp-for="Grelation" class="form-control form-control-sm">
@@ -172,7 +168,7 @@
                                             <option>W/F</option>
                                             <option>C/0</option>
                                             </select>
-                                        <span class="text-danger"></span>
+                                        <span asp-validation-for="Grelation" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +178,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Consultant Dr.</label>
                                     <div class="col-md-8">
-                                        <select asp-for="ConsultantDr" asp-items="@utils.GetDoctors()" class="form-control form-control-sm" id="Doctors">
+                                        <select asp-for="ConsultantDr" asp-items="@utils.GetDoctors()" class="form-control form-control-sm ConsultantDr" id="Doctors">
                                         </select>
                                         <span asp-validation-for="ConsultantDr" class="text-danger"></span>
                                     </div>
@@ -190,21 +186,23 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Bed Type:</label>
                                     <div class="col-md-4">
-                                        <select class="form-control form-control-sm" asp-items="@utils.GetBedCategory()" asp-for="IPDBedTypeId" >
-                                            </select>
+                                        <select class="form-control form-control-sm" asp-items="@utils.GetBedCategory()" asp-for="IPDBedTypeId" onchange="HandleBedCategoryChange(this)" >
+                                           <option disabled selected>-</option>
+                                        </select>
                                         <span asp-validation-for="IPDBedTypeId" class="text-danger"></span>
 
                                     </div>
                                     <div class="col-md-4">
-                                        <input class="form-control form-control-sm" id="BedName" asp-for="IPDBedId" type="text" />
-                                        <span asp-validation-for="IPDBedId" class="text-danger"></span>
+                                        <select class="form-control form-control-sm BedName"  asp-for="BedNo">
+                                            </select>
+                                        <span asp-validation-for="BedNo" class="text-danger"></span>
 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Amount</label>
                                     <div class="col-md-8">
-                                        <input type="text" asp-for="IPDBedPrice" class="form-control form-control-sm" />
+                                        <input type="text" asp-for="IPDBedPrice" class="form-control form-control-sm" id="BedPrice" readonly/>
                                         <span asp-validation-for="CaseType" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -243,10 +241,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // Check if alert message exists
-            if ('@TempData["OPDMSge"]' !== '') {
+            if ('@TempData["IPDMsge"]' !== '') {
                 // Display SweetAlert
                 Swal.fire({
-                    title: '@TempData["OPDMSge"]',
+                    title: '@TempData["IPDMsge"]',
                     showCancelButton: true,
                     confirmButtonText: 'OK',
                     CancelButtonText: 'Cancel',
@@ -278,7 +276,53 @@
             }
 
         }
- 
+        function HandleOPDKeyEvent(e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var opd = $(e.target).val();
+                $.ajax({
+                    url: "@Url.Action("GetPatientInfoByOPD", "IPDTransaction")",
+                    method: "GET",
+                    data: { opd: opd },
+                    success: function (result) {
+                        $(".FirstName").val(result.firstName);
+                        $(".LastName").val(result.lastName);
+                        $(".Address").val(result.address);
+                        $(".District").append("<option selected value='" + result.district + "'>" + result.district + "</option>");
+                        $(".Age").val(result.age);
+                        $(".AgeType").val(result.ageType);
+                        $(".DOB").val(result.dob);
+                        $(".Gender").val(result.gender);
+                        $(".ConsultantDr").append("<option selected value='" + result.consultantDr + "'>" + result.doctorName + "</option>");
+                        $(".Uhid").val(result.uhid);
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+
+        }
+        function HandleBedCategoryChange(e) {
+            var bedCat = $(e).val();
+            $.ajax({
+                url: "@Url.Action("GetBedValues", "IPDTransaction")",
+                method: "Get",
+                data: { BedTypeId: bedCat },
+                success: function (result) {
+                    $(".BedName").empty();
+                    $("#BedPrice").val("");
+                    $.each(result, function (index, row) {
+                        $("#BedPrice").val(row.ipdBedPrice);
+                        $(".BedName").append("<option value='" + row.bedNo + "'>" + row.ipdBedName + "</option>");
+
+                    });
+                },
+                error: function () {
+                    alert('failed');
+                },
+            });
+        }
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
