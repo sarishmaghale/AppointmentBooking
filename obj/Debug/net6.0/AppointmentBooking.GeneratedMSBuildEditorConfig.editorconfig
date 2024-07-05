@@ -42,6 +42,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcSVBEVHJhbnNhY3Rpb25cSVBEUmVnaXN0cmF0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/IPDTransaction/RoomBedStatus.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcSVBEVHJhbnNhY3Rpb25cUm9vbUJlZFN0YXR1cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/acer/Desktop/Project/HospitalManagementSystem/AppointmentBooking/Areas/Staff/Views/OPDTransaction/OPDRegistration.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcU3RhZmZcVmlld3NcT1BEVHJhbnNhY3Rpb25cT1BEUmVnaXN0cmF0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

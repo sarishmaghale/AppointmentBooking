@@ -22,12 +22,12 @@ builder.Services.AddTransient<CommonUtility>();
 builder.Services.AddTransient<ApiService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IOPDBookingService, OPDBookingService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRepo>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDRepo>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptRepo>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IIPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.IPDRepo>();
-builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IRegistrationRepo, AppointmentBooking.Areas.Staff.Services.Repository.RegistrationRepo>();
-builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IComponentSetupRepo, AppointmentBooking.Areas.Staff.Services.Repository.ComponentSetupRepo>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDService>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDService>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptService>();
+builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IIPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.IPDService>();
+builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IRegistrationRepository, AppointmentBooking.Areas.Staff.Services.Repository.RegistrationService>();
+builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IComponentSetupRepository, AppointmentBooking.Areas.Staff.Services.Repository.ComponentSetupService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<ApiService>(client =>
 {

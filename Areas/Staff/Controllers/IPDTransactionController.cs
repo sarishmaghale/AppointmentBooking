@@ -9,10 +9,10 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     [Authorize]
     public class IPDTransactionController : Controller
     {
-        private IRegistrationRepo patientRegistration;
+        private IRegistrationRepository patientRegistration;
         private IOPDRepository opdProvider;
         private IIPDRepository ipdProvider;
-        public IPDTransactionController(IRegistrationRepo _patientRegistration,IOPDRepository _opdProvider,IIPDRepository _ipdProvider)
+        public IPDTransactionController(IRegistrationRepository _patientRegistration,IOPDRepository _opdProvider,IIPDRepository _ipdProvider)
         {
             patientRegistration = _patientRegistration;
             opdProvider = _opdProvider;
@@ -48,6 +48,24 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         public async  Task<IActionResult> GetBedValues(int BedTypeId)
         {
             var result =await ipdProvider.GetIPDBedValues(BedTypeId);
+            return Json(result);
+        }
+        public IActionResult RoomBedStatus()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoomBedStatus(int BedTypeId)
+        {
+            var result = await ipdProvider.GetWardsInfo(BedTypeId);
+            return View(result);
+        }
+
+        public async Task<IActionResult> PatientOnBedDetail(int BedTypeId,int BedId)
+        {
+            var model = new IDPBedViewModel();
+            model.BedTypeId = BedTypeId; model.BedId = BedId;
+           var result= await ipdProvider.GetPatientInfoOnBed(model);
             return Json(result);
         }
     }

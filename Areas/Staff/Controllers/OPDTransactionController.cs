@@ -15,10 +15,10 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     public class OPDTransactionController : Controller
     {
         private CommonUtility utils;
-        private IRegistrationRepo patientRegistration;
+        private IRegistrationRepository patientRegistration;
         private IOPDRepository opdRegistration;
    
-        public OPDTransactionController(CommonUtility _utils, IRegistrationRepo _patientRegistration, IOPDRepository _opdRegistration)
+        public OPDTransactionController(CommonUtility _utils, IRegistrationRepository _patientRegistration, IOPDRepository _opdRegistration)
         {
             utils = _utils;
             patientRegistration = _patientRegistration;

@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class IPDRepo : IIPDRepository
+    public class IPDService : IIPDRepository
     {
         private MedicareAppointmentDbContext db;
-        public IPDRepo(MedicareAppointmentDbContext _db)
+        public IPDService(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }
@@ -58,6 +58,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                     if (bedStatus != null)
                     {
                         bedStatus.Status = 1;
+                        bedStatus.IpdregNo = data.IpdregNo;
                         db.Entry(bedStatus).State = EntityState.Modified;
                         await db.SaveChangesAsync();
                     }
@@ -84,8 +85,55 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                                     BedNo = beds.BedId,
                                     IPDBedName = beds.BedName,
                                     IPDBedPrice = bedCategory.Price,
+                                    IPDStatus=beds.Status,
                                 }).ToListAsync();
             return result;
+        }
+
+        public async Task<IPDViewModel> GetPatientInfoOnBed(IDPBedViewModel model)
+        {
+            var result = await (from bedInfo in db.TblIpdbedStatuses
+                              join patientInfo in db.TblIpdregistrations on bedInfo.IpdregNo equals patientInfo.IpdregNo
+                              where bedInfo.BedId == model.BedId
+                              select new IPDViewModel
+                              {
+                                  IpdregNo = Convert.ToInt32(bedInfo.IpdregNo),
+                                  PatientName = patientInfo.FirstName + " " + patientInfo.LastName,
+                                  AgeType = patientInfo.Age.ToString() + " " + patientInfo.AgeType,
+                                  Contactno=patientInfo.Contactno,
+                                  CaseTypeName = db.TblCaseTypes.Where(c => c.CaseTypeId == patientInfo.CaseType).Select(c => c.CaseTypeName).FirstOrDefault(),
+                                  DoctorName = db.TblDoctorSetups.Where(d => d.DoctorId == patientInfo.ConsultantDr).Select(d => d.DoctorName).FirstOrDefault(),
+                                  Complain = patientInfo.Complain,
+                                  Diagnosis = patientInfo.Diagnosis,
+                                  CreatedDate = patientInfo.CreatedDate,
+                                  Address=patientInfo.Address,
+                                  Uhid=patientInfo.Uhid,
+                              }).FirstOrDefaultAsync();
+            return result;                          
+        }
+
+        public async Task<IEnumerable<IDPBedViewModel>> GetWardsInfo(int BedTypeId)
+        {
+            try
+            {
+                var result = await (from bedCategory in db.TblIpdbedTypes
+                                    join beds in db.TblIpdbedStatuses on bedCategory.BedTypeId equals beds.BedTypeId
+                                    where bedCategory.BedTypeId == BedTypeId
+                                    select new IDPBedViewModel
+                                    {
+                                        BedTypeId = bedCategory.BedTypeId,
+                                        BedId = beds.BedId,
+                                        BedName = beds.BedName,
+                                        Price = bedCategory.Price,
+                                        Status = beds.Status,
+                                    }).ToListAsync();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+           
         }
     }
 }

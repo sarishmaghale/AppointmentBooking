@@ -14,8 +14,8 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     public class HomeController : Controller
     {
 
-        private IRegistrationRepo registration;
-        public HomeController(IRegistrationRepo _registration)
+        private IRegistrationRepository registration;
+        public HomeController(IRegistrationRepository _registration)
         {
             registration = _registration;
         }

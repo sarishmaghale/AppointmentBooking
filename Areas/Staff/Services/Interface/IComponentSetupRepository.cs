@@ -2,7 +2,7 @@
 
 namespace AppointmentBooking.Areas.Staff.Services.Interface
 {
-    public interface IComponentSetupRepo
+    public interface IComponentSetupRepository
     {
         public Task<int> AddDoctor(DoctorSetupViewModel model);
         

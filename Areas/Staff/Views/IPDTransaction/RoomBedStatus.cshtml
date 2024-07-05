@@ -1,0 +1,189 @@
+﻿@model IEnumerable<IDPBedViewModel>
+@inject CommonUtility utils
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-4 col-3">
+                <h4 class="page-title">Bed Status</h4>
+            </div>
+            <div class="col-sm-8 col-9 text-right m-b-20">
+                <a href="add-employee.html" class="btn btn-primary float-right btn-rounded"><i class="fa fa-plus"></i> Add Employee</a>
+            </div>
+        </div>
+            <form asp-action="RoomBedStatus" asp-controller="IPDTransaction" asp-area="Staff" method="POST">
+            <div class="row filter-row">
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus select-focus">
+                        <label class="focus-label">Ward</label>
+                        <select class="select floating Ward" asp-items="@utils.GetBedCategory()" id="BedTypeId" name="BedTypeId">
+                            <option disabled selected>Select ward</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <button type="submit" class="btn btn-success btn-block"> Search </button>
+                </div>
+            </div>
+        </form>
+      
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="WardInfoBody">
+                            @if(Model!=null){
+                                foreach(var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.BedName</td>
+                                        <td>
+                                            @if(item.Status==0){
+                                                <span class="custom-badge status-green">Available</span>
+                                            }
+                                            @if(item.Status==1){
+                                                <span class="custom-badge status-red">Occupied</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="dropdown dropdown-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+
+                                                    <button class="dropdown-item btnViewBedInfo" data-typeid="@item.BedTypeId" data-bedid="@item.BedId"
+                                                    data-toggle="modal" data-target="#delete_employee"><i class="fa fa-eye m-r-5"></i> View</button>
+                                                    <a class="dropdown-item" href="edit-employee.html"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                           
+                    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="PatientInfoBody" style="display: none;">
+            <div class="card-box profile-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="profile-view">
+                            <div class="profile-basic">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="profile-info-left">
+                                            <h3 class="user-name m-t-0 mb-0">RegNo:
+                                               <input id="IpdRegNo" style="border:none;" />
+                                                Uhid: <input id="Uhid" style="border:none;" />
+                                            </h3>
+                                            <div class="staff-id">Patient Name: 
+                                                <input id="PatientName" style="border:none" />
+                                            </div>
+                                            <div class="staff-id">Age : <input id="Age" style="border:none" /></div>
+                                            <div class="staff-id">ContactNo :  <input id="Contactno" style="border:none" /></div>
+
+                                            <div class="staff-id">Adress : <input id="Address" style="border:none" /></div>
+                                            <div class="staff-id">Admitted Date : <input id="AdmitOn" style="border:none" /></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="personal-info">
+                                            <div class="staff-id">
+                                               CaseType:
+                                                <input id="CaseType" style="border:none" />
+                                            </div>
+                                            <div class="staff-id">Consultant Dr. : <input id="DoctorName" style="border:none" /></div>
+                                            <div class="staff-id">Complain :  <input id="Complain" style="border:none" /></div>
+
+                                            <div class="staff-id">Diagnosis :  <input id="Diagnosis" style="border:none" /></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+
+
+
+
+  @section Scripts{
+    <script type="text/javascript">
+        function SearchWards(e) {
+            var ward = $(".Ward").val();
+                $.ajax({
+                url: "@Url.Action("GetWards", "IPDTransaction")",
+                    method: "GET",
+                data: { BedTypeId: ward },
+                    success: function (result) {
+                    var tableBody = $('.WardInfoBody');
+                    tableBody.empty(); // Clear any existing rows
+                    result.forEach(function (item) {
+                        var statusClass = item.status == 0 ? 'custom-badge status-green' : 'custom-badge status-red';
+                        var statusValue = item.status == 0 ? 'Available' : 'Occupied';
+                        console.log(item);
+                        var row = '<tr>' +
+                            '<td>' + item.bedName + '</td>' +
+                            '<td><span class="' + statusClass + '">' + statusValue + '</td>' +
+
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+
+        }
+
+        $(document).ready(function () {
+            $(document).on('click', '.btnViewBedInfo', function () {
+                var BedTypeId = $(this).data('typeid');
+                var BedId = $(this).data('bedid');
+                $.ajax({
+                    url: "@Url.Action("PatientOnBedDetail", "IPDTransaction")",
+                    type: "GET",
+                    data: { BedTypeId: BedTypeId, BedId:BedId},
+                    success: function (data) {
+                        console.log(data);
+                        $("#IpdRegNo").val(data.ipdregNo);
+                        $("#Uhid").val(data.uhid);
+                        $("#PatientName").val(data.patientName);
+                        $("#Age").val(data.ageType);
+                        $("#Address").val(data.address);
+                        $("#Contactno").val(data.contactno);
+                        $("#CaseType").val(data.caseTypeName);
+                        $("#DoctorName").val(data.doctorName);
+                        $("#Complain").val(data.complain);
+                        $("#AdmitOn").val(data.createdDate);
+                        $("#Diagnosis").val(data.diagnosis);
+                        $('#PatientInfoBody').css('display', 'block');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+                                          
+}

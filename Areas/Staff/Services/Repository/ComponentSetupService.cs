@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class ComponentSetupRepo : IComponentSetupRepo
+    public class ComponentSetupService : IComponentSetupRepository
     {
         private MedicareAppointmentDbContext db;
-        public ComponentSetupRepo(MedicareAppointmentDbContext _db)
+        public ComponentSetupService(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }

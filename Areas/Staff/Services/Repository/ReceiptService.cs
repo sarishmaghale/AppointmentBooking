@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class ReceiptRepo : IReceiptRepository
+    public class ReceiptService : IReceiptRepository
 
     {
         private MedicareAppointmentDbContext db;
-        public ReceiptRepo(MedicareAppointmentDbContext _db)
+        public ReceiptService(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }

@@ -37,6 +37,9 @@ namespace AppointmentBooking.Areas.Staff.Models
         public int? IPDStatus { get; set; }
         public string? CreatedByUser { get; set; }
         public int? OpdSrNo { get; set; }
+        public string? PatientName { get; set; }
+        public string? CaseTypeName { get; set; }
+        public string? DoctorName { get; set; }
         public virtual TblPatientRegistration? Uh { get; set; }
     }
     public class IDPBedViewModel

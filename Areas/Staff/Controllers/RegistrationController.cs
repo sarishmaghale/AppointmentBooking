@@ -12,9 +12,9 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     public class RegistrationController : Controller
     {
         private ApiService apiService;
-        private IRegistrationRepo provider;
+        private IRegistrationRepository provider;
        
-        public RegistrationController(ApiService _apiService, IRegistrationRepo _provider)
+        public RegistrationController(ApiService _apiService, IRegistrationRepository _provider)
         {
             apiService = _apiService;
             provider = _provider;

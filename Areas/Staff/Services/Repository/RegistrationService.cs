@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class RegistrationRepo:IRegistrationRepo
+    public class RegistrationService:IRegistrationRepository
     {
         private MedicareAppointmentDbContext db;
-        public RegistrationRepo(MedicareAppointmentDbContext _db)
+        public RegistrationService(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }

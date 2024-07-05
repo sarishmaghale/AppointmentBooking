@@ -123,7 +123,7 @@ namespace AppointmentBooking.Services
         }
         public int GetIPDRegNo()
         {
-            int maxRecNo = db.TblIpdregistrations.Max(item => item.IpdregNo);
+            int maxRecNo = 0; /*db.TblIpdregistrations.Max(item => item.IpdregNo)*/;
             return (maxRecNo + 1);
         }
         public SelectList GetCaseType()

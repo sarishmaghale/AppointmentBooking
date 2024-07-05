@@ -7,5 +7,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
     {
         public Task<IEnumerable<IPDViewModel>> GetIPDBedValues(int BedTypeId);
         public Task<int> AddIPDRegistration(IPDViewModel model);
+        public Task<IEnumerable<IDPBedViewModel>> GetWardsInfo(int BedTypeId);
+        public Task<IPDViewModel> GetPatientInfoOnBed(IDPBedViewModel model);
     }
 }

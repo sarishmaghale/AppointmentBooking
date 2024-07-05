@@ -8,10 +8,10 @@ using System.Globalization;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
-    public class OPDRepo:IOPDRepository
+    public class OPDService:IOPDRepository
     {
         private MedicareAppointmentDbContext db;
-        public OPDRepo(MedicareAppointmentDbContext _db)
+        public OPDService(MedicareAppointmentDbContext _db)
         {
             db = _db;
         }

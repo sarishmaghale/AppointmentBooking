@@ -221,6 +221,8 @@ namespace AppointmentBooking.Data
 
                 entity.Property(e => e.BedName).HasMaxLength(50);
 
+                entity.Property(e => e.IpdregNo).HasColumnName("IPDRegNo");
+
                 entity.Property(e => e.Status).HasColumnName("status");
 
                 entity.HasOne(d => d.BedType)

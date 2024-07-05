@@ -9,8 +9,8 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     [Authorize]
     public class ComponentsController : Controller
     {
-        private IComponentSetupRepo componentSetup;
-        public ComponentsController(IComponentSetupRepo _componentSetup)
+        private IComponentSetupRepository componentSetup;
+        public ComponentsController(IComponentSetupRepository _componentSetup)
         {
             componentSetup = _componentSetup;
         }

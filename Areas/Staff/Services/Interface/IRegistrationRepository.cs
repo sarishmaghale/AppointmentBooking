@@ -2,7 +2,7 @@
 
 namespace AppointmentBooking.Areas.Staff.Services.Interface
 {
-    public interface IRegistrationRepo
+    public interface IRegistrationRepository
     {
         public Task<decimal> AddPatientRegistration(PatientViewModel model);
         public Task<PatientViewModel> GetPatientsByUhid(decimal uhid);

@@ -9,6 +9,7 @@ namespace AppointmentBooking.Data
         public string? BedName { get; set; }
         public int? BedTypeId { get; set; }
         public int? Status { get; set; }
+        public int? IpdregNo { get; set; }
 
         public virtual TblIpdbedType? BedType { get; set; }
     }
