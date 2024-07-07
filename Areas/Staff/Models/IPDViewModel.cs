@@ -40,6 +40,7 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? PatientName { get; set; }
         public string? CaseTypeName { get; set; }
         public string? DoctorName { get; set; }
+       
         public virtual TblPatientRegistration? Uh { get; set; }
     }
     public class IDPBedViewModel

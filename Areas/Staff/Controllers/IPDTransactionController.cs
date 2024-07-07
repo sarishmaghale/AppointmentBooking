@@ -29,11 +29,11 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             if (ModelState.IsValid)
             {
                 var result = await ipdProvider.AddIPDRegistration(model);
-                TempData["IPDMsge"] = "Succcessfully added"+result;
-                return View();
+                TempData["IPDMsge"] = "Succcessfully added";
+                return RedirectToAction("IPDRegistration");
             }
             TempData["IPDMsge"] = "Failed to add";
-            return View();
+            return View() ;
         }
         public async Task<IActionResult> GetPatientInfoByUhid(decimal uhid)
         {
@@ -67,6 +67,11 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             model.BedTypeId = BedTypeId; model.BedId = BedId;
            var result= await ipdProvider.GetPatientInfoOnBed(model);
             return Json(result);
+        }
+        public async Task<IActionResult> IPDPatientList()
+        {
+            var data = await ipdProvider.GetIPDPatientList();
+            return View(data);
         }
     }
 }

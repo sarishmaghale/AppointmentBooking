@@ -23,6 +23,7 @@ namespace AppointmentBooking.Areas.Staff.Models
 
         //for cash summary form
         public int? GroupFilter { get; set; }
+        public string? Gender { get; set; }
         public string? UserFilter { get; set; }
         public string? PayTypeFilter { get; set; }
         public DateTime? FromDateFilter { get; set; }
@@ -42,6 +43,7 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? TestGroup { get; set; }
         public int? Quantity { get; set; }
         public double? Amount { get; set; }
+        public int? IpdRegNo { get; set; }
         public virtual TblCashReceipt? ReceiptNoNavigation { get; set; }
         public virtual TblTestGroupSetup? TestGroups
         {
@@ -50,5 +52,18 @@ namespace AppointmentBooking.Areas.Staff.Models
         }
         public virtual ICollection<TblTestSetup> TblTestSetups { get; set; }
         public string? TestGroupName { get; set; }
+    }
+
+    public class ExpenseEntryViewModel
+    {
+        public int? ExpenseEntryId { get; set; }
+        public int? IpdregNo { get; set; }
+        public decimal? Uhid { get; set; }
+        public string? TestGroup { get; set; }
+        public string? TestName { get; set; }
+        public double? Price { get; set; }
+        public int? Quantity { get; set; }
+        public double? Amount { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }

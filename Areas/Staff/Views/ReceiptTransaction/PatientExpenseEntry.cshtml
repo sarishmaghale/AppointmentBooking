@@ -1,0 +1,309 @@
+﻿
+@inject CommonUtility utils
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <input type="hidden" id="CreatedByUser" value="@User.Identity.Name" />
+                            <label class="col-md-2 ">IPD:</label>
+                            <input class="col-md-2" type="number" id="IPD" onkeydown="HandleIPDkeyEvent(event)"/>
+                            <label class="col-md-2">UHID:</label>
+                            <input class="col-md-2 Uhid" type="number" id="Uhid" />
+                           
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2">Name:</label>
+                            <input class="col-md-5 PatientName" type="text">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3">Consultant Dr.:</label>
+                            <input class="col-md-6 ConsultantDr" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-md-2">Adm. Date:</label>
+                            <input class="col-md-3 AdmitDate" type="date" readonly />
+                            <label class="col-md-2">Date:</label>
+                            <input class="col-md-3 date" type="date" value="@utils.GetTodayDate().ToShortDateString()" readonly />
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2">Age:</label>
+                            <input class="col-md-3 Age" type="text" />
+                            <label class="col-md-2">Gender:</label>
+                            <select class="col-md-3 Gender">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2">Address:</label>
+                            <input class="col-md-5 Address" type="text" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <table class="table table-bordered">
+                    <caption> Cash Receipt </caption>
+                    <tr align="center">
+                        <input type="hidden" class="form-control" placeholder="pro_price" id="pro_price" name="pro_price">
+                        <input type="hidden" class="form-control" placeholder="total_cost" id="total_cost" name="total_cost">
+
+                        <td>
+                            <select class="form-control" id="testGroup" name="testGroup" asp-items="@utils.GetTestGroup()" onchange="TestGroupChange(this)" required>
+                                <option selected disabled>TestGroup</option>
+                            </select>
+
+                        </td>
+                        <td>
+                            <select class="form-control" id="testname" name="testname" onchange="TestChange(this)" required>
+                                <option disabled selected>Test</option>
+                            </select>
+                        </td>
+
+
+                        <td>
+                            <input type="number" class="form-control pro_price" id="qty" name="qty" placeholder="qty" min="1" style="width:50px" onchange="QuantityChange(this)" required>
+                        </td>
+
+                        <td>
+                            <button class="btn btn-success" type="button" onclick="addproduct()">
+                                Add
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="table table-bordered" id="product_list">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px">Remove</th>
+                            <th>Test Group</th>
+                            <th>Test Name</th>
+                            <th>Unit price</th>
+                            <th>Qty</th>
+                            <th>Discount</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <div class="col s12 m6 offset-m4">
+                    <div class="form-group" align="left">
+                        <label class="form-label">Total</label>
+                        <input type="text" class="form-control" placeholder="Total" id="total" name="total" required disabled>
+                    </div>
+                    <div class="card" align="right">
+
+                        <button type="button" id="save" class="btn btn-info" onclick="addProject()">
+                            Save Data
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        var totalAmt = 0;
+        var discount = 0;
+        var grosstotal = 0;
+        var cost = 0;
+        var qtye = 0;
+        var barcode = 0;
+        function HandleIPDkeyEvent(e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var ipd = $(e.target).val();
+                $.ajax({
+                    url: "@Url.Action("GetPatientInfoByIPD", "ReceiptTransaction")",
+                    method: "GET",
+                    data: { ipd: ipd },
+                    success: function (result) {
+                        $(".PatientName").val(result.patientName);
+                        $(".Address").val(result.address);
+                        $(".Age").val(result.age + " " + result.ageType);
+                        $(".Gender").val(result.gender);
+                        $(".ConsultantDr").val(result.doctorName);
+                        $(".Uhid").val(result.uhid);
+                        var admitDate = new Date(result.createdDate).toISOString().split('T')[0];
+                        $(".AdmitDate").val(admitDate);
+                       
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+
+        }
+        function TestGroupChange(e) {
+            var grpId = $(e).val();
+            $.ajax({
+                url: "@Url.Action("GetTestOfGroup", "ReceiptTransaction")",
+                method: "Get",
+                data: { TestGroupId: grpId },
+                success: function (result) {
+                    $("#testname").empty();
+                    $("#pro_price").val("");
+                    $("#total_cost").val("");
+                    $("#testname").append("<option disabled selected> - </option>");
+                    $.each(result, function (index, row) {
+                        $("#testname").append("<option value='" + row.testId + "'>" + row.testName + "</option>");
+                    });
+                },
+                error: function (error) {
+                    console.log(error.message);
+                    alert('failed');
+                },
+            });
+        }
+        function TestChange(e) {
+            var testid = $(e).val();
+            $.ajax({
+                url: "@Url.Action("GetTestPrice", "ReceiptTransaction")",
+                method: "Get",
+                data: { TestId: testid },
+                success: function (result) {
+                    $("#pro_price").val("");
+                    $("#qty").val("");
+                    $("#pro_price").val(result);
+                },
+                error: function (error) {
+                    alert(error.message);
+                },
+            })
+        }
+        function QuantityChange(e) {
+            var qty = $(e).val();
+            var price = $("#pro_price").val();
+            var total = Number(price * qty);
+            $("#total_cost").val(total);
+        }
+        function addproduct() {
+            var sum1 = (
+                Number($("#pro_price").val()) * Number($("#qty").val())
+            );
+            var product = {
+                testGroup: $("#testGroup option:selected").text(),
+                testname: $("#testname option:selected").text(),
+                pro_price: $("#pro_price").val(),
+                qty: $("#qty").val(),
+                discount: 0,
+                total_cost: $("#total_cost").val(),
+                button: '<button  type="button" class="btn btn-warning btn-xs")">delete</button>'
+            };
+            addRow(product);
+        }
+
+        function addRow(product) {
+            var qty = Number($("#qty").val());
+            if ($('#testGroup').val().length === 0) {
+                $.alert({
+                    title: 'Error!',
+                    content: "Please Enter the data",
+                    type: 'red',
+                    autoClose: 'ok|2000'
+                });
+                return false;
+            }
+            else {
+                var $tableB = $('#product_list tbody');
+                var $row = $(
+                    "<tr><td><Button type='button' class='btn btn-warning btn-xs' name='record' id='deleterow' >Delete</td>" +
+                    "<td>" +
+                    product.testGroup +
+                    "</td><td class=\"price\">" +
+                    product.testname +
+                    "</td><td>" +
+                    product.pro_price +
+                    "</td>  <td>" +
+                    product.qty +
+                    "</td>  <td>" +
+                    product.discount +
+                    "</td> <td>" +
+                    product.total_cost +
+                    "</td></tr>");
+                $row.data("testGroup", product.product_code);
+                $row.data("testname", product.product_name);
+                $row.data("pro_price", product.price);
+                $row.data("qty", product.qty);
+                $row.data("discount", product.discount);
+                $row.data("total_cost", product.total_cost);
+                var cost = Number(product.total_cost);
+                totalAmt += cost;
+                $('#total').val(totalAmt);
+                discount += Number(product.discount);
+                $('#discounttotal').val(discount);
+                console.log(product.total_cost);
+                grandtotal = totalAmt - discount;
+                $('#grandtotal').val(grandtotal);
+                qtye += Number(product.qty);
+                $row.find('#deleterow').click(function (event) {
+                    //var $tableB = $('#product_list tbody');
+                    var cost = Number($row.data("total_cost"));
+                    debugger;
+                    var newCost = totalAmt - cost;
+                    totalAmt = newCost;
+                    $("#total").val(newCost);
+                    deleteRow($row);
+                });
+                $tableB.append($row);
+                $("#testGroup").focus();
+                return true;
+            }
+        }
+
+        function addProject() {
+            var tableData = new Array();
+            $('#product_list tbody tr').each(function (row, tr) {
+                var sum = {
+                    'TestGroup': $(tr).find('td:eq(1)').text(),
+                    'TestName': $(tr).find('td:eq(2)').text(),
+                    'Price': parseFloat($(tr).find('td:eq(3)').text()),
+                    'Quantity': parseInt($(tr).find('td:eq(4)').text()),
+                    'Amount': parseFloat($(tr).find('td:eq(6)').text()),
+                    'IpdregNo': parseInt($("#IPD").val()),
+                    'Uhid': parseFloat($("#Uhid").val()),
+                    'CreatedDate': $(".date").val(),
+                };
+                tableData.push(sum);
+            });
+
+            $.ajax({
+                url: "@Url.Action("AddExpenseEntry", "ReceiptTransaction")",
+                type: "POST",
+                data: JSON.stringify(tableData),
+                contentType: "application/json",
+                success: function (response) {
+                    var redirectUrl = '@Url.Action("ReceiptDetailsMain", "ReceiptTransaction")' + '?ReceiptNo=' + response.result;
+                    window.location.href = redirectUrl;
+                },
+                error: function (error) {
+                    alert(error.message);
+                },
+            });
+
+        }
+        function deleteRow($row) {
+
+            $row.remove();
+        }
+    </script>
+}

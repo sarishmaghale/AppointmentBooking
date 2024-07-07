@@ -26,6 +26,7 @@ namespace AppointmentBooking.Data
         public virtual DbSet<TblFeeType> TblFeeTypes { get; set; } = null!;
         public virtual DbSet<TblIpdbedStatus> TblIpdbedStatuses { get; set; } = null!;
         public virtual DbSet<TblIpdbedType> TblIpdbedTypes { get; set; } = null!;
+        public virtual DbSet<TblIpdexpenseEntry> TblIpdexpenseEntries { get; set; } = null!;
         public virtual DbSet<TblIpdregistration> TblIpdregistrations { get; set; } = null!;
         public virtual DbSet<TblOpdbooking> TblOpdbookings { get; set; } = null!;
         public virtual DbSet<TblOpdregistration> TblOpdregistrations { get; set; } = null!;
@@ -239,6 +240,23 @@ namespace AppointmentBooking.Data
                 entity.ToTable("tblIPDBedType");
 
                 entity.Property(e => e.BedTypeName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblIpdexpenseEntry>(entity =>
+            {
+                entity.HasKey(e => e.ExpenseEntryId);
+
+                entity.ToTable("tblIPDExpenseEntry");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("date");
+
+                entity.Property(e => e.IpdregNo).HasColumnName("IPDRegNo");
+
+                entity.Property(e => e.TestGroup).HasMaxLength(50);
+
+                entity.Property(e => e.TestName).HasMaxLength(50);
+
+                entity.Property(e => e.Uhid).HasColumnType("numeric(18, 0)");
             });
 
             modelBuilder.Entity<TblIpdregistration>(entity =>

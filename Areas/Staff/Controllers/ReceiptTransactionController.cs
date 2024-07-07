@@ -6,6 +6,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 
 namespace AppointmentBooking.Areas.Staff.Controllers
@@ -15,11 +16,12 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     public class ReceiptTransactionController : Controller
     {
 
-        private IReceiptRepository receiptProvider; private IOPDRepository opdProvider;
-        public ReceiptTransactionController(IReceiptRepository _receiptProvider, IOPDRepository _opdProvider)
+        private IReceiptRepository receiptProvider; private IOPDRepository opdProvider; IIPDRepository ipdProvider;
+        public ReceiptTransactionController(IReceiptRepository _receiptProvider, IOPDRepository _opdProvider, IIPDRepository _ipdProvider)
         {
             receiptProvider = _receiptProvider;
             opdProvider = _opdProvider;
+            ipdProvider = _ipdProvider;
         }
 
         public IActionResult CashReceipt()
@@ -38,6 +40,11 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         public async Task<IActionResult> GetPatientInfoByOPD(int opd)
         {
             var data = await opdProvider.GetPatientsByOPD(opd);
+            return Json(data);
+        }
+        public async Task<IActionResult> GetPatientInfoByIPD(int ipd)
+        {
+            var data = await ipdProvider.GetPatientsByIPD(ipd);
             return Json(data);
         }
 
@@ -73,7 +80,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         [HttpPost]
         public async Task<IActionResult> CashSummary(ReceiptViewModel model)
         {
-           var results= await receiptProvider.GetFilterCashSummary(model);
+            var results = await receiptProvider.GetFilterCashSummary(model);
             model.Results = results;
             return View("CashSummary", model);
         }
@@ -120,9 +127,49 @@ namespace AppointmentBooking.Areas.Staff.Controllers
                     string excelName = $"CashSummary-{System.DateTime.Now:yyyyMMddHHmmssfff}.xlsx";
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
                 }
-                
+
             }
         }
 
+        public IActionResult DischargeBill()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ExpenseEntry(int IpdNo)
+        {
+            var result = await ipdProvider.GetIPDExpenseEntries(IpdNo);
+            return Json(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DischargeBill(ReceiptViewModel model)
+        {
+            bool dataExists = await receiptProvider.CheckDischargeBill(Convert.ToInt32(model.Ipdno));
+            if (!dataExists)
+            {
+                bool result = await receiptProvider.AddDischargeBill(model);
+                if (result)
+                {
+                    TempData["DischargeBillMsge"] = "Bill successfully saved";
+                    return RedirectToAction("DischargeBill");
+                }
+                TempData["DischargeBillMsge"] = "Failed to save";
+                return RedirectToAction("DischargeBill");
+            }
+            TempData["DischargeBillMsge"] = "Bill was already saved!";
+            return View();
+
+        }
+
+        public IActionResult PatientExpenseEntry()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddExpenseEntry([FromBody] List<ExpenseEntryViewModel> tableData)
+        {
+            bool result = await receiptProvider.AddPatientExpenseEntry(tableData);
+            return View();
+        }
     }
 }

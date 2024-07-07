@@ -1,7 +1,6 @@
 ﻿
 @model ReceiptViewModel
 
-
                     <div class="card-body">
                         <div class="row custom-invoice">
                             <div class="col-6 col-sm-6 m-b-20">
@@ -16,7 +15,7 @@
                                 <div class="invoice-details">
                                     <h3 class="text-uppercase">ReceiptNo #@Model.ReceiptNo</h3>
                                     <ul class="list-unstyled">
-                                        <li>Date: <span>@Model.CreatedDate</span></li>
+                    <li>Date: <span>@Model.CreatedDate.Value.ToString("yyyy-MM-dd")</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -50,11 +49,11 @@
                                     {
                                         <tr>
                                             <td>1</td>
-                                            <td>@Html.DisplayFor(modelItem=> item.TestGroup)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TestName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.TestPrice)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                                            <td>@item.TestGroup</td>
+                                            <td>item.TestName</td>
+                                            <td>@item.TestPrice</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Amount</td>
                                         </tr>
                                     }
 

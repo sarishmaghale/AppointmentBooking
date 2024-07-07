@@ -1,0 +1,170 @@
+﻿
+
+@inject CommonUtility utils 
+  @model ReceiptViewModel
+<div class="page-wrapper">
+    <div class="content">     
+       <form asp-action="DischargeBill" asp-controller="ReceiptTransaction" asp-area="Staff">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                        <label class="col-md-2 ">IPD:</label>
+                        <input asp-for="Ipdno" class="col-md-2" type="number" id="IPD" onkeydown="HandleIPDKeyDownEvent(event)" />
+                                <label class="col-md-2">UHID:</label>
+                                <input asp-for="Uhid" class="col-md-2 Uhid" type="number" readonly />
+                                <label class="col-md-2">OPD:</label>
+                                <input asp-for="Opdno" class="col-md-2" type="number" id="OPD" />
+                               
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2">PayType:</label>
+                                <select asp-for="PayType" class="col-md-3 payType">
+                                    <option value="cash">Cash</option>
+                                    <option value="insurance">Insurance</option>
+                                    <option value="credit">Credit</option>
+                                </select>
+
+                                <label class="col-md-2">Name:</label>
+                        <input asp-for="PatientName" class="col-md-5 PatientName" type="text" />
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3">Consultant Dr.:</label>
+                        <input asp-for="DoctorName" class="col-md-6 ConsultantDr" type="text">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-2">Adm. Date:</label>
+                        <input  class="col-md-3 AdmitDate" type="date" readonly />
+                        <input asp-for="CreatedDate" type="hidden" value="@utils.GetTodayDate().ToShortDateString()"/>
+                                <label class="col-md-2">Rec.No:</label>
+                                <input  class="col-md-3" type="text" value="@utils.GetMaximumReceiptNo()" readonly />
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2">Age:</label>
+                        <input  class="col-md-3 Age" type="text" />
+                                <label class="col-md-2">Gender:</label>
+                                <select class="col-md-3 Gender">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2">Address:</label>
+                                <input class="col-md-5 Address" type="text" />
+                            </div>
+                        </div>
+                    </div>
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <table class="table table-bordered" id="receiptTable">
+                        <thead>
+                            <tr>
+                                <th>Test Group</th>
+                                <th>Test Name</th>
+                                <th>Unit price</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col s12 m6 offset-m4">
+                        <div class="form-group" align="left">
+                            <label class="form-label">Total</label>
+                            <input asp-for="TotalAmount" type="text" class="form-control" placeholder="Total" id="TotalAmount" name="TotalAmount" />
+                        <input asp-for="CreatedByUser" type="hidden" value="@User.Identity.Name"/>
+                        </div>
+                        <div class="card" align="right">
+
+                            <button type="submit" id="save" class="btn btn-info">
+                                Pay Bill
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+       </form>
+            
+
+       
+            
+       
+</div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Check if alert message exists
+            if ('@TempData["DischargeBillMsge"]' !== '') {
+                // Display SweetAlert
+                Swal.fire({
+                    title: '@TempData["DischargeBillMsge"]',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    CancelButtonText: 'Cancel',
+                });
+            }
+        });
+        function HandleIPDKeyDownEvent(e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var ipd = $(e.target).val();
+                $.ajax({
+                    url: "@Url.Action("ExpenseEntry", "ReceiptTransaction")",
+                    method: "GET",
+                    data: { IpdNo: ipd },
+                    success: function (result) {
+                        var tableBody = $('#receiptTable tbody');
+                        tableBody.empty();
+                        var totalAmount = 0;
+                        $(".PatientName").val(result.patientName);
+                        $(".Uhid").val(result.uhid);
+                        $(".ConsultantDr").val(result.doctorName);
+                        $(".Age").val(result.age);
+                        $(".Gender").val(result.gender);
+                        $(".Address").val(result.address);
+                        var admitDate = new Date(result.createdDate).toISOString().split('T')[0];
+                        $(".AdmitDate").val(admitDate);
+                        $.each(result.receiptDetails, function (index, item) {
+                            totalAmount += item.amount;
+                            var row = '<tr>' +
+                                '<td>' + item.testGroupName +
+                                '<input type="hidden" name="ReceiptDetails[' + index + '].TestGroup" value="' + item.testGroupName + '" /></td>' +
+                                '<td>' + item.testName +
+                                '<input type="hidden" name="ReceiptDetails[' + index + '].TestName" value="' + item.testName + '" /></td>' +
+                                '<td>' + item.testPrice +
+                                '<input type="hidden" name="ReceiptDetails[' + index + '].TestPrice" value="' + item.testPrice + '" /></td>' +
+                                '<td>' + item.quantity +
+                                '<input type="hidden" name="ReceiptDetails[' + index + '].Quantity" value="' + item.quantity + '" /></td>' +
+                                '<td>' + item.amount +
+                                '<input type="hidden" name="ReceiptDetails[' + index + '].Amount" value="' + item.amount + '" /></td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                            $("#TotalAmount").val(totalAmount);
+                        });
+                        
+                        console.log(result);
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+        }
+</script>
+                                    @{
+                                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                                    }
+         
+}

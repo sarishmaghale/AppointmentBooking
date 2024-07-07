@@ -114,15 +114,15 @@
             <div class="card" align="right">
 
                 <button type="button" id="save" class="btn btn-info" onclick="addProject()">
-                   Save Data
-                </button>
+                   Pay
+                </button><br />
                 <button type="button" id="clear" class="btn btn-warning" onclick="reSet()">Reset</button>
             </div>
         </div>
 
     </div>
+    </div>
 </div>
-     </div>
 </div>
 <hr />
 
@@ -203,12 +203,7 @@
                 })
             }
 
-        function QuantityChange(e) {
-                var qty = $(e).val();
-                var price = $("#pro_price").val();
-                var total = Number(price * qty);
-                $("#total_cost").val(total);
-            }
+       
 
         function addproduct() {
                 var sum1 = (
@@ -328,12 +323,7 @@
                 $row.remove();
             }
 
-        function reSet(){
-                 $('#product_list tbody').empty();
-                 $("#total").val("");
-                 cost = 0;
-                 totalAmt = 0;
-            }
+        
     </script>
 
 

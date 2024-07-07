@@ -22,13 +22,13 @@ namespace AppointmentBooking.Services
 
         public DateTime GetTodayDate()
         {
-           var date= DateTime.Now.Date;
+            var date = DateTime.Now.Date;
             return date;
         }
         public string GetCurrenTime()
         {
             return DateTime.Now.ToString("hh:mm tt");
-        }      
+        }
         public SelectList GetDepartments()
         {
             var dept = db.TblDepartments.ToList();
@@ -45,7 +45,7 @@ namespace AppointmentBooking.Services
         }
         public SelectList GetDistricts()
         {
-            var district = db.TblDropDownItems.Where(x=>x.ItemName=="District").ToList();
+            var district = db.TblDropDownItems.Where(x => x.ItemName == "District").ToList();
             var data = new SelectList(district, "ItemValue", "ItemValue");
             return data;
         }
@@ -63,7 +63,7 @@ namespace AppointmentBooking.Services
         }
         public string GetTestGroupName(int TestGroupId)
         {
-            var testGroupName =db.TblTestGroupSetups.Where(x=> x.TestGroupId==TestGroupId).Select(x=> x.TestGroupName).FirstOrDefault();
+            var testGroupName = db.TblTestGroupSetups.Where(x => x.TestGroupId == TestGroupId).Select(x => x.TestGroupName).FirstOrDefault();
             return testGroupName;
         }
         public string GetTestName(int TestId)
@@ -74,16 +74,16 @@ namespace AppointmentBooking.Services
         public async Task<IEnumerable<PatientViewModel>> GetValuesOnDepartment(int DepartmentId)
         {
             var result = await (from doctors in db.TblDoctorSetups
-                         join dept in db.TblDepartments
-                         on doctors.DepartmentId equals dept.DepartmentId
-                         where doctors.DepartmentId==DepartmentId
-                         select new PatientViewModel
-                         {
-                             DoctorId=doctors.DoctorId,
-                             DoctorName=doctors.DoctorName,
-                             RoomNo=dept.RoomNo,
-                             FloorName=dept.FloorName,
-                         }).ToListAsync();
+                                join dept in db.TblDepartments
+                                on doctors.DepartmentId equals dept.DepartmentId
+                                where doctors.DepartmentId == DepartmentId
+                                select new PatientViewModel
+                                {
+                                    DoctorId = doctors.DoctorId,
+                                    DoctorName = doctors.DoctorName,
+                                    RoomNo = dept.RoomNo,
+                                    FloorName = dept.FloorName,
+                                }).ToListAsync();
 
             return result;
 
@@ -94,21 +94,21 @@ namespace AppointmentBooking.Services
             {
                 FirstName = m.FirstName,
                 LastName = m.LastName,
-                PatientName=m.FirstName+" "+m.LastName,
+                PatientName = m.FirstName + " " + m.LastName,
                 Dob = m.Dob,
                 Age = m.Age,
                 AgeType = m.AgeType,
                 Address = m.Address,
                 Contactno = m.Contactno,
                 Gender = m.Gender,
-                Uhid=m.Uhid,
+                Uhid = m.Uhid,
             }).FirstOrDefaultAsync();
             return data;
         }
 
         public int GetOPDQueue(DateTime? Date)
         {
-           int maxQueue=db.TblOpdregistrations.Where(item=> item.CreatedDate==Date).Max(item => item.Opdqueue)??0;
+            int maxQueue = db.TblOpdregistrations.Where(item => item.CreatedDate == Date).Max(item => item.Opdqueue) ?? 0;
             return (maxQueue + 1);
         }
         public decimal GetMaximumUhid()
@@ -123,7 +123,7 @@ namespace AppointmentBooking.Services
         }
         public int GetIPDRegNo()
         {
-            int maxRecNo = 0; /*db.TblIpdregistrations.Max(item => item.IpdregNo)*/;
+            int maxRecNo = db.TblIpdregistrations.Max(item => item.IpdregNo);
             return (maxRecNo + 1);
         }
         public SelectList GetCaseType()
@@ -134,7 +134,7 @@ namespace AppointmentBooking.Services
         }
         public SelectList GetReligions()
         {
-            var religions = db.TblDropDownItems.Where(x=> x.ItemName=="Religion").ToList();
+            var religions = db.TblDropDownItems.Where(x => x.ItemName == "Religion").ToList();
             var data = new SelectList(religions, "ItemValue", "ItemValue");
             return data;
         }
@@ -158,7 +158,7 @@ namespace AppointmentBooking.Services
         }
         public string GetDoctorName(int? DoctorId)
         {
-           return db.TblDoctorSetups.Where(x => x.DoctorId == DoctorId).Select(x => x.DoctorName).FirstOrDefault();
+            return db.TblDoctorSetups.Where(x => x.DoctorId == DoctorId).Select(x => x.DoctorName).FirstOrDefault();
         }
         public string GetFeeTypeName(int? FeeeTypeId)
         {

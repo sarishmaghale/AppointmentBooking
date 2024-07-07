@@ -78,27 +78,29 @@
             <div class="card-box profile-header">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="profile-view">
+                      
                             <div class="profile-basic">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <div class="profile-info-left">
-                                            <h3 class="user-name m-t-0 mb-0">RegNo:
-                                               <input id="IpdRegNo" style="border:none;" />
-                                                Uhid: <input id="Uhid" style="border:none;" />
+                                            <h3 class="user-name m-t-0 mb-0">
+                                               <input id="BedName" style="border:none;" />
+                                               <br />                                              
                                             </h3>
+                                            <div class="staff-id">
+                                                IPDRegNo:
+                                                <input id="IPDRegNo" style="border:none" />
+                                            </div>
                                             <div class="staff-id">Patient Name: 
                                                 <input id="PatientName" style="border:none" />
                                             </div>
                                             <div class="staff-id">Age : <input id="Age" style="border:none" /></div>
-                                            <div class="staff-id">ContactNo :  <input id="Contactno" style="border:none" /></div>
-
-                                            <div class="staff-id">Adress : <input id="Address" style="border:none" /></div>
-                                            <div class="staff-id">Admitted Date : <input id="AdmitOn" style="border:none" /></div>
+                                          
                                         </div>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-4">
                                         <div class="personal-info">
+                                            <div class="staff-id">Admitted Date : <input id="AdmitOn" style="border:none" /></div>
                                             <div class="staff-id">
                                                CaseType:
                                                 <input id="CaseType" style="border:none" />
@@ -110,9 +112,23 @@
 
                                         </div>
                                     </div>
+                                <div class="col-md-4">
+                                    <div class="personal-info">
+                                        <div class="staff-id">ContactNo : <input id="Contactno" style="border:none" /></div>
+                                        <div class="staff-id">
+                                            Address:
+                                            <input id="Address" style="border:none" />
+                                        </div>
+                                        <div class="staff-id">Guardian : <input id="Gname" style="border:none" /></div>
+                                        <div class="staff-id">Guardian Contact:  <input id="Gcontact" style="border:none" /></div>
+
+                                        <div class="staff-id">Relation :  <input id="Relation" style="border:none" /></div>
+
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -165,8 +181,8 @@
                     data: { BedTypeId: BedTypeId, BedId:BedId},
                     success: function (data) {
                         console.log(data);
-                        $("#IpdRegNo").val(data.ipdregNo);
-                        $("#Uhid").val(data.uhid);
+                        $("#BedName").val(data.ipdBedName);
+                        $("#IPDRegNo").val(data.ipdregNo);
                         $("#PatientName").val(data.patientName);
                         $("#Age").val(data.ageType);
                         $("#Address").val(data.address);
@@ -176,6 +192,9 @@
                         $("#Complain").val(data.complain);
                         $("#AdmitOn").val(data.createdDate);
                         $("#Diagnosis").val(data.diagnosis);
+                        $("#Gname").val(data.gname);
+                        $("#Gcontact").val(data.gcontact);
+                        $("#Relation").val(data.grelation);
                         $('#PatientInfoBody').css('display', 'block');
                     },
                     error: function (error) {

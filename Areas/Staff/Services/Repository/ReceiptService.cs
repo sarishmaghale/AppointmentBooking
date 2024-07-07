@@ -6,6 +6,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
@@ -64,10 +65,14 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
 
         public async Task<List<ReceiptViewModel>> GetFilterCashSummary(ReceiptViewModel model)
         {
-            var data = from receipts in db.TblCashReceipts 
-                       join details in db.TblReceiptDetails on receipts.ReceiptNo  equals details.ReceiptNo
-                       join opd in db.TblOpdregistrations on receipts.Opdno equals opd.SrNo select new
-                        {
+            var data = from receipts in db.TblCashReceipts
+                       join details in db.TblReceiptDetails on receipts.ReceiptNo equals details.ReceiptNo
+                       join opd in db.TblOpdregistrations on receipts.Opdno equals opd.SrNo into opdJoin
+                       from opd in opdJoin.DefaultIfEmpty()
+                       join ipd in db.TblIpdregistrations on receipts.Ipdno equals ipd.IpdregNo into ipdJoin
+                       from ipd in ipdJoin.DefaultIfEmpty()
+                       select new
+                       {
                             receipts.PayType,
                             receipts.CreatedDate,
                            details.TestGroup,
@@ -76,9 +81,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                            receipts.Opdno,
                            receipts.TotalAmount,
                            details.Amount,
-                           opd.FirstName,
-                           opd.LastName,
-                           opd.ConsultantDr,
+                           PatientName = receipts.Opdno != null ? (opd.FirstName + " " + opd.LastName) : (ipd.FirstName + " " + ipd.LastName),
+                           ConsultantDr = receipts.Opdno != null ? opd.ConsultantDr : ipd.ConsultantDr,                         
                            receipts.CreatedByUser,
                         };
             var query = data.AsQueryable();
@@ -112,7 +116,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 {
                     ReceiptNo = t.ReceiptNo,
                     PayType = t.PayType,
-                    PatientName = t.FirstName + " " + t.LastName,
+                    PatientName = t.PatientName,
                     TotalAmount = t.Amount,
                     DoctorName = db.TblDoctorSetups.Where(d => d.DoctorId == t.ConsultantDr).Select(d => d.DoctorName).FirstOrDefault(),
                     CreatedDate = t.CreatedDate,
@@ -148,52 +152,200 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
 
         public async Task<ReceiptViewModel> GetReceiptDetails(int ReceiptNo)
         {
-          var data=  await (from receipts in db.TblCashReceipts
-                   join opd in db.TblOpdregistrations on receipts.Opdno equals opd.SrNo
-                   join details in db.TblReceiptDetails on receipts.ReceiptNo equals details.ReceiptNo
-                   where receipts.ReceiptNo == ReceiptNo
-                   select new
-                   {
-                       receipts.ReceiptNo,
-                       receipts.TotalAmount,
-                       receipts.CreatedDate,
-                       opd.FirstName,
-                       opd.LastName,
-                       opd.Address,
-                       opd.Age,
-                       opd.AgeType,
-                       opd.ConsultantDr,
-                       ReceiptDetails = new ReceiptDetails
-                       {
-                           TestGroup = details.TestGroup,
-                           TestName = details.TestName,
-                           Quantity = details.Quantity,
-                           TestPrice = details.TestPrice,
-                           Amount = details.Amount
-                       }
-                   }).GroupBy(x => new
-                   {
-                       x.ReceiptNo,
-                       x.TotalAmount,
-                       x.CreatedDate,
-                       x.FirstName,
-                       x.LastName,
-                       x.Address,
-                       x.Age,
-                       x.AgeType,
-                       x.ConsultantDr,
-                   }).Select(y => new ReceiptViewModel
-                   {
-                       ReceiptNo = y.Key.ReceiptNo,
-                       PatientName = y.Key.FirstName + " " + y.Key.LastName,
-                       TotalAmount = y.Key.TotalAmount,
-                       CreatedDate = y.Key.CreatedDate,
-                       Address = y.Key.Address,
-                       Age = y.Key.Age + " " + y.Key.AgeType,
-                       DoctorName = db.TblDoctorSetups.Where(a => a.DoctorId == y.Key.ConsultantDr).Select(a => a.DoctorName).FirstOrDefault(),
-                       ReceiptDetails = y.Select(x => x.ReceiptDetails).ToList()
-                   }).FirstOrDefaultAsync();
+            var checkOPD = await db.TblCashReceipts.Where(c => c.ReceiptNo == ReceiptNo).Select(c => c.Opdno).FirstOrDefaultAsync();
+            if (checkOPD != null)
+            {
+                var result = await GetCashReceiptDetails(ReceiptNo);
+                return result;
+            }
+            else
+            {
+                var result = await GetDischargeReceiptDetails(ReceiptNo);
+                return result;
+            }
+
+
+
+        }
+
+
+        public async Task<ReceiptViewModel> GetDischargeReceiptDetails(int ReceiptNo)
+        {
+            var data = await (from receipts in db.TblCashReceipts
+                              join ipd in db.TblIpdregistrations on receipts.Ipdno equals ipd.IpdregNo
+                              join details in db.TblReceiptDetails on receipts.ReceiptNo equals details.ReceiptNo
+                              where receipts.ReceiptNo == ReceiptNo
+                              select new
+                              {
+                                  receipts.ReceiptNo,
+                                  receipts.TotalAmount,
+                                  receipts.CreatedDate,
+                                  ipd.FirstName,
+                                  ipd.LastName,
+                                  ipd.Address,
+                                  ipd.Age,
+                                  ipd.AgeType,
+                                  ipd.ConsultantDr,
+                                  ReceiptDetails = new ReceiptDetails
+                                  {
+                                      TestGroup = details.TestGroup,
+                                      TestName = details.TestName,
+                                      Quantity = details.Quantity,
+                                      TestPrice = details.TestPrice,
+                                      Amount = details.Amount
+                                  }
+                              }).GroupBy(x => new
+                              {
+                                  x.ReceiptNo,
+                                  x.TotalAmount,
+                                  x.CreatedDate,
+                                  x.FirstName,
+                                  x.LastName,
+                                  x.Address,
+                                  x.Age,
+                                  x.AgeType,
+                                  x.ConsultantDr,
+                              }).Select(y => new ReceiptViewModel
+                              {
+                                  ReceiptNo = y.Key.ReceiptNo,
+                                  PatientName = y.Key.FirstName + " " + y.Key.LastName,
+                                  TotalAmount = y.Key.TotalAmount,
+                                  CreatedDate = y.Key.CreatedDate,
+                                  Address = y.Key.Address,
+                                  Age = y.Key.Age + " " + y.Key.AgeType,
+                                  DoctorName = db.TblDoctorSetups.Where(a => a.DoctorId == y.Key.ConsultantDr).Select(a => a.DoctorName).FirstOrDefault(),
+                                  ReceiptDetails = y.Select(x => x.ReceiptDetails).ToList()
+                              }).FirstOrDefaultAsync();
             return data;
+        }
+
+        public async Task<ReceiptViewModel> GetCashReceiptDetails(int ReceiptNo)
+        {
+            var data = await (from receipts in db.TblCashReceipts
+                              join opd in db.TblOpdregistrations on receipts.Opdno equals opd.SrNo
+                              join details in db.TblReceiptDetails on receipts.ReceiptNo equals details.ReceiptNo
+                              where receipts.ReceiptNo == ReceiptNo
+                              select new
+                              {
+                                  receipts.ReceiptNo,
+                                  receipts.TotalAmount,
+                                  receipts.CreatedDate,
+                                  opd.FirstName,
+                                  opd.LastName,
+                                  opd.Address,
+                                  opd.Age,
+                                  opd.AgeType,
+                                  opd.ConsultantDr,
+                                  ReceiptDetails = new ReceiptDetails
+                                  {
+                                      TestGroup = details.TestGroup,
+                                      TestName = details.TestName,
+                                      Quantity = details.Quantity,
+                                      TestPrice = details.TestPrice,
+                                      Amount = details.Amount
+                                  }
+                              }).GroupBy(x => new
+                              {
+                                  x.ReceiptNo,
+                                  x.TotalAmount,
+                                  x.CreatedDate,
+                                  x.FirstName,
+                                  x.LastName,
+                                  x.Address,
+                                  x.Age,
+                                  x.AgeType,
+                                  x.ConsultantDr,
+                              }).Select(y => new ReceiptViewModel
+                              {
+                                  ReceiptNo = y.Key.ReceiptNo,
+                                  PatientName = y.Key.FirstName + " " + y.Key.LastName,
+                                  TotalAmount = y.Key.TotalAmount,
+                                  CreatedDate = y.Key.CreatedDate,
+                                  Address = y.Key.Address,
+                                  Age = y.Key.Age + " " + y.Key.AgeType,
+                                  DoctorName = db.TblDoctorSetups.Where(a => a.DoctorId == y.Key.ConsultantDr).Select(a => a.DoctorName).FirstOrDefault(),
+                                  ReceiptDetails = y.Select(x => x.ReceiptDetails).ToList()
+                              }).FirstOrDefaultAsync();
+            return data;
+        }
+        public async Task<bool> AddDischargeBill(ReceiptViewModel model)
+        {
+            int ReceiptNo = await AddCashReceipt(model);
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {                
+                    var ipdPatient = await db.TblIpdregistrations.Where(p => p.IpdregNo == model.Ipdno).FirstOrDefaultAsync();
+                    if (ipdPatient != null)
+                    {
+                        ipdPatient.IsDischarged = 1;
+                        db.Entry(ipdPatient).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        var bedNo = ipdPatient.BedNo;
+                        var bedStatus = await db.TblIpdbedStatuses.Where(b => b.BedId == bedNo).FirstOrDefaultAsync();
+                        if (bedStatus != null)
+                        {
+                            bedStatus.Status = 0;
+                            bedStatus.IpdregNo = 0;
+                            db.Entry(bedStatus).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                        }
+                        await transaction.CommitAsync();
+                        return true;
+                    }
+                    await transaction.RollbackAsync();
+                    return false;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> CheckDischargeBill(int IPDRegNo)
+        {
+            bool result = await db.TblCashReceipts.AnyAsync(r => r.Ipdno == IPDRegNo);
+            return result;
+        }
+
+        public async Task<bool> AddPatientExpenseEntry(List<ExpenseEntryViewModel> model)
+        {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var item in model)
+                    {
+                        var expenseEntryData = new TblIpdexpenseEntry()
+                        {
+                            Uhid = item.Uhid,
+                            IpdregNo = item.IpdregNo,
+                            TestGroup = item.TestGroup,
+                            TestName = item.TestName,
+                            Price = item.Price,
+                            Quantity = item.Quantity,
+                            Amount = item.Amount,
+                            CreatedDate = item.CreatedDate
+                        };
+                        await db.TblIpdexpenseEntries.AddAsync(expenseEntryData);
+                        await db.SaveChangesAsync();
+                        
+                    }
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+                
         }
     }
 }

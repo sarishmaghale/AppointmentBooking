@@ -1,0 +1,88 @@
+﻿@model IEnumerable<IPDViewModel>
+<div class="page-wrapper">
+    <div class="content">
+        @* <div class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar-brand">IPD Patient List</a>
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" id="searchInput" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div> *@
+
+                
+          <table class="table custom-table" id="patientTable">
+            <thead>
+                <tr>
+                    <th>RegNo</th>
+                    <th>Uhid</th>
+                    <th>PatientName</th>
+                    <th>ContactNo</th>
+                                <th>Address</th>
+                                <th>Dob/Age</th>
+                                <th>Gender</th>
+                                <th>Guardian</th>
+                                <th>GContact</th>
+                                <th>Relation</th>
+                                <th>Consultant Dr.</th>
+                                <th>Bed</td>
+                                <th>Status</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@item.IpdregNo</td>
+                        <td>@item.Uhid</td>
+                        <td>@item.PatientName</td>
+                        <td>@item.Contactno</td>
+                        <td>@item.Address, @item.District</td>
+                        <td>@item.Dob (@item.AgeType)</td>
+                        <td>@item.Gender</td>
+                        <td>@item.Gname</td>
+                        <td>@item.Gcontact</td>
+                        <td>@item.Grelation</td>
+                        <td>@item.DoctorName</td>
+                        <td>@item.IPDBedName</td>
+                        @if (item.IsDischarged == 1)
+                            {
+                            <td><a class="btn btn-sm btn-secondary custom-badge " href="#">Discharged</a></td>
+                        }
+                        else
+                        {
+                                    <td><a class="btn btn-sm btn-primary custom-badge " href="#">Admitted</a></td>
+                        }
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+ 
+    </div>
+</div>
+
+@section Scripts{
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+  <script>
+        $(document).ready(function () {
+            $('#patientTable').DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "info": false,
+                "responsive": true
+            });
+           
+                });
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#patientTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+ </script>
+ }

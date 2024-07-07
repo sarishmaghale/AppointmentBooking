@@ -36,7 +36,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="table-responsive">
-            <table class="table table-striped custom-table ">
+            <table class="table custom-table ">
                 <thead>
                     <tr>
                         <th>Receipt No</th>
@@ -55,20 +55,20 @@
                         @foreach(var items in Model)
                         {
                             <tr>
-                                <td colspan="3" style="text-align:center;font-weight: bold;"><b>@items.TestGroupDept</b> </td>
+                                <td colspan="9" style="text-align:center;font-weight: bold; background-color: #f2f2f2;"><b>@items.TestGroupDept</b> </td>
                             </tr>
                             @foreach(var item in items.Receipts)
                             {
                                 <tr>
-                                    <td>@Html.DisplayFor(modelItem => item.ReceiptNo)  </td>
-                                    <td>@Html.DisplayFor(modelItem => item.PayType)  </td>
+                                    <td>@item.ReceiptNo  </td>
+                                    <td>@item.PayType  </td>
 
-                                    <td>@Html.DisplayFor(modelItem => item.PatientName)  </td>
+                                    <td>@item.PatientName </td>
 
-                                    <td>@Html.DisplayFor(modelItem => item.TotalAmount)  </td>
-                                    <td>@Html.DisplayFor(modelItem => item.DoctorName)  </td>
+                                    <td>@item.TotalAmount </td>
+                                    <td>@item.DoctorName  </td>
 
-                                    <td>@Html.DisplayFor(modelItem => item.CreatedDate)  </td>
+                                    <td>@item.CreatedDate.Value.ToShortDateString()  </td>
 
                                     <td><a class="btn btn-sm btn-primary custom-badge status-grey" href="salary-view.html">Generate Slip</a></td>
                                     <td class="text-right">
@@ -84,7 +84,7 @@
                             }
                             <tr>
                                 <td colspan="3" style="text-align:center;font-weight: bold;"><b>--TOTAL AMOUNT--</b> </td>
-                                <td style="font-weight: bold;">@items.ReceiptTotal</td>
+                                <td colspan="5" style="font-weight: bold;">@items.ReceiptTotal</td>
                             </tr>
                             
                         }
