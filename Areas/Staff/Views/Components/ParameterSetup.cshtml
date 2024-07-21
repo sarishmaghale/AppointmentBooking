@@ -1,0 +1,98 @@
+﻿@model ParameterSetupViewModel
+@inject CommonUtility utils
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="page-title">Lab Parameter Component</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-box">
+                    <h4 class="card-title">Parameter Setup</h4>
+                    <form asp-action="ParameterSetup" asp-controller="Components" asp-area="Staff" method="post">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Parameter Name</label>
+                            <div class="col-md-9">
+                                <input asp-for="ParameterName" type="text" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Ref Range:</label>
+                            <div class="col-md-9">
+                                <input asp-for="Range" type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Unit:</label>
+                            <div class="col-md-9">
+                                <input asp-for="Unit" type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Method:</label>
+                            <div class="col-md-9">
+                                <input asp-for="Method" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-box">
+                    <h4 class="card-title">Parameter-Test Mapping</h4>
+                    <form asp-action="ParameterTestMapping" asp-controller="Components" asp-area="Staff" method="post">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Test Name:</label>
+                            <div class="col-md-9">
+                                <select asp-for="TestId" class="form-control" asp-items="@utils.GetLabTests()">
+                                    <option disabled selected>Select Test</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Parameter:</label>
+                            <div class="col-md-9">
+                                <select asp-for="Parameterid" class="form-control" asp-items="@utils.GetLabParameters()">
+                                    <option disabled selected>Select Parameter</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        if ('@TempData["SuccessMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "success",
+                title: "@TempData["SuccessMsge"]",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        if ('@TempData["FailedMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "error",
+                title: "Oops",
+                text: '@TempData["FailedMsge"]',
+            });
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

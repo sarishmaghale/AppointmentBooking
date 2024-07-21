@@ -21,8 +21,7 @@ namespace AppointmentBooking.Data
         public int? Age { get; set; }
         public string? AgeType { get; set; }
         public string? Gender { get; set; }
-        public string? Religion { get; set; }
-        public decimal? RegNo { get; set; }
+        public string? Ethnicity { get; set; }
         public int? Opdqueue { get; set; }
         public int? Department { get; set; }
         public int? ConsultantDr { get; set; }
@@ -32,11 +31,10 @@ namespace AppointmentBooking.Data
         public string? PayType { get; set; }
         public int? FeeType { get; set; }
         public double? Amount { get; set; }
-        public double? PaidAmt { get; set; }
-        public int? RefererName { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedTime { get; set; }
         public string? CreatedByUser { get; set; }
+        public string? RefId { get; set; }
 
         public virtual TblCaseType? CaseTypeNavigation { get; set; }
         public virtual TblDoctorSetup? ConsultantDrNavigation { get; set; }

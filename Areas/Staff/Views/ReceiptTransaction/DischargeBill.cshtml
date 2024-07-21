@@ -12,8 +12,6 @@
                         <input asp-for="Ipdno" class="col-md-2" type="number" id="IPD" onkeydown="HandleIPDKeyDownEvent(event)" />
                                 <label class="col-md-2">UHID:</label>
                                 <input asp-for="Uhid" class="col-md-2 Uhid" type="number" readonly />
-                                <label class="col-md-2">OPD:</label>
-                                <input asp-for="Opdno" class="col-md-2" type="number" id="OPD" />
                                
                             </div>
                             <div class="form-group row">
@@ -78,7 +76,17 @@
                     <div class="col s12 m6 offset-m4">
                         <div class="form-group" align="left">
                             <label class="form-label">Total</label>
-                            <input asp-for="TotalAmount" type="text" class="form-control" placeholder="Total" id="TotalAmount" name="TotalAmount" />
+                            <input asp-for="TotalAmount" type="text" class="form-control TotalAmount" placeholder="Total" id="TotalAmount" name="TotalAmount" />
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Paid Amount:</label>
+                                    <input type="number" class="form-control PaidAmount" id="paidAmount" onkeydown="CalculateChangeAmount(event)">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Change:</label>
+                                    <input type="text" class="form-control ChangeAmount" id="changeAmount" readonly>
+                                </div>
+                            </div>
                         <input asp-for="CreatedByUser" type="hidden" value="@User.Identity.Name"/>
                         </div>
                         <div class="card" align="right">
@@ -106,16 +114,30 @@
     <script>
         $(document).ready(function () {
             // Check if alert message exists
-            if ('@TempData["DischargeBillMsge"]' !== '') {
+            if ('@TempData["DischargedBill"]' !== '') {
                 // Display SweetAlert
                 Swal.fire({
-                    title: '@TempData["DischargeBillMsge"]',
+                    title: '@TempData["DischargedBill"]',
+                    icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: 'OK',
                     CancelButtonText: 'Cancel',
                 });
             }
         });
+        function CalculateChangeAmount(e) {
+
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var changeAmt = 0;
+                var paidAmt = Number($(e.target).val());
+                var totalAmt = Number($(".TotalAmount").val());
+                var changeAmt = paidAmt - totalAmt;
+                // Update the change amount input field
+                $(".ChangeAmount").val(changeAmt);
+
+            }
+        }
         function HandleIPDKeyDownEvent(e) {
             if (event.key === "Enter" || event.keyCode === 13) {
                 event.preventDefault();

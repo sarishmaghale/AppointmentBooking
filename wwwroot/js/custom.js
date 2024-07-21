@@ -9,7 +9,29 @@ $(document).ready(function () {
 
     });
 });
+function PrintResult(id) {
+    var element = document.getElementById(id);
+    var printContents = element.innerHTML;
+    var originalContents = document.body.innerHTML;
 
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    location.reload();
+};
+function CalculateChangeAmount(e) {
+
+    if (event.key === "Enter" || event.keyCode === 13) {
+        event.preventDefault();
+        var changeAmt = 0;
+        var paidAmt = Number($(e.target).val());
+        var totalAmt = Number($(".TotalAmount").val());
+        var changeAmt = paidAmt - totalAmt;
+        // Update the change amount input field
+        $(".ChangeAmount").val(changeAmt);
+
+    }
+}
  function calculateBirthDate(e) {
     var age = $(".Age").val();
     var ageType = $(".AgeType").val();

@@ -17,6 +17,11 @@ namespace AppointmentBooking.Services
         }
         public async Task<InsureePatientInfo> GetInsureePersonalInfo(string insid)
         {
+            /*string login = "baghaudahf";
+            string psw = "jJPEQmFdT0zX3KE6S4ct";
+            string HKeyword = "remote-user";
+            string HValue = "bhfhir";
+            */
             string url = "https://imis.hib.gov.np/api/api_fhir/Patient/?identifier=" + insid;
             string login = "baghaudahf";
             string psw = "jJPEQmFdT0zX3KE6S4ct";

@@ -1,0 +1,59 @@
+﻿@model OPDViewModel
+@inject CommonUtility utils
+<div class="card-box profile-header">
+    <h3>@Model.Opdqueue</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-view">
+                <h4>UHID: @Model.Uhid</h4>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="personal-info">
+                            <li>
+                                <span class="title ">PatientName:</span>
+                                @Model.PatientName
+                            </li>
+                            <li>
+                                <span class="title">Age:</span>@Model.Age  @Model.AgeType
+
+                            </li>
+
+                            <li>
+                                <span class="title">Gender:</span>@Model.Gender
+                            </li>
+                            <li>
+                                <span class="title">Address:</span>@Model.Address
+                            </li>
+                            <li>
+                                <span class="title">ContactNo:</span>@Model.Contactno
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <ul class="personal-info">
+                            <li>
+                                <span class="title"> Date:</span>@Model.CreatedDate.Value.ToShortDateString()
+                            </li>
+                            <li>
+                                <span class="title">Department:</span>
+                                @utils.GetDepartmentName(Convert.ToInt32(Model.Department))
+                            </li>
+                            <li>
+                                <span class="title">Consultant Dr:</span>@Model.DoctorName
+                            </li>
+
+                            <li>
+                                <span class="title">RoomNo:</span>@Model.RoomNo -@Model.FloorName
+                            </li>
+                        </ul>
+                        SrNo-@Model.SrNo, USER- @Model.CreatedByUser
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

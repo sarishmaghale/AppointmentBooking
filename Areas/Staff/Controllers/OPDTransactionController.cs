@@ -47,6 +47,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             {
                 int id = await opdRegistration.AddOPDRegistration(model);
                 TempData["OPDMsge"] = (id > 0) ? "Registered successfully" : "Failed";
+                return RedirectToAction("OPDCard", new { OpdNo =id});
 
             }
             else
@@ -142,6 +143,17 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         public IActionResult ViewOPDDetails(int srNo)
         {
             return View();
+        }
+        public async Task<IActionResult> OPDCard(int OpdNo)
+        {
+            var result = await opdRegistration.GetPatientsByOPD(OpdNo);
+            return View(result);
+        }
+        public async Task<IActionResult> OPDCardPartial(int OpdNo)
+        {
+            var result = await opdRegistration.GetPatientsByOPD(OpdNo);
+            return PartialView("_OPDCardPartial", result);
+
         }
     }
 }

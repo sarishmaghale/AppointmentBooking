@@ -1,4 +1,5 @@
-﻿using AppointmentBooking.Data;
+﻿using AppointmentBooking.Areas.Staff.Models;
+using AppointmentBooking.Data;
 using AppointmentBooking.Models;
 using AppointmentBooking.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,9 @@ namespace AppointmentBooking.Services.Repository
 {
     public class OPDBookingService:IOPDBookingService
     {
-        private MedicareAppointmentDbContext db;
+        private HospitalManagementDbContext db;
         
-        public OPDBookingService(MedicareAppointmentDbContext _db)
+        public OPDBookingService(HospitalManagementDbContext _db)
         {
             db = _db;
      }
@@ -42,14 +43,18 @@ namespace AppointmentBooking.Services.Repository
                         Contactno = model.Contactno,
                         Dob = model.Dob,
                         Age = model.Age,
-                        Panno = model.Panno,
                         Gender = model.Gender,
                         Ethnicity = model.Ethnicity,
-                        Email = model.Email,
-                        CreatedDateTime = DateTime.Now.ToString(),
+                        CreatedDate = model.CreatedDate,
+                        CreatedTime=model.CreatedTime,
+                        ConsultantDr=model.ConsultantDr,
+                        RoomNo=model.RoomNo,
+                        FloorName=model.FloorName,
+                        CaseType=model.CaseType,
+                        Amount=model.Amount,
                         AgeType = model.AgeType,
                         PayStatus = 0,
-
+                        Uhid=model.Uhid,
                     };
 
                     await db.TblOpdbookings.AddAsync(data);
@@ -88,9 +93,44 @@ namespace AppointmentBooking.Services.Repository
                         };
                         await db.TblTransactionStatuses.AddAsync(transactionModel);
                         await db.SaveChangesAsync();
+                       
+
+                        int OPDQueue = GetOPDQueue(data.CreatedDate, Convert.ToInt32(data.Department));
+                        var opdRegister = new TblOpdregistration()
+                        {
+                            Uhid = data.Uhid,
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            Opdqueue = OPDQueue,
+                            Department = data.Department,
+                            Address = data.Address,
+                            District = data.District,
+                            Contactno = data.Contactno,
+                            Dob = data.Dob,
+                            Age = data.Age,
+                            AgeType = data.AgeType,
+                            Gender = data.Gender,
+                            Ethnicity = data.Ethnicity,
+                            ConsultantDr = data.ConsultantDr,
+                            RoomNo = data.RoomNo,
+                            FloorName = data.FloorName,
+                            CaseType = data.CaseType,
+                            PayType = "online",
+                            FeeType = 1,
+                            Amount = data.Amount,
+                            CreatedDate = data.CreatedDate,
+                            CreatedTime = data.CreatedTime,
+                            CreatedByUser = "OnlineBooking",
+                           
+                            RefId=model.refid,
+                        };
+                        await db.TblOpdregistrations.AddAsync(opdRegister);
+                        await db.SaveChangesAsync();
+                        transaction.Commit();
+                        return opdRegister.SrNo;
                     }
-                    transaction.Commit();
-                    return data.OpdbookingId;
+                    transaction.Rollback();        
+                    return 0;
                 }
                 catch (Exception ex)
                 {
@@ -103,47 +143,70 @@ namespace AppointmentBooking.Services.Repository
 
         public async Task<OPDBookingViewModel> GetBookingInfo(int BookingId)
         {
-            var data = await db.TblOpdbookings.Where(x => x.OpdbookingId == BookingId).Select(m => new OPDBookingViewModel()
-            {
-                OpdbookingId = m.OpdbookingId,
+            var newData = await db.TblOpdregistrations.Where(x => x.SrNo == BookingId).Select(m => new OPDBookingViewModel() {
+
+                Uhid = m.Uhid,
                 FirstName = m.FirstName,
                 LastName = m.LastName,
-                Contactno = m.Contactno,
-                BookingDate = m.BookingDate,
+                Opdqueue = m.Opdqueue,
                 Department = m.Department,
-                PayStatus = m.PayStatus,
+                Address = m.Address,
+                District = m.District,
+                Contactno = m.Contactno,
+                Dob = m.Dob,
                 Age = m.Age,
                 AgeType = m.AgeType,
                 Gender = m.Gender,
-                Address = m.Address,
-                District = m.District,
+                Ethnicity = m.Ethnicity,
+                ConsultantDr = m.ConsultantDr,
+                RoomNo = m.RoomNo,
+                FloorName = m.FloorName,
+                CaseType = m.CaseType,
+                Amount = m.Amount,
+                CreatedDate = m.CreatedDate,
+                CreatedTime = m.CreatedTime,
+                OpdbookingId=m.SrNo,
+                refid=m.RefId,
             }).FirstOrDefaultAsync();
-            if (data.PayStatus == 1)
-            {
-                var newData = await (from bk in db.TblOpdbookings
-                                     join tr in db.TblTransactionStatuses
-                                   on bk.OpdbookingId equals tr.OpdbookingId
-                                     where bk.OpdbookingId == BookingId
-                                     select new OPDBookingViewModel()
-                                     {
-                                         OpdbookingId = bk.OpdbookingId,
-                                         FirstName = bk.FirstName,
-                                         LastName = bk.LastName,
-                                         Contactno = bk.Contactno,
-                                         BookingDate = bk.BookingDate,
-                                         Department = bk.Department,
-                                         refid = tr.RefId,
-                                         Age = bk.Age,
-                                         AgeType = bk.AgeType,
-                                         PayStatus = bk.PayStatus,
-                                         Gender = bk.Gender,
-                                         Address = bk.Address,
-                                         District = bk.District,
-                                         amount = tr.Amount.ToString(),
-                                     }).FirstOrDefaultAsync();
-                return newData;
-            }
-            return data;
+
+
+            return newData;
         }
+
+        public int GetOPDQueue(DateTime? Date, int Department)
+        {
+            int maxQueue = db.TblOpdregistrations.Where(item => item.CreatedDate == Date && item.Department == Department).Max(item => item.Opdqueue) ?? 0;
+            return (maxQueue + 1);
+        }
+
+        public async Task<PatientViewModel> GetPatientsByUhid(decimal uhid)
+        {
+            var data = await db.TblPatientRegistrations.Where(x => x.Uhid == uhid).Select(m => new PatientViewModel()
+            {
+                FirstName = m.FirstName,
+                LastName = m.LastName,
+                Dob = m.Dob,
+                Age = m.Age,
+                AgeType = m.AgeType,
+                District = m.District,
+                Address = m.Address,
+                Contactno = m.Contactno,
+                Gender = m.Gender,
+                Ethnicity = m.Ethnicity,
+                Uhid = m.Uhid,
+            }).FirstOrDefaultAsync();
+            return data;
+        
+        }
+
+        public async Task<double> GetDoctorFees(int DoctorId, int FeeTypeId)
+        {
+            var data = await db.TblDoctorFeeTypeSetups.Where(x => x.DoctorId == DoctorId && x.FeeTypeId == FeeTypeId).FirstOrDefaultAsync();
+            double amount = (double)((data != null) ? data.Fee : 0);
+            return amount;
+        }
+
+     
+
     }
 }

@@ -1,86 +1,81 @@
 ﻿@model OPDBookingViewModel
 @inject CommonUtility utils
-    <script>
-        $(document).ready(function () {
-            // Check if alert message exists
-        if ('@TempData["PaymentMessage"]' !== '') {
-                // Display SweetAlert
-            Swal.fire({
-                icon: "success",
-                title: '@TempData["PaymentMessage"]',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            }
-        });
-    </script>
+
 
 <div class="page-wrapper">
+  
     <div class="content">
+        @if (@TempData["PaymentMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["PaymentMessage"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
         <div class="row">
             <div class="col-sm-7 col-6">
                 <h4 class="page-title">OPD Booking Card</h4>
             </div>
-
+            <div class="col-sm-7 col-6">
+                <button type="button" class="btn btn-outline-dark DownloadOpdCard"><i class="fa fa-download fa-lg">&nbsp;</i>Download Pdf</button>
+            </div>
         </div>
-        <div class="card-box profile-header">
+        <div class="card-box profile-header" id="OnlineOpdCard">
+            <h3>@Model.Opdqueue</h3>
             <div class="row">
                 <div class="col-md-12">
                     <div class="profile-view">
-@*                         <div class="profile-img-wrap">
-                            <div class="profile-img">
-                                <a href="#"><img class="avatar" src="assets/img/doctor-03.jpg" alt=""></a>
+                        <h4>UHID: @Model.Uhid</h4>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="personal-info">
+                                    <li>
+                                        <span class="title ">PatientName:</span>
+                                        @Model.FirstName @Model.LastName
+                                    </li>
+                                    <li>
+                                        <span class="title">Age:</span>@Model.Age  @Model.AgeType
+
+                                    </li>
+
+                                    <li>
+                                        <span class="title">Gender:</span>@Model.Gender
+                                    </li>
+                                    <li>
+                                        <span class="title">Address:</span>@Model.Address
+                                    </li>
+                                    <li>
+                                        <span class="title">ContactNo:</span>@Model.Contactno
+                                    </li>
+                                </ul>
                             </div>
-                        </div> *@
-                        <div class="profile-basic">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="profile-info-left">
-                                        <h3 class="user-name m-t-0 mb-0" > @Model.FirstName  @Model.LastName                                        
-                                            </h3>
-                                         <small class="text-muted"> BookingId: @Model.OpdbookingId</small>
-                                        <div class="staff-id">Contact No.: @Model.Contactno</div>
-                                        <div class="staff-id">Age : @Model.Age @Model.AgeType</div>
-                                        <div class="staff-id">Gender : @Model.Gender</div>
 
-                                        <div class="staff-id">Adress : @Model.Address, @Model.District</div>
+                            <div class="col-md-6">
 
-                                    </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <ul class="personal-info">
+                                <ul class="personal-info">
+                                    <li>
+                                        <span class="title"> Date:</span>@Model.CreatedDate.Value.ToShortDateString()
+                                    </li>
+                                    <li>
+                                        <span class="title">Department:</span>
+                                        @utils.GetDepartmentName(Convert.ToInt32(Model.Department))
+                                    </li>
+                                    <li>
+                                        <span class="title">Consultant Dr:</span>@utils.GetDoctorName(Convert.ToInt32(Model.ConsultantDr))
+                                    </li>
 
-                                        <li>
-                                            <span class="title">Department:</span>
-                                            <span class="text">@utils.GetDepartmentName(Int32.Parse(Model.Department))</span>
-                                        </li>
-                                        <li>
-                                            <span class="title">Booked Date:</span>
-                                            <span class="text">@Model.BookingDate</span>
-                                        </li>
-
-                                        <li>
-                                            <span class="title">RefId:</span>
-                                            @if (Model.PayStatus==0)
-                                            {
-
-                                                <a class="link" asp-action="InitiateEsewa" asp-controller="Appointment" asp-route-id="@Model.OpdbookingId" asp-route-amount="50">PayNow (Esewa)</a>
-                                                <a class="link" asp-action="InitiateKhalti" asp-controller="Appointment" asp-route-id="@Model.OpdbookingId">PayNow (Khalti)</a>
-
-                                            }
-                                            @if (Model.PayStatus == 1)
-                                            {
-                                                <span class="text"><a href="#">@Model.refid</a></span>
-                                                <span class="text" style="color:green">(PAID)</span>
-                                            }
-
-                                        </li>
-                                        
-                                    </ul>
-                                </div>
+                                    <li>
+                                        <span class="title">RoomNo:</span>@Model.RoomNo - @Model.FloorName
+                                    </li>
+                                </ul>
+                                SrNo-@Model.OpdbookingId, USER- ONLINEBOOKING RefId-@Model.refid
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -88,3 +83,21 @@
     </div>
 
 </div>
+@section Scripts{
+    <script>
+        $(document).on('click', '.DownloadOpdCard', function () {
+
+
+            var divContents = document.getElementById("OnlineOpdCard");
+            var opt = {
+                margin: [2, 0.8, 0.8, 0.8], // 20px top, right, bottom, left (converted to inches: 20px = 0.8 inches)
+                filename: 'OPDCard.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(divContents).set(opt).save();
+
+        })
+    </script>
+}

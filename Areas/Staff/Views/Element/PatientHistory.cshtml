@@ -1,0 +1,175 @@
+﻿
+@model PatientViewModel
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-4 col-5">
+                <h3 class="page-title">Patient History</h3>
+            </div>
+            <div class="col-sm-8 col-7 text-right m-b-30">
+                <a asp-action="PatientList" asp-controller="Element" asp-area="Staff" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Patient List</a>
+            </div>
+        </div>
+        <form asp-action="PatientHistory" asp-controller="Element" asp-area="Staff" method="post" >
+            <div class="row filter-row">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">Uhid</label>
+                        <input type="number" class="form-control floating" asp-for="Uhid">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">Specific Date</label>
+                        <input type="date" class="form-control floating" asp-for="SearchDate">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <button class="btn btn-success btn-block" type="submit"> Search </button>
+                </div>
+            </div>
+        </form>
+           <div class="row">
+               <div class="col-md-12">
+                @if (Model != null)
+                {
+                    @if (Model.HistoryItems != null && Model.HistoryItems.Any())
+                    {
+                        <hr />
+                        <h4>Patient History- @Model.PatientName </h4>
+                        <input type="hidden" id="Uhid" value="@Model.Uhid"/>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>                                   
+                                    <th>Type</th>
+                                    <th>Consultant Dr</th>
+                                    <th>RecordNo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.HistoryItems)
+                                {
+                                    <tr>
+                                        <td>@if (item.HistoryDate != null)
+                                            {
+                                                @item.HistoryDate.Value.ToShortDateString()
+                                            }
+                                            </td>
+                                      
+                                        <td>@item.TypeId-@item.Type</td>
+                                        <td>@item.ConsultantDr</td>
+                                        <td>
+                                            @item.RecordNo
+
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btnViewDetails btn btn-outline-info">
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+               </div>
+          
+           </div>
+</div>
+</div>
+
+<div id="DetailsModal" class="modal fade" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-dialog-centered modal-custom" role="document" style="max-width: 55%;">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                <!-- Partial view content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(".btnViewDetails").click(function () {
+            debugger
+            var currentTd = $(this).closest("tr").find("td");
+            var recordNo = $(currentTd).eq(3).text();
+            var data2 = $(currentTd).eq(1).text();
+            var parts = data2.split('-');
+            var typeId = parts[0]; // Access TypeId
+            var type = parts[1];
+            var uhid = $("#Uhid").val();
+          
+            if (typeId == 3) {
+                $.ajax({
+                    url: "@Url.Action("ReceiptDetailsPartial", "ReceiptTransaction")",
+                    type: "GET",
+                    data: { ReceiptNo: recordNo },
+                    success: function (data) {
+                        $(".modal-body").html(data); // Corrected typo in 'html' method
+                        $("#DetailsModal").modal('show');
+                        $('.modal-backdrop').css('background', '#00000073');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            } 
+            if(typeId==2){
+                $.ajax({
+                    url: "@Url.Action("IpdCardPartial", "IPDTransaction")",
+                    type: "GET",
+                    data: { IpdRegNo: recordNo },
+                    success: function (data) {
+                        $(".modal-body").html(data); // Corrected typo in 'html' method
+                        $("#DetailsModal").modal('show');
+                        $('.modal-backdrop').css('background', '#00000073');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+            if(typeId==1){
+                $.ajax({
+                    url:"@Url.Action("OPDCardPartial","OPDTransaction")",
+                    type:"GET",
+                    data: { OpdNo: recordNo },
+                    success: function (data) {
+                        $(".modal-body").html(data); // Corrected typo in 'html' method
+                        $("#DetailsModal").modal('show');
+                        $('.modal-backdrop').css('background', '#00000073');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+            if(typeId==4){
+                $.ajax({
+                    url: "@Url.Action("PatientLabRecord","Pathology")",
+                    type: "Get",
+                    data: {
+                        LabNo: recordNo, Uhid: uhid
+                    },
+                    success: function (data) {
+                        $(".modal-body").html(data); // Corrected typo in 'html' method
+                        $("#DetailsModal").modal('show');
+                        $('.modal-backdrop').css('background', '#00000073');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+        })
+    </script>
+}

@@ -45,18 +45,18 @@ namespace AppointmentBooking.Services.Repository
             return signature;
         }
 
-        public async Task<PaymentViewModel> ActivateEsewaPayment(int id)
+        public async Task<PaymentViewModel> ActivateEsewaPayment(int id, double? amount)
         {
             string purchaseId = GenerateUniqueId(id);
-            string message = "total_amount=50,transaction_uuid=" + purchaseId + ",product_code=EPAYTEST";
+            string message = "total_amount="+amount+",transaction_uuid=" + purchaseId + ",product_code=EPAYTEST";
             string signature = GenerateSignature(message);
             PaymentViewModel payData = new PaymentViewModel()
             {
-                amount = "50",
-                totalAmount = "50",
+                amount = amount.ToString(),
+                totalAmount = amount.ToString(),
                 purchaseId = purchaseId,
                 successUrl = _urlHelper.Action("PaymentSuccess", "Appointment", null, _urlHelper.ActionContext.HttpContext.Request.Scheme),
-                failureUrl = _urlHelper.Action("BookingCard", "Appointment", new { BookingId = id }, _urlHelper.ActionContext.HttpContext.Request.Scheme),
+                failureUrl = _urlHelper.Action("AppointmentBooking", "Appointment", new { BookingId = id }, _urlHelper.ActionContext.HttpContext.Request.Scheme),
                 signature = signature
             };
             return payData;
@@ -66,7 +66,8 @@ namespace AppointmentBooking.Services.Repository
         {
             string decodedData = Encoding.UTF8.GetString(Convert.FromBase64String(encodedData));
             // Parse the JSON data if necessary
-            JObject jsonData = JObject.Parse(decodedData);
+            JObject jsonData = JObject.Parse(decodedData);         
+
             // Extract individual values
             string status = jsonData["status"].ToString();
             string signature = jsonData["signature"].ToString();
@@ -102,15 +103,15 @@ namespace AppointmentBooking.Services.Repository
 
         }
 
-        public async Task<string> ActivateKhaltiPayment(int id)
+        public async Task<string> ActivateKhaltiPayment(int id, double? amount)
         {
             string purchaseOrderid = GenerateUniqueId(id);
             var url = "https://a.khalti.com/api/v2/epayment/initiate/";
             var payload = new
             {
                 return_url = _urlHelper.Action("PaymentSuccess", "Appointment", null, _urlHelper.ActionContext.HttpContext.Request.Scheme),
-                website_url = _urlHelper.Action("BookingCard", "Appointment", new { BookingId = id }, _urlHelper.ActionContext.HttpContext.Request.Scheme),
-                amount = "5000",
+                website_url = _urlHelper.Action("AppointmentBooking", "Appointment", new { BookingId = id }, _urlHelper.ActionContext.HttpContext.Request.Scheme),
+                amount = (amount*100).ToString(),
                 purchase_order_id = purchaseOrderid,
                 purchase_order_name = "OPBooking",
                 customer_info = new

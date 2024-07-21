@@ -7,8 +7,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
     public class RegistrationService:IRegistrationRepository
     {
-        private MedicareAppointmentDbContext db;
-        public RegistrationService(MedicareAppointmentDbContext _db)
+        private HospitalManagementDbContext db;
+        public RegistrationService(HospitalManagementDbContext _db)
         {
             db = _db;
         }
@@ -29,11 +29,9 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                         Gender = model.Gender,
                         District = model.District,
                         Ethnicity = model.Ethnicity,
-                        Panno = model.Panno,
-                        Email = model.Email,
                         IsDelete = model.IsDelete,
                         CreatedDate = model.CreatedDate,
-                        CreatedTime = model.CreatedDate,
+                        CreatedTime = model.CreatedTime,
                         CreatedByUser = model.CreatedByUser,
                         AgeType = model.AgeType,
                     };
@@ -72,6 +70,28 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
             }
         }
 
+        public async Task<List<PatientViewModel>> GetPatientList()
+        {
+            var data = await db.TblPatientRegistrations.Select(x => new PatientViewModel()
+            {
+                PatientName = x.FirstName + " " + x.LastName,
+                Uhid = x.Uhid,
+                Address = x.Address,
+                Age = x.Age,
+                AgeType = x.AgeType,
+                Dob = x.Dob,
+                Contactno = x.Contactno,
+                Gender = x.Gender,
+                District = x.District,
+                Ethnicity = x.Ethnicity,
+                CreatedDate = x.CreatedDate,
+                CreatedTime = x.CreatedTime,
+                CreatedByUser = x.CreatedByUser,
+
+            }).ToListAsync();
+            return data;
+        }
+
         public async Task<PatientViewModel> GetPatientsByUhid(decimal uhid)
         {
             var data = await db.TblPatientRegistrations.Where(x => x.Uhid == uhid).Select(m => new PatientViewModel()
@@ -86,7 +106,6 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 Contactno = m.Contactno,
                 Gender = m.Gender,
                 Ethnicity = m.Ethnicity,
-                Email = m.Email,
                 Uhid = m.Uhid,
             }).FirstOrDefaultAsync();
             return data;

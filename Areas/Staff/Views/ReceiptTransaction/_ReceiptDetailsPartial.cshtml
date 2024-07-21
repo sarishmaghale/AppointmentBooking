@@ -2,38 +2,34 @@
 @model ReceiptViewModel
 
                     <div class="card-body">
-                        <div class="row custom-invoice">
+                        <div class="row">
                             <div class="col-6 col-sm-6 m-b-20">
-                               @*  <img src="~/assets/img/logo.png" class="inv-logo" alt=""> *@
-                                <ul class="list-unstyled">
-                                    <li>Hospital</li>
-                                    <li>Bharatpur-12,Chitwan</li>
-                                    <li>987806584</li>
-                                </ul>
+            <div class="invoices-details">
+                <ul class="list-unstyled">
+                    <li><strong>Patient name:</strong> <span>@Model.PatientName</span></li>
+                    <li><strong>Address:</strong> <span>@Model.Address</span></li>
+                    <li><strong>Age </strong><span>@Model.Age</span></li>
+                    <li><strong>Consultant Dr.:</strong> <span>@Model.DoctorName</span></li>
+                </ul>
+            </div>
                             </div>
                             <div class="col-6 col-sm-6 m-b-20">
                                 <div class="invoice-details">
                                     <h3 class="text-uppercase">ReceiptNo #@Model.ReceiptNo</h3>
                                     <ul class="list-unstyled">
-                    <li>Date: <span>@Model.CreatedDate.Value.ToString("yyyy-MM-dd")</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-6 m-b-20">
-                                <div class="invoices-view">
-                                    <ul class="list-unstyled invoice-payment-details">
-                                        <li>Patient name: <span>@Model.PatientName</span></li>
-                                        <li>Address: <span>@Model.Address</span></li>
-                                        <li>Age <span>@Model.Age</span></li>
-                                        <li>Consultant Dr.: <span>@Model.DoctorName</span></li>
+                    <li>Date: <span>@if (@Model.CreatedDate != null)
+                            {
+                                @Model.CreatedDate.Value.ToShortDateString()
+                            }
+                            </span></li>
+                    <li>Hospital</li>
+                    <li>Bharatpur-12,Chitwan</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table" style="background-color: #f2f2f2">
+                            <table class="table" >
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -50,7 +46,7 @@
                                         <tr>
                                             <td>1</td>
                                             <td>@item.TestGroup</td>
-                                            <td>item.TestName</td>
+                                            <td>@item.TestName</td>
                                             <td>@item.TestPrice</td>
                                             <td>@item.Quantity</td>
                                             <td>@item.Amount</td>
@@ -66,7 +62,7 @@
                                 </div>
                                 <div class="col-sm-5">
                                     <div class="m-b-20">
-                                        <h6>Total due</h6>
+                                        <h6>Total Amount</h6>
                                         <div class="table-responsive no-border">
                                             <table class="table mb-0">
                                                 <tbody>
@@ -74,16 +70,16 @@
                                                         <th>Subtotal:</th>
                                                         <td class="text-right">@Model.TotalAmount</td>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Tax: <span class="text-regular">(10%)</span></th>
+@*                                                     <tr>
+                                                        <th>Discount: <span class="text-regular">(0%)</span></th>
                                                         <td class="text-right"></td>
-                                                    </tr>
-                                                    <tr>
+                                                    </tr> *@
+@*                                                     <tr>
                                                         <th>Total:</th>
                                                         <td class="text-right text-primary">
                                                             <h5>@Model.TotalAmount</h5>
                                                         </td>
-                                                    </tr>
+                                                    </tr> *@
                                                 </tbody>
                                             </table>
                                         </div>

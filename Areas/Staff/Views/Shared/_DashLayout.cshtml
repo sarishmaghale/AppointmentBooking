@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/assets/js/jquery-3.2.1.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <script src="~/js/custom.js"></script>
     <style>
         input::-webkit-outer-spin-button,
@@ -81,7 +81,7 @@
                         </li>
 						
                         <li >
-                            <a asp-action="PatientRegistration" asp-controller="Registration" asp-area="Staff"><i class="fa fa-wheelchair"></i> <span>Patient Registration</span></a>
+                            <a asp-action="PatientRegistration" asp-controller="Registration" asp-area="Staff"><i class="fa fa-id-card"></i> <span>Patient Registration</span></a>
                         </li>
                        
 						<li class="submenu">
@@ -109,17 +109,34 @@
                                 <li><a asp-action="IPDPatientList" asp-controller="IPDTransaction" asp-area="Staff">IPD Patient List</a></li>
                             </ul>
                         </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-tint"></i> <span>Pathology </span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li><a asp-action="SampleRegistration" asp-controller="Pathology" asp-area="Staff">Sample Registration</a></li>
+                                <li><a asp-action="ResultEntry" asp-controller="Pathology" asp-area="Staff">Result Entry</a></li>
+                                <li><a asp-action="LabResults" asp-controller="Pathology" asp-area="Staff">Lab Records</a></li>
+
+                            </ul>
+                        </li>
                         <li class="menu-title">SetUp</li>
                         <li class="submenu">
                             <a href="#"><i class="fa fa-laptop"></i> <span> Components</span> <span class="menu-arrow"></span></a>
                             <ul style="display: none;">
                                 <li><a asp-action="DoctorSetup" asp-controller="Components" asp-area="Staff">Doctor SetUp</a></li>
-                               
+                                <li><a asp-action="BedSetup" asp-controller="Components" asp-area="Staff">Bed SetUp</a></li>
                             </ul>
                         </li>
+                        <li >
+                            <a asp-action="HospitalTestSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-list"></i> <span>Test Setup</span></a>
+                        </li>
+                        <li><a asp-action="ParameterSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-exchange"></i><span>Parameter-Mapping</span></a></li>
+ 
                         <li class="menu-title">Elements</li>
                         <li >
                             <a asp-action="Doctors" asp-controller="Element" asp-area="Staff"><i class="fa fa-user-md"></i> <span>Doctors</span></a>
+                        </li>
+                          <li >
+                            <a asp-action="PatientHistory" asp-controller="Element" asp-area="Staff"><i class="fa fa-history"></i> <span>Patient History</span></a>
                         </li>
                     </ul>
                 </div>
@@ -173,6 +190,10 @@
         });
     </script>
     <div class="sidebar-overlay" data-reff=""></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Then load Bootstrap's JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="~/assets/js/jquery-3.2.1.min.js"></script>
     <script src="~/assets/js/popper.min.js"></script>
     <script src="~/assets/js/bootstrap.min.js"></script>

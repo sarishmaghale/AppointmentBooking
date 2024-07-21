@@ -22,8 +22,6 @@ namespace AppointmentBooking.Data
         public string? Gender { get; set; }
         public string? District { get; set; }
         public string? Ethnicity { get; set; }
-        public int? Panno { get; set; }
-        public string? Email { get; set; }
         public int? IsDelete { get; set; }
         public string? CreatedDate { get; set; }
         public string? CreatedTime { get; set; }

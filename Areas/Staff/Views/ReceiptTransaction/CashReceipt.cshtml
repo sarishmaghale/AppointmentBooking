@@ -7,11 +7,11 @@
                 <div class="col-md-6">
                     <div class="form-group row">
                             <input  type="hidden" id="CreatedByUser" value="@User.Identity.Name" />
-
-                        <label class="col-md-2">UHID:</label>
-                            <input class="col-md-2 Uhid" type="number" id="Uhid" />
-                         <label class="col-md-2">OPD:</label>
+                            <label class="col-md-2">OPD:</label>
                             <input class="col-md-2" type="number" id="OPD" onkeydown="HandleOPDKeyEvent(event)" />
+                        <label class="col-md-2">UHID:</label>
+                            <input class="col-md-2 Uhid" type="number" id="Uhid" readonly disabled />
+                        
                           <label class="col-md-2 ">IPD:</label>
                             <input class="col-md-2" type="number" id="IPD" />
                     </div>
@@ -61,8 +61,8 @@
             <table class="table table-bordered">
                 <caption> Cash Receipt </caption>
                 <tr align="center">
-                        <input type="hidden" class="form-control" placeholder="pro_price"  id="pro_price" name="pro_price">
-                        <input type="hidden" class="form-control" placeholder="total_cost"  id="total_cost" name="total_cost">
+                        <input type="hidden" class="form-control" placeholder="pro_price"  id="pro_price" name="pro_price"/>
+                        <input type="hidden" class="form-control" placeholder="total_cost"  id="total_cost" name="total_cost"/>
 
                     <td>
                             <select class="form-control" id="testGroup" name="testGroup" asp-items="@utils.GetTestGroup()" onchange="TestGroupChange(this)" required>
@@ -109,7 +109,19 @@
         <div class="col s12 m6 offset-m4">
             <div class="form-group" align="left">
                 <label class="form-label">Total</label>
-                <input type="text" class="form-control" placeholder="Total" id="total" name="total"  required disabled>
+                <input type="text" class="form-control TotalAmount" placeholder="Total" id="total" name="total"  required disabled>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                                <label class="form-label">Paid Amount:</label>
+                                <input type="number" class="form-control PaidAmount" id="paidAmount" onkeydown="CalculateChangeAmount(event)">
+                    </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Change:</label>
+                                <input type="text" class="form-control ChangeAmount" id="changeAmount" readonly>
+                            </div>
+                </div>
+                        
+                        
             </div>
             <div class="card" align="right">
 
@@ -203,8 +215,25 @@
                 })
             }
 
-       
+        function QuantityChange(e) {
+            var qty = $(e).val();
+            var price = $("#pro_price").val();
+            var total = Number(price * qty);
+            $("#total_cost").val(total);
+        }
+        function CalculateChangeAmount(e) {
 
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var changeAmt = 0;
+                var paidAmt = Number($(e.target).val());
+                var totalAmt = Number($(".TotalAmount").val());
+                var changeAmt = paidAmt - totalAmt;
+                // Update the change amount input field
+                $(".ChangeAmount").val(changeAmt);
+
+            }
+        }
         function addproduct() {
                 var sum1 = (
                     Number($("#pro_price").val()) * Number($("#qty").val())
@@ -255,6 +284,7 @@
                     $row.data("qty", product.qty);
                     $row.data("discount", product.discount);
                     $row.data("total_cost", product.total_cost);
+                    console.log(product.total_cost);
                     var cost = Number(product.total_cost);
                     totalAmt += cost;
                     $('#total').val(totalAmt);

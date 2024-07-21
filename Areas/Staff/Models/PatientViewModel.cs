@@ -5,7 +5,7 @@ namespace AppointmentBooking.Areas.Staff.Models
 {
     public class PatientViewModel
     {
-        public decimal Uhid { get; set; }
+        public decimal? Uhid { get; set; }
 
         [Required(ErrorMessage = "FirstName is required.")]
         public string? FirstName { get; set; }
@@ -50,13 +50,26 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? Department { get; set; }
         public string? Religion { get; set; }
         public string? Remarks { get; set; }
-
+        public string? PatientName { get; set; }
 
         public int DoctorId { get; set; }
         public string? DoctorName { get; set; }
         public int? DepartmentId { get; set; }
         public int? RoomNo { get; set; }
         public string? FloorName { get; set; }
+        public DateTime? SearchDate { get; set; }
         public virtual TblDepartment? Departments { get; set; }
+        public List<PatientHistoryItem>? HistoryItems { get; set; }
+    }
+
+    public class PatientHistoryItem
+    {
+        public decimal? PatientId { get; set; }
+        public DateTime? HistoryDate { get; set; }
+        public string? Type { get; set; }
+        public string? ConsultantDr { get; set; }
+        public int? RecordNo { get; set; }
+        public int? TypeId { get; set; }
+        public double? BillAmount { get; set; }
     }
 }

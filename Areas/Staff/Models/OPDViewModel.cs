@@ -35,7 +35,7 @@ namespace AppointmentBooking.Areas.Staff.Models
         [Required(ErrorMessage = "Please select Gender")]
 
         public string? Gender { get; set; }
-        public string? Religion { get; set; }
+        public string? Ethnicity { get; set; }
         public decimal? RegNo { get; set; }
         public int? Opdqueue { get; set; }
         [Required(ErrorMessage = "Please select Department")]
@@ -67,7 +67,9 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? FeeTypeName { get; set; }
         public DateTime? FromDateFilter { get; set; }
         public DateTime? ToDateFilter { get; set; }
-      
+        public string? InsuranceId { get; set; }
+        public int? Count { get; set; }
+       
         public List<OPDViewModel>? opdReports { get; set; }
         public virtual TblCaseType? CaseTypeNavigation { get; set; }
         public virtual TblDoctorSetup? ConsultantDrNavigation { get; set; }

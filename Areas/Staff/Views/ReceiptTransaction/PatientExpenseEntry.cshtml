@@ -121,6 +121,23 @@
 
 @section Scripts{
     <script>
+        if ('@TempData["SuccessMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "success",
+                title: "@TempData["SuccessMsge"]",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        if ('@TempData["FailedMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "error",
+                title: "Oops",
+                text: '@TempData["FailedMsge"]',
+            });
+        }
         var totalAmt = 0;
         var discount = 0;
         var grosstotal = 0;
@@ -292,7 +309,8 @@
                 data: JSON.stringify(tableData),
                 contentType: "application/json",
                 success: function (response) {
-                    var redirectUrl = '@Url.Action("ReceiptDetailsMain", "ReceiptTransaction")' + '?ReceiptNo=' + response.result;
+                    alert('added');
+                    var redirectUrl = '@Url.Action("PatientExpenseEntry", "ReceiptTransaction")';
                     window.location.href = redirectUrl;
                 },
                 error: function (error) {

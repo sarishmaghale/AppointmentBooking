@@ -66,24 +66,11 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Reg No:</label>
                                     <div class="col-md-3">
-                                        <input class="form-control form-control-sm" type="text" />
+                                        <input class="form-control form-control-sm" type="number" value="@utils.GetMaximumOPDSrNo()" readonly disabled />
                                     </div>
-                                    <label class="col-md-3 col-form-label col-form-label-sm">OPD Queue:</label>
-                                    <div class="col-md-3">
-                                      
-                                        <input class="form-control form-control-sm" type="text" asp-for="Opdqueue" value="@utils.GetOPDQueue(date)" placeholder="@utils.GetOPDQueue(date)" readonly />
-                                    </div>
+  
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Counter:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" class="form-control form-control-sm" />
-                                    </div>
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Receipt No:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" class="form-control form-control-sm" />
-                                    </div>
-                                </div>
+                               
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Department</label>
                                     <div class="col-md-8">
@@ -93,6 +80,14 @@
                                         </select>
                                         <span asp-validation-for="Department" class="text-danger"></span>
                                     </div>                                  
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label col-form-label-sm">Consultant Dr.</label>
+                                    <div class="col-md-8">
+                                        <select asp-for="ConsultantDr" class="form-control form-control-sm" id="Doctors">
+                                        </select>
+                                        <span asp-validation-for="ConsultantDr" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -139,13 +134,13 @@
                                         </select>
                                         <span asp-validation-for="Gender" class="text-danger"></span>
                                     </div>
-                                    <label class="col-lg-2 col-form-label col-form-label-sm">Religion:</label>
+                                    <label class="col-lg-2 col-form-label col-form-label-sm">Ethnicity:</label>
                                     <div class="col-lg-5">
-                                        <select asp-for="Religion" asp-items="@utils.GetReligions()" class="form-control form-control-sm">
-                                            <option disabled selected>Select Religion</option>
+                                        <select asp-for="Ethnicity" asp-items="@utils.GetEthnicity()" class="form-control form-control-sm Ethnicity">
+                                            <option disabled selected>Select Ethnicity</option>
 
                                         </select>
-                                        <span asp-validation-for="Religion" class="text-danger"></span>
+                                        <span asp-validation-for="Ethnicity" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -155,34 +150,11 @@
                                         <span  class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Referer Name:</label>
-                                    <div class="col-md-7">
-                                        <select asp-for="RefererName" class="form-control form-control-sm">
-                                        </select>
-                                        <span asp-validation-for="RefererName" class="text-danger"></span>
-
-                                    </div>
-                                </div>
-@*                                 <div class="form-group row">
-                                    <label class="col-md-2 col-form-label col-form-label-sm">PAN NO.:</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control form-control-sm">
-                                        <span class="text-danger"></span>
-                                    </div>
-                                </div> *@
                             </div>
 
                             <div class="col-md 6">
 
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Consultant Dr.</label>
-                                    <div class="col-md-8">
-                                        <select asp-for="ConsultantDr" class="form-control form-control-sm" id="Doctors">
-                                        </select>
-                                        <span asp-validation-for="ConsultantDr" class="text-danger"></span>
-                                    </div>
-                                </div>
+                               
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">R.N.</label>
                                     <div class="col-md-3">
@@ -210,7 +182,7 @@
                                         <select asp-for="PayType" class="form-control form-control-sm">
                                             <option value="cash">Cash</option>
                                             <option value="insurance">Insurance</option>
-                                            <option value="credit">Credit</option>
+                                            <option value="online">Online</option>
 
                                         </select>
                                         <span asp-validation-for="PayType" class="text-danger"></span>
@@ -231,13 +203,7 @@
                                         <span asp-validation-for="Amount" class="text-danger"></span>
 
                                     </div>
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Paid Amt.:</label>
-
-                                    <div class="col-md-3">
-                                        <input asp-for="PaidAmt" type="text" class="form-control form-control-sm" />
-                                        <span asp-validation-for="PaidAmt" class="text-danger"></span>
-
-                                    </div>
+   
                                 </div>
 
                                
@@ -272,6 +238,7 @@
                 if (event.key === "Enter" || event.keyCode === 13) {
                     event.preventDefault();
                     var uhid = $(e.target).val();
+
                     $.ajax({
                         url: "@Url.Action("GetPatientInfoByUhid", "OPDTransaction")",
                         method: "GET",
@@ -286,6 +253,7 @@
                             $(".AgeType").val(result.ageType);
                             $(".Contactno").val(result.contactno);
                             $(".Gender").val(result.gender);
+                        $(".Ethnicity").append("<option selected value='" + result.ethnicity + "'>" + result.ethnicity + "</option>");
                         },
                         error: function (error) {
                             alert(error);

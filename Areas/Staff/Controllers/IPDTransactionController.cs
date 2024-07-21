@@ -68,10 +68,22 @@ namespace AppointmentBooking.Areas.Staff.Controllers
            var result= await ipdProvider.GetPatientInfoOnBed(model);
             return Json(result);
         }
-        public async Task<IActionResult> IPDPatientList()
+        public IActionResult IPDPatientList()
         {
-            var data = await ipdProvider.GetIPDPatientList();
-            return View(data);
+            
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult>GetIPDPatientList(IPDViewModel model)
+        {
+            var data = await ipdProvider.GetIPDPatientList(model);
+            model.IpdPatients = data;
+            return View("IPDPatientList",model);
+        }
+        public async Task<IActionResult> IpdCardPartial(int IpdRegNo)
+        {
+            var data = await ipdProvider.GetPatientsByIPD(IpdRegNo);
+            return PartialView("_IPDPatientDetailsPartial", data);
         }
     }
 }

@@ -3,199 +3,243 @@
 
 @model OPDBookingViewModel
 @inject CommonUtility utils
-@if (TempData["BookingMsg"] != null)
-{
-    <script>
-        alert('@TempData["BookingMsg"]');
-    </script>
+
+@if (@TempData["BookingMsg"] != null)
+ {
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["BookingMsg"]
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @TempData["PaymentMessage"]
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+}
+@{
+    var date = utils.GetTodayDate();
+
 }
 
 
 
 <div class="content mt-5 pt-2">
-        <div class="row">
 
-            <div class="col-md-12">
-            <form asp-action="OpdBooking" asp-controller="Appointment" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="AppointmentBooking" asp-controller="Appointment" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="card-box">
-                        <b><h4 class="card-title" style="text-align:center">OPD Booking Form</h4></b>
-                   @*  <center> Current DateTime: @utils.GetCurrentDateTime()</center> *@
+                    <b><h4 class="card-title" style="text-align:center">OPD Booking Form</h4></b>
+                    @*  <center> Current DateTime: @utils.GetCurrentDateTime()</center> *@
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group row">
-
-                                <input type="checkbox" class="col-xs-5" id="toggleReadonlyCheckbox" >
-
-                                    <label class="col-md-3 col-form-label">Ins. ID:</label>
-                                    <div class="col-md-3">
-                                        <input asp-for="InsuranceId" type="number" id="targetInput" class="form-control" onkeydown="HandleKeyevent(event)" readonly>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label col-form-label-sm">UHID:</label>
+                                <div class="col-md-3">
+                                    <input asp-for="Uhid" type="number" class="form-control form-control-sm" onkeydown="HandleUHidKeyEvent(event)">
+                                    <span asp-validation-for="Uhid" class="text-danger"></span>
 
                                 </div>
-                           
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">First Name</label>
-                                    <div class="col-md-9">
-                                        <input asp-for="FirstName" type="text" id="firstName" class="form-control">
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                                    </div>
+                                <input type="checkbox" class="col-xs-5" id="toggleReadonlyCheckbox">
+
+                                <label class="col-md-2 col-form-label">Ins. ID:</label>
+                                <div class="col-md-3">
+                                    <input asp-for="InsuranceId" type="number" id="targetInput" class="form-control" onkeydown="HandleKeyevent(event)" readonly>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Last Name</label>
-                                    <div class="col-md-9">
-                                        <input asp-for="LastName" type=" text" id="lastName" class="form-control">
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
+
                             </div>
 
-                            <div class="col-md-6">
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label"></label>
-                                <div class="col-md-9">
+                                <label class="col-md-2 col-form-label col-form-label-sm">PatientName</label>
+                                <div class="col-md-5">
+                                    <input asp-for="FirstName" type="text" id="firstName" class="form-control form-control-sm FirstName" placeholder="FirstName" readonly>
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <input asp-for="LastName" type=" text" id="lastName" class="form-control form-control-sm LastName" placeholder="LastName" readonly>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 col-form-label"></label>
-                                <div class="col-md-8">
+                                <label class="col-md-2 col-form-label col-form-label-sm">Address</label>
+                                <div class="col-md-4">
+                                    <input asp-for="Address" type="text" class="form-control form-control-sm Address">
+                                    <span asp-validation-for="Address" class="text-danger"></span>
                                 </div>
-                            </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Booking Date:</label>
-                                    <div class="col-md-8">
-                                        <input asp-for="BookingDate" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")"  class="form-control datetimepicker ">
-                                        <span asp-validation-for="BookingDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                             
-                                <div class="form-group row">
-                                    <b><label class="col-md-3 col-form-label">Department</label></b>
-                                    <div class="col-md-8">
-                                        <select asp-for="Department" asp-items="@utils.GetDepartments()" class="form-control">
-                                            <option disabled selected>Select Department</option>
-   
-                                         </select>
-                                        <span asp-validation-for="Department" class="text-danger"></span>
-                                    </div>
-                                </div>                               
-                            </div>
-                        </div>
-                        <h4 class="card-title">Detail Information</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Address</label>
-                                    <div class="col-md-9">
-                                        <input asp-for ="Address" type="text" class="form-control">
-                                        <span asp-validation-for="Address" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Contact No:</label>
-                                    <div class="col-md-9">
-                                        <input asp-for="Contactno" type="number" class="form-control">
-                                        <span asp-validation-for="Contactno" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Email ID:</label>
-                                    <div class="col-md-9">
-                                        <input asp-for="Email" type="text" class="form-control">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 col-form-label">PAN NO.:</label>
-                                <div class="col-md-6">
-                                        <input asp-for="Panno" type="text" class="form-control">
-                                        <span asp-validation-for="Panno" class="text-danger"></span>
-                                </div>
-                            </div>
-                            </div>
-                          
-
-
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">District</label>
-                                    <div class="col-md-9">
-                                        <select asp-for="District" asp-items="@utils.GetDistricts()" class="form-control">
+                                <div class="col-md-4">
+                                    <select asp-for="District" asp-items="@utils.GetDistricts()" class="form-control form-control-sm District">
                                         <option disabled selected>Select Districts</option>
 
                                     </select>
-                                        <span asp-validation-for="District" class="text-danger"></span>
-                                    </div>
+                                    <span asp-validation-for="District" class="text-danger"></span>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label">DOB:</label>
-                                    <div class="col-md-4">
-                                        <input asp-for="Dob" type="date" id="DOB" class="form-control" onchange="CalculateAge(this)">
-                                        <span asp-validation-for="Dob" class="text-danger"></span>
-                                    </div>
-                              
-                                    <label class="col-md-1 col-form-label">Age:</label>
-                                    <div class="col-md-2">
-                                        <input asp-for="Age" type="text" id="AgeInput" class="form-control" onchange="calculateDOB(this)">
-                                        </div>
-                                        <div class="col-md-3">
-                                        <select asp-for="AgeType" id="AgeTypeInput" class="form-control" onchange="calculateDOB(this)">
-                                            <option value="years">Years</option>
-                                            <option value="months">Months</option>
-                                            <option value="days">Days</option>
-                                        </select>
-                                    </div>
-                               
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <input asp-for="CreatedDate" type="datetime" class="form-control form-control-sm" value="@date.ToShortDateString()" readonly>
+
                                 </div>
+                                <div class="col-md-3">
+                                    <input asp-for="CreatedTime" class="form-control form-control-sm" value="@utils.GetCurrenTime()" readonly>
+
+                                </div>
+                            </div>
 
                             <div class="form-group row">
-                                <label class="col-lg-2 col-form-label">Gender:</label>
+                                <label class="col-md-3 col-form-label col-form-label-sm">Department</label>
+                                <div class="col-md-8">
+                                    <select asp-for="Department" asp-items="@utils.GetDepartments()" class="form-control form-control-sm" onchange="DepartmentChange(this)">
+                                        <option disabled selected>Select Department</option>
+
+                                    </select>
+                                    <span asp-validation-for="Department" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label col-form-label-sm">Consultant Dr.</label>
+                                <div class="col-md-8">
+                                    <select asp-for="ConsultantDr" class="form-control form-control-sm" id="Doctors" onchange="DoctorChangeEvent(this)">
+                                    </select>
+                                    <span asp-validation-for="ConsultantDr" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label col-form-label-sm">Contact No:</label>
+                                <div class="col-md-9">
+                                    <input asp-for="Contactno" type="number" class="form-control form-control-sm Contactno">
+                                    <span asp-validation-for="Contactno" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label col-form-label-sm">DOB:</label>
+                                <div class="col-md-4">
+                                    <input asp-for="Dob" type="date" id="DOB" class="form-control form-control-sm DOB" onchange="ShowAge(this)">
+                                    <span asp-validation-for="Dob" class="text-danger"></span>
+                                </div>
+
+                                <label class="col-md-1 col-form-label col-form-label-sm">Age:</label>
+                                <div class="col-md-2">
+                                    <input asp-for="Age" type="text" id="AgeInput" class="form-control form-control-sm Age" onchange="calculateBirthDate(this)">
+                                </div>
+                                <div class="col-md-3">
+                                    <select asp-for="AgeType" id="AgeTypeInput" class="form-control form-control-sm AgeType" onchange="calculateBirthDate(this)">
+                                        <option value="years">Years</option>
+                                        <option value="months">Months</option>
+                                        <option value="days">Days</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-form-label col-form-label-sm">Gender:</label>
                                 <div class="col-lg-3">
-                                        <select asp-for="Gender" id="Gender" class="form-control">
+                                    <select asp-for="Gender" id="Gender" class="form-control form-control-sm Gender">
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
-                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
-                                <label class="col-lg-2 col-form-label">Ethnicity:</label>
+                                <label class="col-lg-2 col-form-label col-form-label-sm">Ethnicity:</label>
                                 <div class="col-lg-5">
-                                        <select asp-for="Ethnicity" asp-items="@utils.GetEthnicity()" class="form-control">
+                                    <select asp-for="Ethnicity" asp-items="@utils.GetEthnicity()" class="form-control form-control-sm">
                                         <option disabled selected>Select Ethnicity</option>
 
                                     </select>
-                                        <span asp-validation-for="Ethnicity" class="text-danger"></span>
+                                    <span asp-validation-for="Ethnicity" class="text-danger"></span>
                                 </div>
                             </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label"></label>
-                                    <div class="col-md-9">
-                                        <br/><br/>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label col-form-label-sm">Complain:</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control form-control-sm" required>
+                                    <span class="text-danger"></span>
                                 </div>
-                               
-
                             </div>
-
-                      
+                            
                         </div>
-                
-                <div class="text-center">
-                            <button type="submit" name="button" value="Register" class="btn btn-primary">Submit</button>
 
+                        <div class="col-md 6">
+
+
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label col-form-label-sm">R.N.</label>
+                                <div class="col-md-3">
+                                    <input class="form-control form-control-sm" id="RoomNo" type="text" asp-for="RoomNo" readonly />
+                                    <span asp-validation-for="RoomNo" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-5">
+                                    <input class="form-control form-control-sm" id="FloorName" asp-for="FloorName" type="text" readonly />
+                                    <span asp-validation-for="FloorName" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label col-form-label-sm">Case Type</label>
+                                <div class="col-md-8">
+                                    <select asp-for="CaseType" asp-items="@utils.GetCaseType()" class="form-control form-control-sm">
+                                    </select>
+                                    <span asp-validation-for="CaseType" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label col-form-label-sm">Pay Type:</label>
+                                <div class="col-md-4">
+                                    <select  class="form-control form-control-sm" readonly>
+                                        <option disabled value="cash">Cash</option>
+                                        <option disabled value="insurance">Insurance</option>
+                                        <option selected value="online">Online</option>
+
+                                    </select>
+
+                                </div>
+                                <div class="col-md-5">
+                                    <input class="form-control form-control-sm" placeholder="OPD Cash" readonly />
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label col-form-label-sm">Amount:</label>
+                                <div class="col-md-3">
+                                    <input asp-for="Amount" type="text" class="form-control form-control-sm Amount" readonly />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" name="button" value="Esewa" class="btn btn-primary">Pay With Esewa</button>
+                        <button type="submit" name="button" value="Khalti" class="btn btn-primary">Pay With Khalti</button>
+
+                    </div>
                 </div>
-               
-            </div>
             </form>
-
-        
         </div>
     </div>
+
 </div>
 
 
@@ -226,6 +270,34 @@
                 });
 
 
+            }
+
+        }
+        function HandleUHidKeyEvent(e) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                var uhid = $(e.target).val();
+               
+                $.ajax({
+                    url: "@Url.Action("GetPatientInfoByUhid", "Appointment")",
+                    method: "GET",
+                    data: { uhid: uhid },
+                    success: function (result) {
+                        $(".FirstName").val(result.firstName);
+                        $(".LastName").val(result.lastName);
+                        $(".Address").val(result.address);
+                        $(".District").append("<option selected value='" + result.district + "'>" + result.district + "</option>");
+                        $(".DOB").val(result.dob);
+                        $(".Age").val(result.age);
+                        $(".AgeType").val(result.ageType);
+                        $(".Contactno").val(result.contactno);
+                        $(".Gender").val(result.gender);
+                        $(".Ethnicity").append("<option selected value='" + result.ethnicity + "'>" + result.ethnicity + "</option>");
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
             }
 
         }
@@ -298,6 +370,51 @@
             var data = `${year}-${month}-${day}`;
             $("#DOB").val(data);
 
+        }
+        function DepartmentChange(e) {
+            var deptId = $(e).val();
+            $.ajax({
+
+                url: "@Url.Action("GetDoctors", "Appointment")",
+                method: "Get",
+                data: { DepartmentId: deptId },
+                success: function (result) {
+                    $("#Doctors").empty();
+                    $("#RoomNo").val("");
+                    $("#FloorName").val("");
+                    $(".Amount").val("");
+
+                    $("#Doctors").append("<option disabled selected> - </option>");
+                    $.each(result, function (index, row) {
+                        $("#RoomNo").val(row.roomNo);
+                        $("#FloorName").val(row.floorName);
+                        $("#Doctors").append("<option value='" + row.doctorId + "'>" + row.doctorName + "</option>");
+
+                    });
+                },
+                error: function () {
+                    alert('failed');
+                },
+            });
+        }
+        function DoctorChangeEvent(e) {
+            var feeTypeId = 1;
+            var doctorId = $(e).val();
+            $(".Amount").val("");
+            $.ajax({
+                url: "@Url.Action("GetDoctorFees", "Appointment")",
+                method: "Get",
+                data: {
+                    FeeTypeId: feeTypeId,
+                    DoctorId: doctorId,
+                },
+                success: function (result) {
+                    $(".Amount").val(result);
+                },
+                error: function () {
+                    alert('failed');
+                },
+            });
         }
         $(document).ready(function () {
             $('#toggleReadonlyCheckbox').on('click', function () {

@@ -1,0 +1,85 @@
+﻿@model BedSetupViewModel
+@inject CommonUtility utils
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="page-title">IPD Bed & Category Setup</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-box">
+                    <h4 class="card-title">Bed Category Setup</h4>
+                    <form asp-action="BedCategorySetup" asp-controller="Components" asp-area="Staff" method="post">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Bed Category Name</label>
+                            <div class="col-md-9">
+                                <input asp-for="BedCategoryName" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Price</label>
+                            <div class="col-md-9">
+                                <input asp-for="BedPrice" type="number" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-box">
+                    <h4 class="card-title">Tests Setup</h4>
+                    <form asp-action="BedSetup" asp-controller="Components" asp-area="Staff" method="post">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Bed Category:</label>
+                            <div class="col-md-9">
+                                <select asp-for="BedCategoryId" class="form-control" asp-items="@utils.GetBedCategory()">
+                                    <option disabled selected>Select Bed Category</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Bed Name:</label>
+                            <div class="col-md-9">
+                                <input asp-for="BedName" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        if ('@TempData["SuccessMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "success",
+                title: "@TempData["SuccessMsge"]",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        if ('@TempData["FailedMsge"]' !== '') {
+            // Display SweetAlert
+            Swal.fire({
+                icon: "error",
+                title: "Oops",
+                text: '@TempData["FailedMsge"]',
+            });
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

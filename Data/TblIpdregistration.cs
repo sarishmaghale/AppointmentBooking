@@ -16,7 +16,6 @@ namespace AppointmentBooking.Data
         public int? Age { get; set; }
         public string? AgeType { get; set; }
         public string? Gender { get; set; }
-        public string? Religion { get; set; }
         public string? Gname { get; set; }
         public string? Gaddress { get; set; }
         public string? Gcontact { get; set; }
@@ -29,7 +28,6 @@ namespace AppointmentBooking.Data
         public int? CaseType { get; set; }
         public string? Complain { get; set; }
         public string? Diagnosis { get; set; }
-        public string? Remark { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? IsDischarged { get; set; }
         public string? CreatedByUser { get; set; }

@@ -50,7 +50,8 @@ namespace AppointmentBooking.Areas.Staff.Models
             get; set;
 
         }
-        public virtual ICollection<TblTestSetup> TblTestSetups { get; set; }
+        public virtual ICollection<TblTestSetup>? TblTestSetups { get; set; }
+        public List<TestParameterViewModel>? TestParameterList { get; set; }
         public string? TestGroupName { get; set; }
     }
 

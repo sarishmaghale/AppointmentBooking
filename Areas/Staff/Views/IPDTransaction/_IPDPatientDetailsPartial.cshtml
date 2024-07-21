@@ -1,0 +1,65 @@
+﻿
+@model IPDViewModel
+@inject CommonUtility utils
+<div class="card-box profile-header">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-basic">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="profile-info-left">
+
+                            <div class="title">
+                                IPDRegNo:
+                          
+                               @Model.IpdregNo
+                            </div>
+                            <div class="staff-id">
+                                Patient Name:
+                                @Model.PatientName
+                            </div>
+                            <div class="staff-id">Age : @Model.Age @Model.AgeType</div>
+                <div class="staff-id">ContactNo : @Model.Contactno</div>
+                <div class="staff-id">
+                    Address : @Model.Address                 
+                </div>
+                <div class="staff-id">Guardian : @Model.Gname</div>
+                <div class="staff-id">Guardian Contact:  @Model.Gcontact</div>
+
+                <div class="staff-id">Relation : @Model.Grelation</div>
+
+                        
+                    </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="personal-info">
+                <div class="staff-id">Admitted Date : @if (Model.CreatedDate != null)
+                    {
+                        @Model.CreatedDate.Value.ToShortDateString()
+                    }
+                </div>
+                            <div class="staff-id">
+                                CaseType : @utils.GetCaseTypeName(@Model.CaseType)
+                            </div>
+                <div class="staff-id">
+                    Ward/Bed : @utils.GetBedTypeName(Model.BedType)/ @Model.IPDBedName
+                </div>
+                            <div class="staff-id">Consultant Dr. : @Model.DoctorName</div>
+                            <div class="staff-id">Discharge Date : @if(Model.DischargeDate!=null){
+                                @Model.DischargeDate.Value.ToShortDateString()
+                            }</div>
+
+                            <div class="staff-id">Complain : @Model.Complain</div>
+</div>
+                       
+                    </div>
+
+
+                </div>
+           </div>
+
+        </div>
+    </div>
+    </div>

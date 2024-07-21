@@ -11,19 +11,22 @@
         {
             var items = Model[i];
             <input type="hidden" name="Results[@i].TestGroupDept" value="@items.TestGroupDept" />
-
-            @foreach (var item in items.Receipts)
+            @if (items.Receipts != null)
             {
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].ReceiptNo" value="@item.ReceiptNo" />
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].PayType" value="@item.PayType" />
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].PatientName" value="@item.PatientName" />
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].TotalAmount" value="@item.TotalAmount" />
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].DoctorName" value="@item.DoctorName" />
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].CreatedDate" value="@item.CreatedDate" />
-                <!-- Add more hidden inputs as needed for other properties -->
-                <!-- Dropdown Actions (assuming you're only capturing ReceiptNo for dropdown actions) -->
-                <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].ActionReceiptNo" value="@item.ReceiptNo" />
+                @foreach (var item in items.Receipts)
+                {
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].ReceiptNo" value="@item.ReceiptNo" />
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].PayType" value="@item.PayType" />
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].PatientName" value="@item.PatientName" />
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].TotalAmount" value="@item.TotalAmount" />
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].DoctorName" value="@item.DoctorName" />
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].CreatedDate" value="@item.CreatedDate" />
+                    <!-- Add more hidden inputs as needed for other properties -->
+                    <!-- Dropdown Actions (assuming you're only capturing ReceiptNo for dropdown actions) -->
+                    <input type="hidden" name="Results[@i].Receipts[@items.Receipts.IndexOf(item)].ActionReceiptNo" value="@item.ReceiptNo" />
+                }
             }
+          
 
             <!-- Total Amount -->
             <input type="hidden" name="Results[@i].ReceiptTotal" value="@items.ReceiptTotal" />
@@ -45,7 +48,6 @@
                         <th> Amount</th>
                         <th>Doctor Name</th>
                         <th>Date</th>
-                        <th>Receipt Type</th>
                         <th class="text-right">Action</th>
                     </tr>
                 </thead>
@@ -57,31 +59,34 @@
                             <tr>
                                 <td colspan="9" style="text-align:center;font-weight: bold; background-color: #f2f2f2;"><b>@items.TestGroupDept</b> </td>
                             </tr>
-                            @foreach(var item in items.Receipts)
+                            if (items.Receipts != null)
                             {
-                                <tr>
-                                    <td>@item.ReceiptNo  </td>
-                                    <td>@item.PayType  </td>
+                                @foreach (var item in items.Receipts)
+                                {
+                                    <tr>
+                                        <td>@item.ReceiptNo  </td>
+                                        <td>@item.PayType  </td>
 
-                                    <td>@item.PatientName </td>
+                                        <td>@item.PatientName </td>
 
-                                    <td>@item.TotalAmount </td>
-                                    <td>@item.DoctorName  </td>
+                                        <td>@item.TotalAmount </td>
+                                        <td>@item.DoctorName  </td>
 
-                                    <td>@item.CreatedDate.Value.ToShortDateString()  </td>
+                                        <td>
+                                            @if (item.CreatedDate != null)
+                                            {
+                                                @item.CreatedDate.Value.ToShortDateString()
+                                            }
+                                        </td>
 
-                                    <td><a class="btn btn-sm btn-primary custom-badge status-grey" href="salary-view.html">Generate Slip</a></td>
-                                    <td class="text-right">
-                                        <div class="dropdown dropdown-action">
-                                            <a class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <button class="btnView dropdown-item" id="btnView" data-id="@item.ReceiptNo"><i class="fa fa-pencil m-r-5"></i> View</button>
-                                                <a class="dropdown-item" href="#"><i class="fa fa-trash-o m-r-5"></i> Print</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+
+                                        <td class="text-right">
+                                            <button class="btn btn-primary btn-sm rounded-0 btnView" type="button" data-id="@item.ReceiptNo" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-table"></i></button>
+                                        </td>
+                                    </tr>
+                                }
                             }
+                         
                             <tr>
                                 <td colspan="3" style="text-align:center;font-weight: bold;"><b>--TOTAL AMOUNT--</b> </td>
                                 <td colspan="5" style="font-weight: bold;">@items.ReceiptTotal</td>

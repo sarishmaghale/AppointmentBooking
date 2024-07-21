@@ -9,11 +9,12 @@ namespace AppointmentBooking.Models
         public string? FirstName { get; set; }
         [Required(ErrorMessage = "LastName is required.")]
         public string? LastName { get; set; }
-        [Required(ErrorMessage = "Booking Date is required.")]
+     
         public string? BookingDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string? InsuranceId { get; set; }
         [Required(ErrorMessage = "Department is required.")]
-        public string? Department { get; set; }
+        public int? Department { get; set; }
         [Required(ErrorMessage = "Address is required.")]
         public string? Address { get; set; }
         [Required(ErrorMessage = "District is required.")]
@@ -24,8 +25,19 @@ namespace AppointmentBooking.Models
         [Required(ErrorMessage = "DOB required is required.")]
 
         public string? Dob { get; set; }
-       
+        public int? Opdqueue { get; set; }
+        public decimal? Uhid { get; set; }
 
+        public string? CreatedTime { get; set; }
+        [Required(ErrorMessage = "Consultant Doctor is required.")]
+        public int? ConsultantDr { get; set; }
+        public int? RefererName { get; set; }
+        public int? RoomNo { get; set; }
+        public string? FloorName { get; set; }
+        [Required(ErrorMessage = "Please select CaseType")]
+
+        public int? CaseType { get; set; }
+        public double? Amount { get; set; }
         public int? Age { get; set; }
         public string? Panno { get; set; }
 

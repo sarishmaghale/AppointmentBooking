@@ -67,7 +67,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             return PartialView("_ReceiptDetailsPartial", data);
         }
         public async Task<IActionResult> ReceiptDetailsMain(int ReceiptNo)
-        {
+        {          
             var data = await receiptProvider.GetReceiptDetails(ReceiptNo);
             return View(data);
         }
@@ -146,16 +146,16 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             bool dataExists = await receiptProvider.CheckDischargeBill(Convert.ToInt32(model.Ipdno));
             if (!dataExists)
             {
-                bool result = await receiptProvider.AddDischargeBill(model);
-                if (result)
+                int ReceiptNo = await receiptProvider.AddDischargeBill(model);
+                if (ReceiptNo!=0)
                 {
                     TempData["DischargeBillMsge"] = "Bill successfully saved";
-                    return RedirectToAction("DischargeBill");
+                    return RedirectToAction("ReceiptDetailsMain", new { ReceiptNo =ReceiptNo});
                 }
                 TempData["DischargeBillMsge"] = "Failed to save";
                 return RedirectToAction("DischargeBill");
             }
-            TempData["DischargeBillMsge"] = "Bill was already saved!";
+            TempData["DischargedBill"] = "Bill was already saved!";
             return View();
 
         }
@@ -169,7 +169,15 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         public async Task<IActionResult> AddExpenseEntry([FromBody] List<ExpenseEntryViewModel> tableData)
         {
             bool result = await receiptProvider.AddPatientExpenseEntry(tableData);
-            return View();
+            if (result)
+            {
+                TempData["SuccessMsge"] = "Expense added!";
+            }
+            else
+            {
+                TempData["FailedMsge"] = "Failed to add expensse!";
+            }
+            return View("PatientExpenseEntry");
         }
     }
 }

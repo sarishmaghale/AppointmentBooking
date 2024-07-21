@@ -13,8 +13,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
     public class ReceiptService : IReceiptRepository
 
     {
-        private MedicareAppointmentDbContext db;
-        public ReceiptService(MedicareAppointmentDbContext _db)
+        private HospitalManagementDbContext db;
+        public ReceiptService(HospitalManagementDbContext _db)
         {
             db = _db;
         }
@@ -50,6 +50,24 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                         };
                        await db.TblReceiptDetails.AddAsync(details);
                         await db.SaveChangesAsync();
+
+                    }
+                   foreach(var checkLabTest in model.ReceiptDetails)
+                    {
+                        if (checkLabTest.TestGroup == "Pathology")
+                        {
+                            var labData = new TblSampleRegistration()
+                            {
+                                Uhid = model.Uhid,
+                                RecordType = 1, //1=Opd, 2=IPd
+                                RecordNo = cashReceipt.ReceiptNo,
+                                IsCollected = 0, //0= isCollected false, 1=isCollected=true
+                                LabNo = null,
+                            };
+                            await db.TblSampleRegistrations.AddAsync(labData);
+                            await db.SaveChangesAsync();
+                            break;
+                        }
                     }
                     transaction.Commit();
                     return cashReceipt.ReceiptNo;
@@ -268,7 +286,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                               }).FirstOrDefaultAsync();
             return data;
         }
-        public async Task<bool> AddDischargeBill(ReceiptViewModel model)
+        public async Task<int> AddDischargeBill(ReceiptViewModel model)
         {
             int ReceiptNo = await AddCashReceipt(model);
             using (var transaction = db.Database.BeginTransaction())
@@ -291,17 +309,17 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                             await db.SaveChangesAsync();
                         }
                         await transaction.CommitAsync();
-                        return true;
+                        return ReceiptNo;
                     }
                     await transaction.RollbackAsync();
-                    return false;
+                    return 0;
 
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     await transaction.RollbackAsync();
-                    return false;
+                    return 0;
                 }
             }
         }
@@ -333,8 +351,26 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                         };
                         await db.TblIpdexpenseEntries.AddAsync(expenseEntryData);
                         await db.SaveChangesAsync();
-                        
+                       
                     }
+                    foreach (var checkLabTest in model)
+                    {
+                        if (checkLabTest.TestGroup == "Pathology")
+                        {
+                            var labData = new TblSampleRegistration()
+                            {
+                                Uhid = checkLabTest.Uhid,
+                                RecordType = 2, //1=OPd, 2=IPD
+                                RecordNo = checkLabTest.IpdregNo,
+                                IsCollected = 0, //0=isCollected false, 1=isCollected true
+                                LabNo = null,
+                            };
+                            await db.TblSampleRegistrations.AddAsync(labData);
+                            await db.SaveChangesAsync();
+                            break;
+                        }
+                    }
+                    
                     await transaction.CommitAsync();
                     return true;
                 }
@@ -346,6 +382,16 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 }
             }
                 
+        }
+        public async Task<List<object>> GetSalesData()
+        {
+            var daysLimit = DateTime.Today.AddDays(-15);
+            List<object> data = new List<object>();
+            List<string?> labels =await db.TblCashReceipts.Where(x=> x.CreatedDate>=daysLimit).GroupBy(x=> x.CreatedDate).Select(g => g.Key.ToString()).ToListAsync();
+            data.Add(labels);
+            List<double> SalesNumber = db.TblCashReceipts.Where(x=> x.CreatedDate>=daysLimit).GroupBy(x=> x.CreatedDate).Select(g => g.Sum(y=> y.TotalAmount?? 0)).ToList();
+            data.Add(SalesNumber);
+            return data;
         }
     }
 }

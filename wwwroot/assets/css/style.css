@@ -5204,10 +5204,10 @@ blockquote p {
 	}
 }
 
-@media only screen and (min-width: 768px) {
+/*@media only screen and (min-width: 768px) {
 	.modal-md {
 		width: 500px;
-	}
+	}*/
 
 	.nav-tabs.nav-justified.nav-tabs-top {
 		border-bottom: 1px solid #ddd;

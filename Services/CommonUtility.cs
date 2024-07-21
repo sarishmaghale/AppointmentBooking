@@ -13,9 +13,9 @@ namespace AppointmentBooking.Services
 {
     public class CommonUtility
     {
-        private MedicareAppointmentDbContext db;
+        private HospitalManagementDbContext db;
 
-        public CommonUtility(MedicareAppointmentDbContext _db)
+        public CommonUtility(HospitalManagementDbContext _db)
         {
             db = _db;
         }
@@ -37,7 +37,7 @@ namespace AppointmentBooking.Services
         }
         public string GetDepartmentName(int DepartmentId)
         {
-            return db.TblDepartments.Where(x => x.DepartmentId == DepartmentId).Select(x => x.DepartmentName).FirstOrDefault();
+            return db.TblDepartments.Where(x => x.DepartmentId == DepartmentId).Select(x => x.DepartmentName).FirstOrDefault()??"ddd";
         }
         public string GetCurrentDateTime()
         {
@@ -64,12 +64,12 @@ namespace AppointmentBooking.Services
         public string GetTestGroupName(int TestGroupId)
         {
             var testGroupName = db.TblTestGroupSetups.Where(x => x.TestGroupId == TestGroupId).Select(x => x.TestGroupName).FirstOrDefault();
-            return testGroupName;
+            return testGroupName??"ttt";
         }
         public string GetTestName(int TestId)
         {
             var testName = db.TblTestSetups.Where(x => x.TestId == TestId).Select(x => x.TestName).FirstOrDefault();
-            return testName;
+            return testName??"ttt";
         }
         public async Task<IEnumerable<PatientViewModel>> GetValuesOnDepartment(int DepartmentId)
         {
@@ -116,6 +116,11 @@ namespace AppointmentBooking.Services
             decimal maxUhid = db.TblOpdregistrations.Max(item => item.Uhid) ?? 0;
             return (maxUhid + 1);
         }
+        public decimal GetMaximumOPDSrNo()
+        {
+            int maxRegNo = db.TblOpdregistrations.Max(item => item.SrNo);
+            return (maxRegNo + 1);
+        }
         public int GetMaximumReceiptNo()
         {
             int maxRecNo = db.TblCashReceipts.Max(item => item.ReceiptNo);
@@ -131,6 +136,11 @@ namespace AppointmentBooking.Services
             var cases = db.TblCaseTypes.ToList();
             var data = new SelectList(cases, "CaseTypeId", "CaseTypeName");
             return data;
+        }
+        public string? GetCaseTypeName(int? CaseTypeId)
+        {
+            var result = db.TblCaseTypes.Where(x => x.CaseTypeId == CaseTypeId).Select(x => x.CaseTypeName).FirstOrDefault();
+            return result;
         }
         public SelectList GetReligions()
         {
@@ -158,11 +168,11 @@ namespace AppointmentBooking.Services
         }
         public string GetDoctorName(int? DoctorId)
         {
-            return db.TblDoctorSetups.Where(x => x.DoctorId == DoctorId).Select(x => x.DoctorName).FirstOrDefault();
+            return db.TblDoctorSetups.Where(x => x.DoctorId == DoctorId).Select(x => x.DoctorName).FirstOrDefault()??" ";
         }
         public string GetFeeTypeName(int? FeeeTypeId)
         {
-            return db.TblFeeTypes.Where(x => x.FeeTypeId == FeeeTypeId).Select(x => x.FeeTypeName).FirstOrDefault();
+            return db.TblFeeTypes.Where(x => x.FeeTypeId == FeeeTypeId).Select(x => x.FeeTypeName).FirstOrDefault()??"fff";
         }
 
         public IEnumerable<DoctorSetupViewModel> GetDoctorList()
@@ -186,6 +196,22 @@ namespace AppointmentBooking.Services
             var data = new SelectList(beds, "BedTypeId", "BedTypeName");
             return data;
         }
-
+        public string GetBedTypeName(int? BedTypeId)
+        {
+            return db.TblIpdbedTypes.Where(b => b.BedTypeId == BedTypeId).Select(b => b.BedTypeName).FirstOrDefault() ?? "bb";
+        }
+        public SelectList GetLabTests()
+        {
+            var groupData = db.TblTestGroupSetups.Where(x => x.TestGroupName == "Pathology").Select(x => x.TestGroupId).FirstOrDefault();
+            var testData = db.TblTestSetups.Where(y => y.TestGroupId == groupData).ToList();
+            var result = new SelectList(testData, "TestId", "TestName");
+            return result;                         
+        }
+        public SelectList GetLabParameters()
+        {
+            var data = db.TblLabParameterSetups.ToList();
+            var result = new SelectList(data, "ParameterId", "ParameterName");
+            return result;
+        }
     }
 }

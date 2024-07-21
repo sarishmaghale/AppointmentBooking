@@ -9,12 +9,14 @@ using AppointmentBooking.Areas.Staff.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Policy;
 using NuGet.Common;
+using AppointmentBooking.Areas.Staff.Services.Interface;
+using AppointmentBooking.Areas.Staff.Services.Repository;
 
 
 var builder = WebApplication.CreateBuilder(args);
 var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetRequiredService<IConfiguration>();
-builder.Services.AddDbContext<MedicareAppointmentDbContext>(item => item.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<HospitalManagementDbContext>(item => item.UseSqlServer(config.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,12 +24,14 @@ builder.Services.AddTransient<CommonUtility>();
 builder.Services.AddTransient<ApiService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IOPDBookingService, OPDBookingService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IOPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.OPDService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IReceiptRepository, AppointmentBooking.Areas.Staff.Services.Repository.ReceiptService>();
-builder.Services.AddTransient<AppointmentBooking.Areas.Staff.Services.Interface.IIPDRepository, AppointmentBooking.Areas.Staff.Services.Repository.IPDService>();
-builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IRegistrationRepository, AppointmentBooking.Areas.Staff.Services.Repository.RegistrationService>();
-builder.Services.AddScoped<AppointmentBooking.Areas.Staff.Services.Interface.IComponentSetupRepository, AppointmentBooking.Areas.Staff.Services.Repository.ComponentSetupService>();
+builder.Services.AddTransient<IOPDRepository,OPDService>();
+builder.Services.AddTransient<IOPDRepository, OPDService>();
+builder.Services.AddTransient<IReceiptRepository, ReceiptService>();
+builder.Services.AddTransient<IIPDRepository, IPDService>();
+builder.Services.AddScoped<IRegistrationRepository, RegistrationService>();
+builder.Services.AddScoped<IComponentSetupRepository, ComponentSetupService>();
+builder.Services.AddTransient<IPathologyRepository, PathologyService>();
+builder.Services.AddTransient<IPatientHistoryRepository, PatientHistoryService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<ApiService>(client =>
 {

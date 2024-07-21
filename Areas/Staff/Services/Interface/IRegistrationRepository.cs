@@ -7,5 +7,6 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
         public Task<decimal> AddPatientRegistration(PatientViewModel model);
         public Task<PatientViewModel> GetPatientsByUhid(decimal uhid);
         public Task<AccountViewModel> CheckUserAccount(AccountViewModel model);
+        public Task<List<PatientViewModel>> GetPatientList();
     }
 }

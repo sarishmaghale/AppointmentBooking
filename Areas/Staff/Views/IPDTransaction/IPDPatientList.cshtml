@@ -1,88 +1,149 @@
-﻿@model IEnumerable<IPDViewModel>
+﻿<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+@model IPDViewModel
+@inject CommonUtility utils
+
 <div class="page-wrapper">
     <div class="content">
-        @* <div class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar-brand">IPD Patient List</a>
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" id="searchInput" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div> *@
+        <form asp-action="GetIPDPatientList" asp-controller="IPDTransaction" asp-area="Staff" method="POST">
 
-                
-          <table class="table custom-table" id="patientTable">
-            <thead>
-                <tr>
-                    <th>RegNo</th>
-                    <th>Uhid</th>
-                    <th>PatientName</th>
-                    <th>ContactNo</th>
-                                <th>Address</th>
-                                <th>Dob/Age</th>
-                                <th>Gender</th>
-                                <th>Guardian</th>
-                                <th>GContact</th>
-                                <th>Relation</th>
-                                <th>Consultant Dr.</th>
-                                <th>Bed</td>
-                                <th>Status</th>
-                </tr>
+            <div class="row filter-row">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <div class="form-group form-focus select-focus">
+                        <label class="focus-label">Patient Type</label>
+                        <select class="select floating" asp-for="IsDischarged">
+                            <option value="2">--All--</option>
+                            <option value="0">Admitted</option>
+                            <option value="1">Discharged</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">From</label>
+                        <input type="date" class="form-control floating" asp-for="FromDateFilter">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">To</label>
+                        <input type="date" class="form-control floating" asp-for="ToDateFilter">
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <button class="btn btn-success btn-block" type="submit"> Search </button>
+                </div>
 
-            </thead>
-            <tbody>
-                @foreach(var item in Model)
-                {
-                    <tr>
-                        <td>@item.IpdregNo</td>
-                        <td>@item.Uhid</td>
-                        <td>@item.PatientName</td>
-                        <td>@item.Contactno</td>
-                        <td>@item.Address, @item.District</td>
-                        <td>@item.Dob (@item.AgeType)</td>
-                        <td>@item.Gender</td>
-                        <td>@item.Gname</td>
-                        <td>@item.Gcontact</td>
-                        <td>@item.Grelation</td>
-                        <td>@item.DoctorName</td>
-                        <td>@item.IPDBedName</td>
-                        @if (item.IsDischarged == 1)
-                            {
-                            <td><a class="btn btn-sm btn-secondary custom-badge " href="#">Discharged</a></td>
-                        }
-                        else
-                        {
-                                    <td><a class="btn btn-sm btn-primary custom-badge " href="#">Admitted</a></td>
-                        }
-                       
-                    </tr>
-                }
-            </tbody>
-        </table>
- 
+            </div>
+
+        </form>
+     
+
+        @if (Model!= null)
+        {
+            <div class="row">
+                <div class="col-sm-11 col-6 text-right m-b-10">
+                    <button class="btn btn-primary btn-rounded float-right btnViewDetails"><i class="fa fa-plus"></i> Show Details</button>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table custom-table ">
+                            <thead>
+                                <tr>
+                                    <th>RegNo</th>
+                                    <th>Uhid</th>
+                                    <th>PatientName</th>
+                                    <th>Age</th>
+                                    <th>Admitted Date</th>
+                                    <th>ContactNo:</th>
+                                    <th>DoctorName</th>
+                                    <th>Ward</th>
+                                    <th></th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    @foreach (var item in Model.IpdPatients)
+                                    {
+
+                                        <tr>
+                                            <td>@item.IpdregNo  </td>
+                                            <td>@item.Uhid  </td>
+                                            <td>                                               
+                                                @item.PatientName
+                                                <div class="PatientDetails" style="display:none;">
+                                                    <b> Guardian Name</b> :@item.Gname<br />
+                                                    <b>Relation:</b>@item.Grelation<br />
+                                                </div>
+                                                
+                                            </td>
+                                            <td>@item.Age @item.AgeType
+                                                <div class="PatientDetails" style="display:none;">
+                                                    DOB :@item.Dob<br />
+                                                    Gender:@item.Gender<br />
+                                                    Address :@item.Address<br />
+                                                </div>
+                                            </td>
+                                            <td>@if(item.CreatedDate!=null){
+                                                @item.CreatedDate.Value.ToShortDateString()
+                                                    <div class="PatientDetails" style="display:none;">
+                                                        @if(item.DischargeDate!=null){
+                                                            <b>Discharged: </b>@item.DischargeDate.Value.ToShortDateString()
+                                                        }
+                                                    </div>
+                                            }</td>
+                                            <td>@item.Contactno
+                                                <div class="PatientDetails" style="display:none;">
+                                                    <b> Guardian</b> :@item.Gcontact<br />
+                                                </div>
+                                            </td>
+                                            <td>@item.DoctorName </td>
+                                            <td>@item.Ward
+                                                <div class="PatientDetails" style="display:none;">
+                                                    @item.IPDBedName<br />
+                                                </div>
+                                            </td>
+                                            <td>@if(item.IsDischarged==0){
+                                                    <a class="btn btn-sm btn-primary custom-badge" href="#">Admitted</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-sm btn-secondary custom-badge" href="#">Discharged</a>
+                                                }
+                                            </td>
+                                        
+                                        </tr>
+                                    }
+
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        }
+
     </div>
 </div>
 
-@section Scripts{
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-
-    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-  <script>
+@section Scripts {
+    <script>
         $(document).ready(function () {
-            $('#patientTable').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "info": false,
-                "responsive": true
-            });
-           
-                });
-        $(document).ready(function () {
-            $("#searchInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#patientTable tbody tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+            $(document).on('click', '.btnViewDetails', function () {
+                $('.PatientDetails').toggle();
+              
             });
         });
- </script>
- }
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+}

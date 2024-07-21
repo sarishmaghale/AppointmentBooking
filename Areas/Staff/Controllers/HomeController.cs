@@ -14,10 +14,15 @@ namespace AppointmentBooking.Areas.Staff.Controllers
     public class HomeController : Controller
     {
 
-        private IRegistrationRepository registration;
-        public HomeController(IRegistrationRepository _registration)
+        private IRegistrationRepository registration;private IIPDRepository ipdProvider;private IOPDRepository opdProvider;
+        private IReceiptRepository receiptProvider;
+        public HomeController(IRegistrationRepository _registration,IIPDRepository _ipdProvider,IOPDRepository _opdProvider,
+            IReceiptRepository _receiptProvider)
         {
             registration = _registration;
+            ipdProvider = _ipdProvider;
+            opdProvider = _opdProvider;
+            receiptProvider = _receiptProvider;
         }
        
 
@@ -55,10 +60,21 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             
         }
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            
+           
             return View();
+        }
+       public async Task<IActionResult> GetPatientCount()
+        {
+            var ipdCount = await ipdProvider.GetIPDPatientCount();
+            var opdCount = await opdProvider.GetOpdPatientCount();
+            return Json(new { opdCount, ipdCount });
+        }
+        public async Task<List<object>> GetSalesData()
+        {
+            var data = await receiptProvider.GetSalesData();
+            return data;
         }
         [Authorize]
         public IActionResult Dashboard()

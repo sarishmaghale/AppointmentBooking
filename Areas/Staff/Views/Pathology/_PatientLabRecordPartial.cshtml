@@ -1,0 +1,88 @@
+﻿@model PathologyViewModel
+
+<div class="card-body" id="LabRecordPrint">
+    <div class="row">
+        <div class="col-6 col-sm-6 m-b-20">
+            <div class="invoices-details">
+                <ul class="list-unstyled ">
+                    <li><strong>Patient name:</strong> <span>@Model.PatientName</span></li>
+                    <li><strong>Address: </strong><span>@Model.Address</span></li>
+                    <li><strong>Age/Sex:</strong> <span>@Model.Age/ @Model.Gender</span></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 col-sm-6 m-b-20">
+            <div class="invoice-details">
+                <h3 class="text-uppercase">LabNo #@Model.LabNo</h3>
+                <ul class="list-unstyled">
+                    <li>
+                        Date: <span>
+@*                             @if (@Model.CreatedDate != null)
+                            {
+                                @Model.CreatedDate.Value.ToShortDateString()
+                            } *@
+                        </span>
+                    </li>
+                    <li>Hospital</li>
+                    <li>Bharatpur-12,Chitwan</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table" >
+            <thead>
+                <tr>
+                   
+                 
+                    <th>DESCRIPTION</th>                    
+                    <th>Ref.Range</th>
+                    <th>Unit</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.TestList != null)
+                {
+                    @foreach (var items in Model.TestList)
+                    {
+                        <tr>
+                            <td colspan="4">@items.TestName</td>
+                        </tr>
+                        @if (items.TestParameterList != null)
+                        {
+                            @foreach (var item in items.TestParameterList)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.ParameterName
+                                    </td>
+                                    <td>
+                                        @item.Range
+                                    </td>
+                                    <td>
+                                        @item.Unit
+                                    </td>
+                                    <td>
+                                        @item.ParamResult
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+}

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<PatientViewModel>
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped custom-table mb-0" id="PatientListDataTable">
+                        <thead>
+                            <tr>
+                                <th>Uhid</th>
+                                <th>Patient Name</th>
+                                <th>Age</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Contact No</th>
+                                <th>Address</th>
+                                <th>Ethnicity</th>
+                                <th>Created Date Time</th>
+                                <th>Created By User</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Uhid</td>
+                                    <td>@item.PatientName</td>
+                                    <td>@item.Age @item.AgeType</td>
+                                    <td>@item.Dob</td>
+                                    <td>@item.Gender</td>
+                                    <td>@item.Contactno</td>
+                                    <td>@item.Address, @item.District</td>
+                                    <td>@item.Ethnicity</td>
+                                    <td>@item.CreatedDate @item.CreatedTime</td>
+                                    <td>@item.CreatedByUser</td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#PatientListDataTable').DataTable({
+                searching: true // Ensure searching is enabled
+            });
+        });
+    </script>
+}

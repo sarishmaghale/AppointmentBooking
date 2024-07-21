@@ -57,33 +57,26 @@
 
                             <div class="col-md-6">
                                 <div class="form-group row">
+                                    <label class="col-md-2 col-form-label col-form-label-sm">IPD Reg:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control form-control-sm" value="@utils.GetIPDRegNo()" readonly />
+                                    </div>
                                     <label class="col-md-2 col-form-label col-form-label-sm">OPD No:</label>
                                     <div class="col-md-2">
                                         <input asp-for="OpdSrNo" type="text" class="form-control form-control-sm" onkeydown="HandleOPDKeyEvent(event)" />
                                         <span asp-validation-for="OpdSrNo" class="text-danger"></span>
                                     </div>
-                                    <label class="col-md-2 col-form-label col-form-label-sm">IPD Reg:</label>
-                                    <div class="col-md-2">
-                                        <input type="text" class="form-control form-control-sm" value="@utils.GetIPDRegNo()" readonly />
-                                    </div>
-                                    <label class="col-md-2 col-form-label col-form-label-sm">Counter:</label>
-                                    <div class="col-md-2">
-                                        <input type="text" class="form-control form-control-sm" />
-                                    </div>
+ 
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-2 col-form-label col-form-label-sm">Pay Type:</label>
+                                    <label class="col-md-3 col-form-label col-form-label-sm">Pay Type:</label>
                                     <div class="col-md-3">
                                         <select class="form-control form-control-sm"  asp-for="PayType">
                                             <option value="cash">Cash</option>
                                             <option value="insurance">Insurance</option>
                                             </select>
                                     </div>
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Admission Charge:</label>
-                                    <div class="col-md-3">
-                                        <input type="text" asp-for="AdmCharge" class="form-control form-control-sm" />
-                                        <span asp-validation-for="AdmCharge" class="text-danger"></span>
-                                    </div>
+
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label col-form-label-sm">Case Type:</label>
@@ -140,14 +133,6 @@
                                         </select>
                                         <span asp-validation-for="Gender" class="text-danger"></span>
                                     </div>
-                                    <label class="col-lg-2 col-form-label col-form-label-sm">Religion:</label>
-                                    <div class="col-lg-5">
-                                        <select asp-for="Religion" asp-items="@utils.GetReligions()" class="form-control form-control-sm">
-                                            <option disabled selected>Select Religion</option>
-
-                                        </select>
-                                        <span asp-validation-for="Religion" class="text-danger"></span>
-                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label col-form-label-sm">Guardian Name:</label>
@@ -165,8 +150,11 @@
                                     <div class="col-md-3">
                                         <select  asp-for="Grelation" class="form-control form-control-sm">
                                             <option disabled selected>Relation</option>
-                                            <option>W/F</option>
-                                            <option>C/0</option>
+                                            <option>M/O</option>
+                                            <option>D/0</option>
+                                            <option>S/0</option>
+                                            <option>W/O</option>
+                                            <option>F/O</option>
                                             </select>
                                         <span asp-validation-for="Grelation" class="text-danger"></span>
                                     </div>
@@ -200,7 +188,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label col-form-label-sm">Amount</label>
+                                    <label class="col-md-3 col-form-label col-form-label-sm">Amount/ Admission Charge</label>
                                     <div class="col-md-8">
                                         <input type="text" asp-for="IPDBedPrice" class="form-control form-control-sm" id="BedPrice" readonly/>
                                         <span asp-validation-for="CaseType" class="text-danger"></span>
@@ -269,6 +257,8 @@
                         $(".AgeType").val(result.ageType);
                         $(".Contactno").val(result.contactno);
                         $(".Gender").val(result.gender);
+                        $(".District").append("<option selected value='" + result.district + "'>" + result.district + "</option>");
+
                     },
                     error: function (error) {
                         alert(error);

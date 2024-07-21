@@ -3,8 +3,162 @@
 }
 <div class="page-wrapper">
     <div class="content">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <a asp-action="OPDRegistration" asp-controller="OPDTransaction" asp-area="Staff" >
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg1"><i class="fa fa-user" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3>OPD Registration</h3>
+                            
+                        </div>
+                        
+                    </div>
+                </a>
+               
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <a asp-action="IPDRegistration" asp-controller="IPDTransaction" asp-area="Staff">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg2"><i class="fa fa-bed"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 style="color:green;">IPD Registration</h3>
+                        </div>
+                    </div>
+                </a>
+               
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <a asp-action="CashReceipt" asp-controller="ReceiptTransaction" asp-area="Staff">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg3"><i class="fa fa-inr" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 style="color:grey;">Billing Transaction</h3>
 
-        dfdf
+                        </div>
+                    </div>
+                </a>
+             
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <a asp-action="SampleRegistration" asp-controller="Pathology" asp-area="Staff">
+                    <div class="dash-widget">
+                        <span class="dash-widget-bg4"><i class="fa fa-heartbeat" aria-hidden="true"></i></span>
+                        <div class="dash-widget-info text-right">
+                            <h3 style="color:orange;">Lab Registration</h3>
+                           
+                        </div>
+                    </div>
+                </a>
+              
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="chart-title">
+                            <h4>Billings Total</h4>
+                            <span class="float-right"><i class="fa fa-caret-up" aria-hidden="true"></i> In recent 15days</span>
+                        </div>
+                        <canvas id="linegraph"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="chart-title">
+                            <h4>Patients In</h4>
+                        </div>
+                        <canvas id="bargraph"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
-    
+        </div>
+    @section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "Get",
+                url: '@Url.Action("GetPatientCount", "Home")', 
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    const ctx = document.getElementById('bargraph').getContext('2d');
+                    const options = { day: 'numeric', month: 'short'};
+                    const labels = data.opdCount.map(d => new Date(d.createdDate).toLocaleDateString('en-US', options).replace(',', ''));
+                    const opdCounts = data.opdCount.map(d => d.count);
+                    const ipdCounts = data.ipdCount.map(d => d.count);
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'OPD Patients',
+                                    data: opdCounts,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'IPD Patients',
+                                    data: ipdCounts,
+                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                    borderColor: 'rgba(153, 102, 255, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            $.ajax({
+                type: "Post",
+                url: "@Url.Action("GetSalesData", "Home")",
+                data: "",
+                contentType: "application/json; charset-utf8",
+                dataType: "json",
+                success: OnSuccess,
+            });
+            function OnSuccess(data) {
+                const barChart = document.getElementById("linegraph");               
+                var _data = data;
+                var _labels = _data[0];
+                var _CharData = _data[1];
+                var colors = ["#86C5D8", "#86C5D8", "#86C5D8"];
+                new Chart(barChart,
+                    {
+                        type: 'line',
+                        data: {
+                            labels: _labels,
+                            datasets: [{
+                                label:'Income in Rs',
+                                fill: false,
+                                data: _CharData,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        }
+                    });
+            }
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

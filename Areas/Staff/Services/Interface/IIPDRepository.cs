@@ -11,6 +11,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
         public Task<IPDViewModel> GetPatientInfoOnBed(IDPBedViewModel model);
         public Task<ReceiptViewModel> GetIPDExpenseEntries(int IPDRegNo);
         public Task<IPDViewModel> GetPatientsByIPD(int ipd);
-        public Task<IEnumerable<IPDViewModel>> GetIPDPatientList();
+        public Task<List<IPDViewModel>> GetIPDPatientList(IPDViewModel model);
+        public Task<List<IPDViewModel>> GetIPDPatientCount();
+
     }
 }

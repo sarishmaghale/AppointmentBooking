@@ -1,0 +1,173 @@
+﻿@model IEnumerable<PathologyViewModel>
+@inject CommonUtility utils
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="page-title">Sample Collection</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-box">
+                    <h4 class="card-title">Patient List</h4>
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th>ReceiptNo</th>
+                                <th>PatientName</th>
+                                <th>PatientType</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            @foreach(var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.RecordNo</td>
+                                    <td>@item.PatientName</td>
+                                    <td>
+                                        @if (item.RecordType == 1)
+                                        {
+                                            <p>OPD Patient</p>
+                                        }
+                                        @if (item.RecordType == 2)
+                                        {
+                                            <p>IPD Patient</p>
+                                        }
+                                    </td>
+                                    <td>@item.ContactNo</td>
+                                    <td>
+                                        <button class="dropdown-item btnLabPatient" data-id="@item.SrNo">
+                                            <i class="fa fa-eye m-r-5"></i> View
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                <div class="col-md-6">
+            <form asp-action="SampleRegistration" asp-controller="Pathology" asp-area="Staff" method="post">
+
+                    <div class="card-box">
+                        <h4 class="card-title">RegDate:  <input type="text" class="form-control Date" style="border:none; background-color: transparent" placeholder="YYYY-MM-DD" readonly></h4>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-4 d-flex align-items-center ">
+                                        <label class="col-form-label me-3">Uhid:</label>
+                                        <input type="text" class="form-control Uhid" style="border:none; background-color: transparent" placeholder="UHID" readonly>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-center">
+                                        <label class="col-form-label me-2">Opd:</label>
+                                        <input type="text" class="form-control Opd" style="border:none; background-color: transparent" placeholder="OPDNo" readonly>
+                                    </div>
+                                    <div class="col-md-4 d-flex align-items-center">
+                                        <label class="col-form-label me-2">Ipd:</label>
+                                        <input type="text" class="form-control Ipd" style="border:none; background-color: transparent" placeholder="IPDNo" readonly>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-4 d-flex align-items-center">
+                                        <label class="col-form-label me-2">Name:</label>
+                                        <input type="text" class="form-control PatientName" style="border:none; background-color: transparent" placeholder="PatientName" readonly>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-center">
+                                        <label class="col-form-label me-2">Age/Sex:</label>
+                                        <input type="text" class="form-control AgeSex" style="border:none; background-color: transparent" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <td>
+                                        TEST NAME
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody class="TestBody">
+                            </tbody>
+                        </table>
+                        <div class="text-right">
+                            <input type="hidden"  id="SrNo"  name="SrNo"/>
+                            <input type="hidden" id="CreatedDate" name="CreatedDate" value="@utils.GetTodayDate()"/>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            
+           
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+                        // Check if alert message exists
+                if ('@TempData["SampleRegistrationMsge"]' !== '') {
+                            // Display SweetAlert
+                            Swal.fire({
+                        title: '@TempData["SampleRegistrationMsge"]',
+                                showCancelButton: true,
+                                confirmButtonText: 'OK',
+                                CancelButtonText: 'Cancel',
+                            });
+                        }
+
+            $(document).on('click', '.btnLabPatient', function () {
+                $(".Opd").val("");
+                $(".AgeSex").val("");
+                    $(".Ipd").val("");
+                    $(".Uhid").val("");
+                    $(".PatientName").val("");
+                    $(".Date").val("");
+                $("#SrNo").val("");
+                    var tableBody = $('.TestBody');
+                    tableBody.empty();
+                var SrNo = $(this).data('id');
+                $.ajax({
+                    url: "@Url.Action("LabPatientPartial", "Pathology")",
+                    type: "GET",
+                    data: { SrNo: SrNo },
+                    success: function (data) {
+                        console.log(data);
+                        $(".Opd").val(data.opdNo);
+                            $(".Ipd").val(data.ipdNo);
+                            $(".Uhid").val(data.uhid);
+                            $(".PatientName").val(data.patientName);
+                        $("#SrNo").val(data.srNo);
+                        $(".AgeSex").val(data.age+"/"+data.gender);
+                            var regDate = new Date(data.createdDate).toISOString().split('T')[0];
+                        $(".Date").val(regDate);
+                            $.each(data.receiptDetails, function (index, item) {
+                                var row = '<tr>' +
+                                    '<td>' + item.testName +
+                                    '<input type = "hidden" name = "ReceiptDetails[' + index + '].TestName" value = "' + item.testName + '" /> </td>' +
+                                    '<td> <input type="hidden" name="ReceiptDetails[' + index + '].TestId" value="' + item.testId + '" /></td>' +
+                                '</tr>';
+                               tableBody.append(row);
+                            });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+        });
+    </script>
+}

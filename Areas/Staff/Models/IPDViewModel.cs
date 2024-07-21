@@ -40,6 +40,12 @@ namespace AppointmentBooking.Areas.Staff.Models
         public string? PatientName { get; set; }
         public string? CaseTypeName { get; set; }
         public string? DoctorName { get; set; }
+        public DateTime? DischargeDate { get; set; }
+       public int? Count { get; set; }
+       public List<IPDViewModel>? IpdPatients { get; set; }
+        public DateTime? FromDateFilter { get; set; }
+        public DateTime? ToDateFilter { get; set; }
+        public string? Ward { get; set; }
        
         public virtual TblPatientRegistration? Uh { get; set; }
     }

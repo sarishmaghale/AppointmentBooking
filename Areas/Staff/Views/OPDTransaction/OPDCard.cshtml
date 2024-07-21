@@ -1,0 +1,50 @@
+﻿@model OPDViewModel
+@inject CommonUtility utils
+<div class="page-wrapper">
+    <div class="content">
+        @{
+            if (@TempData["OPDMSge"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><a asp-action="OPDRegistration" asp-controller="OPDTransaction" asp-area="Staff">Go Back</a></strong> @TempData["OPDMSge"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        }
+
+        <div class="row">
+            <div class="col-sm-7 col-6">
+                <h4 class="page-title">OPD Booking Card</h4>
+            </div>
+            <div class="col-sm-5 col-6 text-right">
+                <button type="button" class="btn btn-outline-dark" onclick="PrintResult('OPDCardBody')"><i class="fa fa-print fa-lg">&nbsp;</i>Print</button>
+
+            </div>
+        </div>
+        <div id="OPDCardBody">
+            @if (Model != null)
+            {
+                @await Html.PartialAsync("_OPDCardPartial", Model)
+            }
+
+        </div>
+      
+ 
+    </div>
+
+</div>
+@section Scripts{
+    <script>
+        $(document).on('click', '.PrintOPDCard', function () {
+            var printContents = document.getElementById('OPDCardBody').innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        });
+    </script>
+}
