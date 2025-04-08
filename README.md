@@ -32,7 +32,8 @@ NOTE: if you don't have the EF CLI tools installed, run:
 dotnet tool install --global dotnet -ef
 7.  **Insert Default Admin Credentials (Manually)**
 8.  **Debug and Run the project**
-9.  
+```
+
 ##  Key Features
 - **OPD & IPD Booking** – Book and manage outpatient/inpatient records by hospital staff.
 - **Billing Module** – Generate and manage billing records linked to OPD/IPD visits.
