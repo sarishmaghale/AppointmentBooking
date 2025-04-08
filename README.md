@@ -3,13 +3,18 @@
 1. **Clone the Repository** - git clone https://github.com/sarishmaghale/AppointmentBooking.git
 2. **Create Database manually**
 3.  **Configure Database connection**-
-   🔹 appsettings.json
+
+🔹 appsettings.json
+
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=YOUR_DB_NAME;Trusted_Connection=True;"
 }
+
 🔹 HospitalManagementDbContext.cs
+
 optionsBuilder.UseSqlServer("Server=YOUR_SERVER_NAME;Database=YOUR_DB_NAME;Trusted_Connection=True;");
-4.  **Apply Entity Fraamework Migrations**-
+
+5.  **Apply Entity Fraamework Migrations**-
    Navigate to Project Directory (Where .csproj exists):
      cd path/to/your/AppointmentBooking/
    Open the terminal, then run:
@@ -17,8 +22,9 @@ dotnet ef migrations add InitialDatabaseCreate
 dotnet ef database update
 NOTE: if you don't have the EF CLI tools installed, run:
 dotnet tool install --global dotnet -ef
-6.  **Insert Default Admin Credentials (Manually)**
-7.  **Debug and Run the project**
+7.  **Insert Default Admin Credentials (Manually)**
+8.  **Debug and Run the project**
+9.  
 ##  Key Features
 - **OPD & IPD Booking** – Book and manage outpatient/inpatient records by hospital staff.
 - **Billing Module** – Generate and manage billing records linked to OPD/IPD visits.
