@@ -16,11 +16,17 @@ optionsBuilder.UseSqlServer("Server=YOUR_SERVER_NAME;Database=YOUR_DB_NAME;Trust
 
 5.  **Apply Entity Fraamework Migrations**-
    Navigate to Project Directory (Where .csproj exists):
+
      cd path/to/your/AppointmentBooking/
+    
    Open the terminal, then run:
+   
 dotnet ef migrations add InitialDatabaseCreate
+
 dotnet ef database update
+
 NOTE: if you don't have the EF CLI tools installed, run:
+
 dotnet tool install --global dotnet -ef
 7.  **Insert Default Admin Credentials (Manually)**
 8.  **Debug and Run the project**
