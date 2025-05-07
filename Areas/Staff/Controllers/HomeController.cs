@@ -43,13 +43,13 @@ namespace AppointmentBooking.Areas.Staff.Controllers
                     {
                        new Claim(ClaimTypes.Name, user.Username),
                        new Claim("UserId", user.UserId.ToString()),
+                       new Claim(ClaimTypes.Role, user.Department)
                     };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                     HttpContext.Session.SetString("UserName", user.Username);
                     HttpContext.Session.SetInt32("UserId", user.UserId);
-                    HttpContext.Session.SetString("UserShift", user.Shift);
                     HttpContext.Session.SetString("UserDept", user.Department);
                     return RedirectToAction("Index");
                 }
@@ -71,6 +71,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             var opdCount = await opdProvider.GetOpdPatientCount();
             return Json(new { opdCount, ipdCount });
         }
+      
         public async Task<List<object>> GetSalesData()
         {
             var data = await receiptProvider.GetSalesData();

@@ -20,14 +20,14 @@ namespace AppointmentBooking.Controllers
         private ApiService apiService;
         private IOPDBookingService opdbookingService;
         private IPaymentService paymentService;
-        private CommonUtility utils;private IPathologyRepository labProvider;
+        private IPatientHistoryRepository historyHelper;private IPathologyRepository labProvider;
 
-        public AppointmentController(ApiService _insuranceService, IOPDBookingService _opdbookingService, IPaymentService _paymentService, CommonUtility _utils,IPathologyRepository _labProvider)
+        public AppointmentController(ApiService _insuranceService, IOPDBookingService _opdbookingService, IPaymentService _paymentService, IPatientHistoryRepository _historyHelper,IPathologyRepository _labProvider)
         {
             opdbookingService = _opdbookingService;
             apiService = _insuranceService;
             paymentService = _paymentService;
-            utils = _utils;
+            historyHelper = _historyHelper;
             labProvider = _labProvider;
         }
        
@@ -159,7 +159,7 @@ namespace AppointmentBooking.Controllers
         }
         public async Task<IActionResult> GetDoctors(int DepartmentId)
         {
-            var result = await utils.GetValuesOnDepartment(DepartmentId);
+            var result = await opdbookingService.GetValuesOnDepartment(DepartmentId);
             return Json(result);
         }
         public async Task<IActionResult> GetDoctorFees(int FeeTypeId, int DoctorId)
@@ -167,9 +167,11 @@ namespace AppointmentBooking.Controllers
             double amount = await opdbookingService.GetDoctorFees(DoctorId, FeeTypeId);
             return Json(amount);
         }
-        public IActionResult AboutUs()
+        public async Task<IActionResult> AboutUs()
         {
-            return View();
+            var model = new PatientViewModel();
+            model.Feedbacks = await opdbookingService.GetAllPatientFeedback();
+            return View(model);
         }
         public IActionResult LabReport()
         {
@@ -189,5 +191,18 @@ namespace AppointmentBooking.Controllers
             }             
                 return RedirectToAction("LabReport");           
         }
-    }
+
+        [HttpPost]
+        public async Task<IActionResult> DoctorRecommendation(PatientViewModel model)
+        {
+            var data = await historyHelper.GetRecommendedDoctors(Convert.ToDecimal(model.Uhid));
+            return View(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> PatientFeedback(PatientViewModel model)
+        {
+            bool result = await opdbookingService.AddPatientFeedback(model);
+            return RedirectToAction("AboutUs");
+        }
+	}
 }

@@ -5,6 +5,7 @@ using AppointmentBooking.Data;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Razor.Language.Intermediate;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace AppointmentBooking.Areas.Staff.Services.Repository
 {
@@ -341,8 +342,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
 
         public async Task<bool> CheckParameterTestMapping(ParameterSetupViewModel model)
         {
-            var existingData = await db.TblTestParameterMappings
-     .FirstOrDefaultAsync(x => x.TestId == model.TestId && x.ParamaterId == model.Parameterid);
+            var existingData = await db.TblTestParameterMappings.FirstOrDefaultAsync(x => x.TestId == model.TestId && x.ParamaterId == model.Parameterid);
             if (existingData != null)
             {
                 return true;
@@ -351,6 +351,46 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
             {
                 return false;
             }
+        }
+
+        public async Task<bool> AddNewUser(AccountViewModel model)
+        {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    //add doctor information
+                    TblUserAccount userData = new TblUserAccount()
+                    {
+                        Username = model.Username,
+                        Password = model.Password,
+                        Department=model.Department
+                    };
+                    await db.TblUserAccounts.AddAsync(userData);
+                    await db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+        }
+
+        public async Task<IEnumerable<AccountViewModel>> GetUserList()
+        {
+            var data = await db.TblUserAccounts.Select(x => new AccountViewModel()
+            {
+                UserId = x.UserId,
+                Username = x.Username,
+                Password = x.Password,
+                Department = x.Department,
+            }).ToListAsync();
+            return data;
         }
     }
 }

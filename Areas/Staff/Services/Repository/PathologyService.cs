@@ -254,6 +254,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                                   Address=g.Key.Address,
                                   Gender=g.Key.Gender,
                                   LabNo=g.Key.LabNo,
+                                  CreatedDate=g.Key.CreatedDate,
                                   TestList = g.GroupBy(r => r.TestName).Select(t => new TestsListViewModel
                                   {
                                       TestName = t.Key,

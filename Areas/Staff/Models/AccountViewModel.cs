@@ -13,12 +13,13 @@ namespace AppointmentBooking.Areas.Staff.Models
 
         public string? Password { get; set; }
 
-        [Required(ErrorMessage = "Shift is required.")]
+        //[Required(ErrorMessage = "Shift is required.")]
 
         public string? Shift { get; set; }
 
         [Required(ErrorMessage = "Department is required.")]
 
         public string? Department { get; set; }
+        public IEnumerable<AccountViewModel>? UserList { get; set; }
     }
 }

@@ -53,11 +53,10 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
 
         public async Task<AccountViewModel> CheckUserAccount(AccountViewModel model)
         {
-            var result= await db.TblUserAccounts.Where(x => x.Username == model.Username && x.Password == model.Password && x.Shift == model.Shift && x.Department == model.Department).Select(m=> new AccountViewModel()
+            var result= await db.TblUserAccounts.Where(x => x.Username == model.Username && x.Password == model.Password && x.Department == model.Department).Select(m=> new AccountViewModel()
             {
                 Username=m.Username,
                 UserId=m.UserId,
-                Shift=m.Shift,
                 Department=m.Department,
             }).FirstOrDefaultAsync();
             if (result!=null)

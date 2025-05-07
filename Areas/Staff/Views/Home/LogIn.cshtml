@@ -31,26 +31,13 @@
 
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 col-form-label">Shift:</label>
-                            <div class="col-md-8">
-                                <select asp-for="Shift" class="form-control">
-                                    <option disabled selected>Select Shift</option>
-                                    <option value="morning" >Morning</option>
-                                    <option value="day">Day</option>
-                                    <option value="evening">Evening</option>
-                                </select>
-                                <span asp-validation-for="Shift" class="text-danger"></span>
-
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label class="col-md-3 col-form-label">Department:</label>
                             <div class="col-md-8">
                                 <select asp-for="Department" class="form-control">
                                     <option disabled selected>Select Department</option>
                                     <option value="admin">Administration</option>
                                     <option value="reception">Reception</option>
-                                    <option value="pharmacy">Pharmacy</option>
+                                    <option value="lab">Laboratory</option>
                                 </select>
                                 <span asp-validation-for="Department" class="text-danger"></span>
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace AppointmentBooking.Services
 {
@@ -118,17 +119,19 @@ namespace AppointmentBooking.Services
         }
         public decimal GetMaximumOPDSrNo()
         {
-            int maxRegNo = db.TblOpdregistrations.Max(item => item.SrNo);
+            int maxRegNo = db.TblOpdregistrations.Any()
+     ? db.TblOpdregistrations.Max(item => item.SrNo)
+     : 0;
             return (maxRegNo + 1);
         }
         public int GetMaximumReceiptNo()
         {
-            int maxRecNo = db.TblCashReceipts.Max(item => item.ReceiptNo);
+            int maxRecNo = db.TblCashReceipts.Any()? db.TblCashReceipts.Max(item => item.ReceiptNo):0;
             return (maxRecNo + 1);
         }
         public int GetIPDRegNo()
         {
-            int maxRecNo = db.TblIpdregistrations.Max(item => item.IpdregNo);
+            int maxRecNo = db.TblIpdregistrations.Any()? db.TblIpdregistrations.Max(item => item.IpdregNo):0;
             return (maxRecNo + 1);
         }
         public SelectList GetCaseType()
@@ -212,6 +215,87 @@ namespace AppointmentBooking.Services
             var data = db.TblLabParameterSetups.ToList();
             var result = new SelectList(data, "ParameterId", "ParameterName");
             return result;
+        }
+        public int? GetBedCount()
+        {
+            var beds = db.TblIpdbedStatuses.Count();
+            return beds;
+        }
+        public int? GetDepartmentCount()
+        {
+            return (db.TblDepartments.Count());
+        }
+        public int? GetDoctorCount()
+        {
+            return db.TblDoctorSetups.Count();
+        }
+
+
+        public async Task<double> GetHospitalRating()
+        {
+            var feedbacks = await db.TblPatientFeedbacks.ToListAsync();
+            int positiveCount = 0;
+
+            foreach (var feedback in feedbacks)
+            {
+                if (feedback != null && IsPositive(feedback.FeedbackText))
+                {
+                    positiveCount++;
+                }
+            }
+
+            double totalFeedbacks = feedbacks.Count;
+            if (totalFeedbacks == 0)
+                return 0; 
+
+            double ratingOutOf5 = (positiveCount / totalFeedbacks) * 5.0; 
+            ratingOutOf5 = Math.Round(ratingOutOf5, 2);
+            return ratingOutOf5;
+        }
+
+        public static bool IsPositive(string feedbackText)
+        {
+            if (string.IsNullOrWhiteSpace(feedbackText))
+                return false;
+
+            var words = feedbackText.ToLower().Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            var positiveKeywords = new HashSet<string> {
+        "good", "excellent", "great", "satisfactory", "happy", "amazing", "positive", "like",
+        "outstanding", "fantastic", "pleased", "delightful", "commendable", "wonderful",
+        "exceptional", "superb", "brilliant", "perfect", "impressive", "remarkable"
+    };
+            var negativeKeywords = new HashSet<string> {
+        "bad", "poor", "horrible", "unhappy", "dissatisfied", "negative",
+        "terrible", "awful", "disappointing", "unpleasant", "substandard", "unsatisfactory",
+        "dreadful", "miserable", "inadequate", "lousy", "inferior", "pathetic", "frustrating"
+    };
+
+            bool hasPositive = false;
+            bool hasNegative = false;
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (i < words.Length - 1 && (words[i] == "not" || words[i] == "no" || words[i] == "wasn't" || words[i] == "weren't"
+                    || words[i] == "isn't" || words[i] == "aren't" || words[i] == "don't" || words[i] == "doesn't" || words[i] == "didn't"))
+                {
+                    // Check if the word following negation is positive/negative
+                    if (positiveKeywords.Contains(words[i + 1]))
+                        hasNegative = true;
+                    if (negativeKeywords.Contains(words[i + 1]))
+                        hasPositive = true;
+                    i++; // Skip next word after handling negation
+                }
+                else
+                {
+                    if (positiveKeywords.Contains(words[i]))
+                        hasPositive = true;
+                    if (negativeKeywords.Contains(words[i]))
+                        hasNegative = true;
+                }
+            }
+
+            // Feedback is positive if positive keywords are present and no negative keywords are found
+            return hasPositive && !hasNegative;
         }
     }
 }

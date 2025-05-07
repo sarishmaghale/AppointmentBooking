@@ -42,6 +42,7 @@ namespace AppointmentBooking.Areas.Staff.Controllers
         }
       public IActionResult HospitalTestSetup()
         {
+    
             return View();
         }
         [HttpPost]
@@ -167,6 +168,29 @@ namespace AppointmentBooking.Areas.Staff.Controllers
                 TempData["FailedMsge"] = "Mapping already exists!";
             }
             return RedirectToAction("ParameterSetup");
+        }
+
+        public async Task< IActionResult> UserSetup()
+        {
+            var model = new AccountViewModel();
+            model.UserList = await setupProvider.GetUserList();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UserSetup(AccountViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                bool result = await setupProvider.AddNewUser(model);
+                TempData["CreateUserMsge"] = (result) ? "Successfully added" : "Failed to add! Try again";
+                return View();
+            }
+            var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(string.Empty, error.ErrorMessage);
+            }
+            return RedirectToAction("UserSetup");
         }
     }
 }

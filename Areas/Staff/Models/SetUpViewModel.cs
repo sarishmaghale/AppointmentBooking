@@ -22,6 +22,7 @@ namespace AppointmentBooking.Areas.Staff.Models
         public virtual TblDoctorSetup? Doctor { get; set; }
         public virtual TblDepartment? Department { get; set; }
         public virtual TblFeeType? FeeType { get; set; }
+        public int? Score { get; set; }
     }
     public class DoctorFeeViewModel
     {

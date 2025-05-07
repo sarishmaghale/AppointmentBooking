@@ -1,0 +1,233 @@
+﻿.slider .single-slider {
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+    .slider .single-slider .text {
+        margin-top: 120px;
+    }
+
+.slider.index2 .single-slider .text {
+    margin-top: 150px;
+}
+
+.slider .single-slider h1 {
+    color: #2C2D3F;
+    font-size: 38px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    line-height: 42px;
+}
+
+    .slider .single-slider h1 span {
+        color: #1a76d1;
+    }
+
+.slider .single-slider p {
+    color: #2C2D3F;
+    margin-top: 27px;
+    font-weight: 400;
+}
+
+.slider .single-slider .button {
+    margin-top: 30px;
+}
+
+.slider .single-slider .btn {
+    color: #fff;
+    background: #1a76d1;
+    font-weight: 500;
+    display: inline-block;
+    margin: 0;
+    margin-right: 10px;
+}
+
+    .slider .single-slider .btn:last-child {
+        margin: 0;
+    }
+
+    .slider .single-slider .btn.primary {
+        background: #2C2D3F;
+        color: #fff;
+    }
+
+        .slider .single-slider .btn.primary:before {
+            background: #1A76D1;
+        }
+.fun-facts {
+    position: relative;
+}
+
+    .fun-facts.section {
+        padding: 120px 0;
+    }
+
+/*.fun-facts {*/
+    /*background: url('/assets/img/fun-bg.jpg');*/
+    /*background-size: cover;
+    background-repeat: no-repeat;
+}*/
+
+    .fun-facts .single-fun {
+    }
+
+        .fun-facts .single-fun i {
+            position: absolute;
+            left: 0;
+            font-size: 62px;
+        /*    color: #fff;*/
+            height: 70px;
+            width: 70px;
+            line-height: 67px;
+            font-size: 28px;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            border: 2px solid ;
+            border-radius: 0px;
+            top: 50%;
+            margin-top: -35px;
+            -webkit-transition: all 0.4s ease;
+            -moz-transition: all 0.4s ease;
+            transition: all 0.4s ease;
+            border-radius: 50%;
+        }
+
+        .fun-facts .single-fun:hover i {
+            color: #1A76D1;
+        /*    background: #fff;*/
+            border-color: transparent;
+        }
+
+        .fun-facts .single-fun .content {
+            padding-left: 80px;
+        }
+
+        .fun-facts .single-fun span {
+            /*color: #fff;*/
+            font-weight: 600;
+            font-size: 30px;
+            position: relative;
+            display: block;
+            -webkit-transition: all 0.4s ease;
+            -moz-transition: all 0.4s ease;
+            transition: all 0.4s eas;
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .fun-facts .single-fun p {
+         /*   color: #fff;*/
+            font-size: 15px;
+        }
+.services .single-service {
+    margin: 30px 0;
+    position: relative;
+    padding-left: 70px;
+}
+
+    .services .single-service i {
+        font-size: 45px;
+        color: #1a76d1;
+        position: absolute;
+        left: 0;
+        -webkit-transition: all 0.4s ease;
+        -moz-transition: all 0.4s ease;
+        transition: all 0.4s ease;
+    }
+
+    .services .single-service h4 {
+        text-transform: capitalize;
+        margin-bottom: 25px;
+        color: #2C2D3F;
+    }
+
+        .services .single-service h4 a {
+            color: #2C2D3F;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+            .services .single-service h4 a:hover {
+                color: #1A76D1;
+            }
+
+    .services .single-service p {
+        color: #868686;
+    }
+/*-- Service Details --*/
+.services-details-img {
+    margin-bottom: 50px;
+}
+
+    .services-details-img img {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .services-details-img h2 {
+        font-weight: 600;
+        font-size: 28px;
+        margin-bottom: 16px;
+    }
+
+    .services-details-img P {
+        margin-bottom: 20px;
+    }
+
+    .services-details-img blockquote {
+        font-size: 15px;
+        color: #4a6f8a;
+        background-color: #1a76d1;
+        padding: 30px 75px;
+        line-height: 26px;
+        position: relative;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+
+        .services-details-img blockquote i {
+            position: absolute;
+            display: inline-block;
+            top: 20px;
+            left: 38px;
+            font-size: 32px;
+        }
+
+.service-details-inner-left {
+    background-image: url("img/signup-bg.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+    .service-details-inner-left img {
+        display: none;
+    }
+
+.service-details-inner {
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .service-details-inner h2 {
+        font-weight: 600;
+        font-size: 30px;
+        margin-bottom: 15px;
+        border-left: 3px solid #1a76d1;
+        padding-left: 15px;
+    }
+
+    .service-details-inner p {
+        margin-bottom: 15px;
+    }
+
+        .service-details-inner p:last-child {
+            margin-bottom: 0;
+        }

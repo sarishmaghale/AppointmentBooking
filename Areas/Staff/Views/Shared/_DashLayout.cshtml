@@ -27,6 +27,7 @@
     
     @RenderSection("Styles", required: false)
 </head>
+
 <body>
 
         <div class="main-wrapper">
@@ -79,58 +80,69 @@
                         <li class="active">
                             <a asp-action="Dashboard" asp-controller="Home" asp-area="Staff"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
                         </li>
-						
-                        <li >
-                            <a asp-action="PatientRegistration" asp-controller="Registration" asp-area="Staff"><i class="fa fa-id-card"></i> <span>Patient Registration</span></a>
-                        </li>
-                       
-						<li class="submenu">
-							<a href="#"><i class="fa fa-user"></i> <span> OPD Transaction </span> <span class="menu-arrow"></span></a>
-							<ul style="display: none;">
-                                <li><a asp-action="OPDRegistration" asp-controller="OPDTransaction" asp-area="Staff">OPD Registration</a></li>
-                                <li><a asp-action="OPDReports" asp-controller="OPDTransaction" asp-area="Staff">OPD Reports</a></li>
-                            </ul>
-						</li>
-                      
-						<li class="submenu">
-							<a href="#"><i class="fa fa-money"></i> <span> Receipt Transaction </span> <span class="menu-arrow"></span></a>
-							<ul style="display: none;">
-                                <li><a asp-action="CashReceipt" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Receipt</a></li>
-                                <li><a asp-action="PatientExpenseEntry" asp-controller="ReceiptTransaction" asp-area="Staff">Patient Expense Entry</a></li>
-                                <li><a asp-action="DischargeBill" asp-controller="ReceiptTransaction" asp-area="Staff">Discharge Bill</a></li>
-								<li><a asp-action="CashSummary" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Summary</a></li>
-							</ul>
-						</li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-bed"></i> <span> IPD Transaction </span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a asp-action="IPDRegistration" asp-controller="IPDTransaction" asp-area="Staff">IPD Registration</a></li>
-                                <li><a asp-action="RoomBedStatus" asp-controller="IPDTransaction" asp-area="Staff">Room/Bed Status</a></li>
-                                <li><a asp-action="IPDPatientList" asp-controller="IPDTransaction" asp-area="Staff">IPD Patient List</a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-tint"></i> <span>Pathology </span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a asp-action="SampleRegistration" asp-controller="Pathology" asp-area="Staff">Sample Registration</a></li>
-                                <li><a asp-action="ResultEntry" asp-controller="Pathology" asp-area="Staff">Result Entry</a></li>
-                                <li><a asp-action="LabResults" asp-controller="Pathology" asp-area="Staff">Lab Records</a></li>
+                        @if ((User.FindFirst(ClaimTypes.Role)?.Value == "admin") || (User.FindFirst(ClaimTypes.Role)?.Value == "reception"))
+                        {
+                            <li>
+                                <a asp-action="PatientRegistration" asp-controller="Registration" asp-area="Staff"><i class="fa fa-id-card"></i> <span>Patient Registration</span></a>
+                            </li>
 
-                            </ul>
-                        </li>
-                        <li class="menu-title">SetUp</li>
-                        <li class="submenu">
-                            <a href="#"><i class="fa fa-laptop"></i> <span> Components</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a asp-action="DoctorSetup" asp-controller="Components" asp-area="Staff">Doctor SetUp</a></li>
-                                <li><a asp-action="BedSetup" asp-controller="Components" asp-area="Staff">Bed SetUp</a></li>
-                            </ul>
-                        </li>
-                        <li >
-                            <a asp-action="HospitalTestSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-list"></i> <span>Test Setup</span></a>
-                        </li>
-                        <li><a asp-action="ParameterSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-exchange"></i><span>Parameter-Mapping</span></a></li>
- 
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-user"></i> <span> OPD Transaction </span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-action="OPDRegistration" asp-controller="OPDTransaction" asp-area="Staff">OPD Registration</a></li>
+                                    <li><a asp-action="OPDReports" asp-controller="OPDTransaction" asp-area="Staff">OPD Reports</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-money"></i> <span> Receipt Transaction </span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-action="CashReceipt" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Receipt</a></li>
+                                    <li><a asp-action="PatientExpenseEntry" asp-controller="ReceiptTransaction" asp-area="Staff">Patient Expense Entry</a></li>
+                                    <li><a asp-action="DischargeBill" asp-controller="ReceiptTransaction" asp-area="Staff">Discharge Bill</a></li>
+                                    <li><a asp-action="CashSummary" asp-controller="ReceiptTransaction" asp-area="Staff">Cash Summary</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-bed"></i> <span> IPD Transaction </span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-action="IPDRegistration" asp-controller="IPDTransaction" asp-area="Staff">IPD Registration</a></li>
+                                    <li><a asp-action="RoomBedStatus" asp-controller="IPDTransaction" asp-area="Staff">Room/Bed Status</a></li>
+                                    <li><a asp-action="IPDPatientList" asp-controller="IPDTransaction" asp-area="Staff">IPD Patient List</a></li>
+                                </ul>
+                            </li>
+                        }
+                      
+                        @if ((User.FindFirst(ClaimTypes.Role)?.Value == "admin") || (User.FindFirst(ClaimTypes.Role)?.Value == "lab"))
+                        {
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-tint"></i> <span>Pathology </span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-action="SampleRegistration" asp-controller="Pathology" asp-area="Staff">Sample Registration</a></li>
+                                    <li><a asp-action="ResultEntry" asp-controller="Pathology" asp-area="Staff">Result Entry</a></li>
+                                    <li><a asp-action="LabResults" asp-controller="Pathology" asp-area="Staff">Lab Records</a></li>
+
+                                </ul>
+                            </li>
+                        }
+                        @if (User.FindFirst(ClaimTypes.Role)?.Value == "admin")
+                        {
+                            <li class="menu-title">SetUp</li>
+                            <li class="submenu">
+                                <a href="#"><i class="fa fa-laptop"></i> <span> Components</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-action="DoctorSetup" asp-controller="Components" asp-area="Staff">Doctor SetUp</a></li>
+                                    <li><a asp-action="BedSetup" asp-controller="Components" asp-area="Staff">Bed SetUp</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a asp-action="HospitalTestSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-list"></i> <span>Test Setup</span></a>
+                            </li>
+                            <li><a asp-action="ParameterSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-exchange"></i><span>LabParameter-Mapping</span></a></li>
+                            <li><a asp-action="UserSetup" asp-controller="Components" asp-area="Staff"><i class="fa fa-user-plus"></i><span>User Setup</span></a></li>
+                        }
+                      
+
                         <li class="menu-title">Elements</li>
                         <li >
                             <a asp-action="Doctors" asp-controller="Element" asp-area="Staff"><i class="fa fa-user-md"></i> <span>Doctors</span></a>

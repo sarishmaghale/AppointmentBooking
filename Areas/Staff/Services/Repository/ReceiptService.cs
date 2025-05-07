@@ -385,12 +385,31 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
         }
         public async Task<List<object>> GetSalesData()
         {
-            var daysLimit = DateTime.Today.AddDays(-15);
+            var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             List<object> data = new List<object>();
-            List<string?> labels =await db.TblCashReceipts.Where(x=> x.CreatedDate>=daysLimit).GroupBy(x=> x.CreatedDate).Select(g => g.Key.ToString()).ToListAsync();
+
+            // Get the list of dates from the start of the month to today
+            List<DateTime> dates = Enumerable.Range(0, (DateTime.Today - startOfMonth).Days + 1)
+                                             .Select(offset => startOfMonth.AddDays(offset))
+                                             .ToList();
+
+            // Get the labels for these dates
+            List<string> labels = dates.Select(date => date.ToString("MM-dd")).ToList();
             data.Add(labels);
-            List<double> SalesNumber = db.TblCashReceipts.Where(x=> x.CreatedDate>=daysLimit).GroupBy(x=> x.CreatedDate).Select(g => g.Sum(y=> y.TotalAmount?? 0)).ToList();
-            data.Add(SalesNumber);
+
+            // Get the sales numbers for these dates
+            var rawData = await db.TblCashReceipts
+                .Where(x => x.CreatedDate >= startOfMonth && x.CreatedDate <= DateTime.Today)
+                .GroupBy(x => x.CreatedDate)
+                .Select(g => new { CreatedDate = g.Key, Total = g.Sum(y => y.TotalAmount ?? 0) })
+                .ToListAsync();
+
+            // Prepare the sales numbers to match the list of dates
+            List<double> salesNumbersPerDay = dates.Select(date =>
+                rawData.FirstOrDefault(s => s.CreatedDate == date)?.Total ?? 0
+            ).ToList();
+            data.Add(salesNumbersPerDay);
+
             return data;
         }
     }

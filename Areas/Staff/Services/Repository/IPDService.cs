@@ -92,7 +92,6 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
         }
 
 
-
         public async Task<IEnumerable<IPDViewModel>> GetIPDBedValues(int BedTypeId)
         {
             var result = await (from bedCategory in db.TblIpdbedTypes
@@ -149,16 +148,18 @@ namespace AppointmentBooking.Areas.Staff.Services.Repository
                 Count = g.Count()
             }
             */
-            var daysLimit = DateTime.Today.AddDays(-15);
-            var last30Days = Enumerable.Range(0, (DateTime.Today - daysLimit).Days + 1)
-                                       .Select(offset => daysLimit.AddDays(offset))
-                                       .ToList();
+            var startOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            var endOfMonth = DateTime.Today;
+
+            var daysInMonth = Enumerable.Range(0, (endOfMonth - startOfMonth).Days + 1)
+                                        .Select(offset => startOfMonth.AddDays(offset))
+                                        .ToList();
             var rawData = await db.TblIpdregistrations
-                      .Where(x => x.CreatedDate >= daysLimit)
-                      .GroupBy(x => x.CreatedDate)
-                      .Select(g => new { CreatedDate = g.Key, Count = g.Count() })
-                      .ToListAsync();
-            var result = last30Days.Select(date => new IPDViewModel
+                .Where(x => x.CreatedDate >= startOfMonth && x.CreatedDate <= endOfMonth)
+                .GroupBy(x => x.CreatedDate) // Group by date only, not time
+                .Select(g => new { CreatedDate = g.Key, Count = g.Count() })
+                .ToListAsync();
+            var result = daysInMonth.Select(date => new IPDViewModel
             {
                 CreatedDate = date,
                 Count = rawData.FirstOrDefault(d => d.CreatedDate == date)?.Count ?? 0

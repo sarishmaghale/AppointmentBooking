@@ -31,6 +31,7 @@ namespace AppointmentBooking.Data
         public virtual DbSet<TblLabParameterSetup> TblLabParameterSetups { get; set; } = null!;
         public virtual DbSet<TblOpdbooking> TblOpdbookings { get; set; } = null!;
         public virtual DbSet<TblOpdregistration> TblOpdregistrations { get; set; } = null!;
+        public virtual DbSet<TblPatientFeedback> TblPatientFeedbacks { get; set; } = null!;
         public virtual DbSet<TblPatientRegistration> TblPatientRegistrations { get; set; } = null!;
         public virtual DbSet<TblReceiptDetail> TblReceiptDetails { get; set; } = null!;
         public virtual DbSet<TblResultEntry> TblResultEntries { get; set; } = null!;
@@ -46,7 +47,7 @@ namespace AppointmentBooking.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=DESKTOP-772ROET; database=HospitalManagementDb; trusted_connection=true;");
+                optionsBuilder.UseSqlServer("server=DESKTOP-UJBUJDU; database=HospitalManagementDb; trusted_connection=true;");
             }
         }
 
@@ -470,6 +471,19 @@ namespace AppointmentBooking.Data
                     .WithMany(p => p.TblOpdregistrations)
                     .HasForeignKey(d => d.Uhid)
                     .HasConstraintName("FK__tblOPDRegi__UHID__74AE54BC");
+            });
+
+            modelBuilder.Entity<TblPatientFeedback>(entity =>
+            {
+                entity.ToTable("tblPatientFeedback");
+
+                entity.Property(e => e.FeedbackText).HasMaxLength(100);
+
+                entity.Property(e => e.PatientName).HasMaxLength(50);
+
+                entity.Property(e => e.SubmittedDate).HasColumnType("date");
+
+                entity.Property(e => e.Uhid).HasColumnType("decimal(18, 0)");
             });
 
             modelBuilder.Entity<TblPatientRegistration>(entity =>

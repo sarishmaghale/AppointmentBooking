@@ -1,0 +1,170 @@
+﻿
+@inject CommonUtility utils
+@model PatientViewModel
+<section class="slider">
+			<div class="hero-slider">
+				<!-- Start Single Slider -->
+		<div class="single-slider" @* style="/* background-image: url('/assets/img/slider.jpg'); */" *@>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-7">
+								<div class="text">
+									<h1>We Provide <span>Medical</span> Services That You Can <span>Trust!</span></h1>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed nisl pellentesque, faucibus libero eu, gravida quam. </p>
+									<div class="button">
+										<button class="btn OpenUhidForm">Get Recommended Doctors</button>
+										<a href="#" class="btn" style="background-color:#FFCC00;color:black;border;solid"> Rating: @await utils.GetHospitalRating()/5</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+
+<div id="UHidForm" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-custom modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form asp-action="DoctorRecommendation" asp-controller="Appointment" method="post">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="Uhid" class="col-form-label ">UHID:</label>
+						<input type="number" class="form-control Uhid" asp-for="Uhid" required>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Done</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+<div id="fun-facts" class="fun-facts section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-6 col-12">
+				<!-- Start Single Fun -->
+				<div class="single-fun">
+					<i class="fa fa-bed"></i>
+					<div class="content">
+						<span class="counter">@utils.GetBedCount()</span>
+						<p>Hospital Beds</p>
+					</div>
+				</div>
+				<!-- End Single Fun -->
+			</div>
+			<div class="col-lg-3 col-md-6 col-12">
+				<!-- Start Single Fun -->
+				<div class="single-fun">
+					<i class="fa fa-user"></i>
+					<div class="content">
+						<span class="counter">@utils.GetDoctorCount()</span>
+						<p>Specialist Doctors</p>
+					</div>
+				</div>
+				<!-- End Single Fun -->
+			</div>
+			<div class="col-lg-3 col-md-6 col-12">
+				<!-- Start Single Fun -->
+				<div class="single-fun">
+					<i class="fa fa-user"></i>
+					<div class="content">
+						<span class="counter">@utils.GetDepartmentCount()</span>
+						<p>Departments</p>
+					</div>
+				</div>
+				<!-- End Single Fun -->
+			</div>
+			<div class="col-lg-3 col-md-6 col-12">
+				<!-- Start Single Fun -->
+				<div class="single-fun">
+					<i class="fa fa-wrench"></i>
+					<div class="content">
+						<span class="counter">XX</span>
+						<p>Years of Experience</p>
+					</div>
+				</div>
+				<!-- End Single Fun -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-11">
+		<div class="widget new-comment clearfix">
+			<h3>Leave Comment</h3>
+			<form asp-action="PatientFeedback" asp-controller="Appointment" method="post">
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label>Name <span class="text-red">*</span></label>
+							<input type="text" class="form-control" asp-for="PatientName">
+						</div>
+						<div class="form-group">
+							<label>Comments</label>
+							<textarea rows="4" class="form-control" asp-for="Remarks"></textarea>
+						</div>
+						<div class="comment-submit">
+							<input type="hidden" asp-for="SearchDate" value="@utils.GetTodayDate()" />
+							<input type="submit" value="Submit" class="btn">
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="blog-view">
+			<div class="widget blog-comments clearfix">
+				<h3>Comments</h3>
+				<ul class="comments-list">
+				@if (Model != null)
+				{
+					if (Model.Feedbacks != null)
+					{
+						foreach(var item in Model.Feedbacks)
+						{
+							<li>
+						<div class="comment">
+							<div class="comment-author">
+								<img class="avatar" alt="" src="~/assets/img/user.jpg">
+							</div>
+							<div class="comment-block">
+								<span class="comment-by">
+									<span class="blog-author-name">@item.PatientName</span>
+								</span>
+								<p>@item.FeedbackText</p>
+								<span class="blog-date">@item.SubmittedDate.Value.ToShortDateString()</span>
+							</div>
+						</div>
+				</li>
+						}
+					}
+				}
+			</ul>
+			</div>
+			
+
+
+			</div>
+			</div>
+			</div>
+
+@section Scripts{
+	<script>
+		$(document).on('click', '.OpenUhidForm', function () {
+			$(".Uhid").val("");
+			$(".LabNo").val("");
+			$("#UHidForm").modal('show');
+			$('.modal-backdrop').css('background', '#00000073');
+
+		})
+	</script>
+}

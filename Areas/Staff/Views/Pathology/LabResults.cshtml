@@ -72,8 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
+                        <table class="table-responsive">
                                 <thead>
                                     <tr>
 
@@ -87,8 +86,8 @@
                                 </thead>
                                 <tbody class="TestBody">
                                 </tbody>
-                            </table>
-                        </div>
+                           
+                        </table>
 
                         <div class="text-right">
                             
@@ -188,12 +187,13 @@
                     type: "GET",
                     data: { LabNo: LabNo, Uhid: Uhid },
                     success: function (data) {
-                        console.log(data);
+                        
                         tableBody.empty();
                         $(".Uhid").val(data.uhid);
                         $(".PatientName").val(data.patientName);
                         $(".LabNo").val(data.labNo);
                         $(".AgeSex").val(data.age + "/" + data.gender);
+                      
                         $.each(data.testList, function (testIndex, items) {
                             var rows = '<tr><td colspan=5>' + items.testName +
                                 '</td></tr>';

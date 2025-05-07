@@ -94,7 +94,7 @@
                                 <tr>
 
                                     <td>
-                                        TEST NAME
+                                        TEST NAME :
                                     </td>
                                 </tr>
                             </thead>
@@ -151,9 +151,9 @@
                             $(".PatientName").val(data.patientName);
                         $("#SrNo").val(data.srNo);
                         $(".AgeSex").val(data.age+"/"+data.gender);
-                            var regDate = new Date(data.createdDate).toISOString().split('T')[0];
+                       var regDate = new Date(data.createdDate).toISOString().split('T')[0];
                         $(".Date").val(regDate);
-                            $.each(data.receiptDetails, function (index, item) {
+                            $.each(data.testList, function (index, item) {
                                 var row = '<tr>' +
                                     '<td>' + item.testName +
                                     '<input type = "hidden" name = "ReceiptDetails[' + index + '].TestName" value = "' + item.testName + '" /> </td>' +

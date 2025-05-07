@@ -2,6 +2,7 @@
 using AppointmentBooking.Data;
 using AppointmentBooking.Models;
 using AppointmentBooking.Services.Interface;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentBooking.Services.Repository
@@ -87,7 +88,7 @@ namespace AppointmentBooking.Services.Repository
                         TblTransactionStatus transactionModel = new TblTransactionStatus()
                         {
                             OpdbookingId = model.OpdbookingId,
-                            Amount = double.Parse(model.amount),
+                            Amount =Convert.ToDouble(model.amount),
                             RefId = model.refid,
 
                         };
@@ -202,11 +203,68 @@ namespace AppointmentBooking.Services.Repository
         public async Task<double> GetDoctorFees(int DoctorId, int FeeTypeId)
         {
             var data = await db.TblDoctorFeeTypeSetups.Where(x => x.DoctorId == DoctorId && x.FeeTypeId == FeeTypeId).FirstOrDefaultAsync();
-            double amount = (double)((data != null) ? data.Fee : 0);
+            double amount = Convert.ToDouble((data != null) ? data.Fee : 0);
             return amount;
         }
 
-     
+		public Task<PatientViewModel> GetRecommendedDoctors(int Uhid)
+		{
+			throw new NotImplementedException();
+		}
+		public async Task<IEnumerable<PatientViewModel>> GetValuesOnDepartment(int DepartmentId)
+		{
+			var result = await (from doctors in db.TblDoctorSetups
+								join dept in db.TblDepartments
+								on doctors.DepartmentId equals dept.DepartmentId
+								where doctors.DepartmentId == DepartmentId
+								select new PatientViewModel
+								{
+									DoctorId = doctors.DoctorId,
+									DoctorName = doctors.DoctorName,
+									RoomNo = dept.RoomNo,
+									FloorName = dept.FloorName,
+								}).ToListAsync();
 
-    }
+			return result;
+
+		}
+
+		public async Task<bool> AddPatientFeedback(PatientViewModel model)
+		{
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    var data = new TblPatientFeedback()
+                    {
+                        PatientName = model.PatientName,
+                        FeedbackText = model.Remarks,
+                        SubmittedDate = model.SearchDate,
+                    };
+                    await db.TblPatientFeedbacks.AddAsync(data);
+                    await db.SaveChangesAsync();
+					await transaction.CommitAsync();
+					return true;
+                   
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+            }
+		}
+
+		public async Task<IEnumerable<PatientFeedbackViewModel>> GetAllPatientFeedback()
+		{
+            var data = await db.TblPatientFeedbacks.Select(x => new PatientFeedbackViewModel()
+            {
+                PatientName = x.PatientName,
+                FeedbackText = x.FeedbackText,
+                SubmittedDate = x.SubmittedDate,
+            }).OrderByDescending(x=>x.SubmittedDate).ToListAsync();
+            return data;
+		}
+	}
 }

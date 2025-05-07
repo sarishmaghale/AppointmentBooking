@@ -11,5 +11,6 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
         public Task<List<OPDViewModel>> GetFilterOPDReports(OPDViewModel model);
         public Task<OPDViewModel> GetPatientsByOPD(int OPDNo);
         public Task<List<OPDViewModel>> GetOpdPatientCount();
+
     }
 }

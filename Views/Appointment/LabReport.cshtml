@@ -1,8 +1,7 @@
 ﻿@model PathologyViewModel 
 
-<div class="page-wrapper">
-    <div class="content">
-        <div class="row mb-5">
+<div class="content mt-5 mr-5 ml-5 pt-2">
+        <div class="row mb-3">
             <div class="col-12">
                 <button class="btn btn-primary float-right OpenForm" type="button">GetLabReport</button>
 
@@ -22,6 +21,7 @@
                     <div class="col-6 m-b-20">
                         <div class="invoices-details">
                             <ul class="list-unstyled ">
+                                <li><strong>UHID:</strong> <span>@Model.Uhid</span></li>
                                 <li><strong>Patient name:</strong> <span>@Model.PatientName</span></li>
                                 <li><strong>Address: </strong><span>@Model.Address</span></li>
                                 <li><strong>Age/Sex:</strong> <span>@Model.Age/ @Model.Gender</span></li>
@@ -34,11 +34,11 @@
                             <h3 class="text-uppercase">LabNo #@Model.LabNo</h3>
                             <ul class="list-unstyled">
                                 <li>
-                                    Date: <span>
-                                        @*                             @if (@Model.CreatedDate != null)
+                                   Registered Date: <span>
+                                      @if (Model.CreatedDate != null)
                                     {
                                     @Model.CreatedDate.Value.ToShortDateString()
-                                    } *@
+                                    }
                                     </span>
                                 </li>
                                 <li>Hospital</li>
@@ -99,7 +99,7 @@
                 </div>
             </div>
         }
-    </div>
+  
 </div>
 <div id="LabReportForm" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-custom modal-dialog-centered" role="document">

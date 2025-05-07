@@ -5,6 +5,6 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
     public interface IPatientHistoryRepository
     {
         public Task<List<PatientHistoryItem>> GetPatientHistory(decimal Uhid,DateTime?targetDate);
-
+        public Task<List<DoctorSetupViewModel>> GetRecommendedDoctors(decimal Uhid);
     }
 }

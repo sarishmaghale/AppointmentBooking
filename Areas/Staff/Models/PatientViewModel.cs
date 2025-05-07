@@ -58,8 +58,10 @@ namespace AppointmentBooking.Areas.Staff.Models
         public int? RoomNo { get; set; }
         public string? FloorName { get; set; }
         public DateTime? SearchDate { get; set; }
-        public virtual TblDepartment? Departments { get; set; }
+		
+		public virtual TblDepartment? Departments { get; set; }
         public List<PatientHistoryItem>? HistoryItems { get; set; }
+        public IEnumerable<PatientFeedbackViewModel>? Feedbacks { get; set; }
     }
 
     public class PatientHistoryItem
@@ -71,5 +73,14 @@ namespace AppointmentBooking.Areas.Staff.Models
         public int? RecordNo { get; set; }
         public int? TypeId { get; set; }
         public double? BillAmount { get; set; }
+        public int? Department { get; set; }
+    }
+    public class PatientFeedbackViewModel
+    {
+   
+        public string? FeedbackText { get; set; }
+        public decimal? Uhid { get; set; }
+        public string? PatientName { get; set; }
+        public DateTime? SubmittedDate { get; set; }
     }
 }

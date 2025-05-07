@@ -60,7 +60,7 @@
                     <div class="card-body">
                         <div class="chart-title">
                             <h4>Billings Total</h4>
-                            <span class="float-right"><i class="fa fa-caret-up" aria-hidden="true"></i> In recent 15days</span>
+                            <span class="float-right"><i class="fa fa-caret-up" aria-hidden="true"></i> In recent days this month</span>
                         </div>
                         <canvas id="linegraph"></canvas>
                     </div>
@@ -76,6 +76,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+                
+                <div class="col-12 col-md-6 col-lg-2 col-xl-6">
+                    <div class="form-group form-focus">
+                        <label class="focus-label">From</label>
+                        <input type="date"id="targetDate" class="form-control floating">
+                    </div>
+                </div>
+    
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-12">
+                    <button class="btn btn-success btn-block btnPatientForecast"> Search </button>
+                </div>
+           
         </div>
         </div>
         </div>
@@ -121,6 +136,8 @@
                             scales: {
                                 y: {
                                     beginAtZero: true
+
+                                   
                                 }
                             }
                         }
@@ -136,26 +153,35 @@
                 success: OnSuccess,
             });
             function OnSuccess(data) {
-                const barChart = document.getElementById("linegraph");               
+                const barChart = document.getElementById("linegraph");
                 var _data = data;
                 var _labels = _data[0];
                 var _CharData = _data[1];
                 var colors = ["#86C5D8", "#86C5D8", "#86C5D8"];
-                new Chart(barChart,
-                    {
-                        type: 'line',
-                        data: {
-                            labels: _labels,
-                            datasets: [{
-                                label:'Income in Rs',
-                                fill: false,
-                                data: _CharData,
-                                borderColor: 'rgb(75, 192, 192)',
-                                tension: 0.1
-                            }]
+
+                new Chart(barChart, {
+                    type: 'line',
+                    data: {
+                        labels: _labels,
+                        datasets: [{
+                            label: 'Income in Rs',
+                            fill: false,
+                            data: _CharData,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true // Ensure the y-axis starts from 0
+                            }
                         }
-                    });
+                    }
+                });
             }
+
+            
         });
     </script>
     @{

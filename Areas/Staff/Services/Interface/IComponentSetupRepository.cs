@@ -7,6 +7,8 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
         public Task<int> AddDoctor(DoctorSetupViewModel model);
         public Task<bool> AddTestGroup(TestSetupViewModel model);
         public Task<bool> AddTest(TestSetupViewModel model);
+     
+
         public Task<DoctorSetupViewModel> GetDoctorInfo(int DoctorId);
         public Task<bool> UpdateDoctorInfo(DoctorSetupViewModel model);
         public Task<bool> AddBedCategory(BedSetupViewModel model);
@@ -15,5 +17,7 @@ namespace AppointmentBooking.Areas.Staff.Services.Interface
         public Task<bool> AddNewLabParameter(ParameterSetupViewModel model);
         public Task<bool> AddParameterTestMapping(ParameterSetupViewModel model);
         public Task<bool> CheckParameterTestMapping(ParameterSetupViewModel model);
+        public Task<bool> AddNewUser(AccountViewModel model);
+        public Task<IEnumerable<AccountViewModel>> GetUserList();
     }
 }

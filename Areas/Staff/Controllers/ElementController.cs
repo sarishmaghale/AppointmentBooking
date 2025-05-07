@@ -37,15 +37,24 @@ namespace AppointmentBooking.Areas.Staff.Controllers
             {
                 ModelState.AddModelError("", "Please enter a valid Patient ID.");
                 return View("PatientHistory");
-            }
+            }          
             var history = await historyProvider.GetPatientHistory(Convert.ToDecimal(model.Uhid),model.SearchDate);
-            var patientData = await patientProvider.GetPatientsByUhid(Convert.ToDecimal(model.Uhid));
-            var historyModel = new PatientViewModel()
+            if (history != null)
             {
-                PatientName =patientData.FirstName+" "+patientData.LastName,
-            };
-            historyModel.HistoryItems = history;
-            return View(historyModel);
+                var patientData = await patientProvider.GetPatientsByUhid(Convert.ToDecimal(model.Uhid));
+                if (patientData != null)
+                {
+                    var historyModel = new PatientViewModel()
+                    {
+                        PatientName = patientData.FirstName + " " + patientData.LastName,
+
+                    };
+                    historyModel.HistoryItems = history;
+                    return View(historyModel);
+                }
+            }
+         
+            return View("PatientHistory");
         }
     
         public async Task<IActionResult> PatientList()
