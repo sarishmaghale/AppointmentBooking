@@ -67,7 +67,7 @@ AppointmentBooking/
 ├── wwwroot/                   # Static files
 ├── program.cs                 # Configuration & DI setup
 └── ...
-
+```
 ## 🖼️ Project Screenshots  
 
 ### 🧾 OPD Booking (User Panel with Online Payment Integration)
