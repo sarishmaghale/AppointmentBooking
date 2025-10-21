@@ -32,6 +32,9 @@ NOTE: if you don't have the EF CLI tools installed, run:
 dotnet tool install --global dotnet -ef
 7.  **Insert Default Admin Credentials (Manually)**
 8.  **Debug and Run the project**
+
+You can create a new database manually or import one (.dacpac), but ensure you update the DefaultConnection String with the correct server name.
+
 ```
 
 ##  Key Features
