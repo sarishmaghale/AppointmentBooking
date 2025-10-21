@@ -232,13 +232,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\fun-bg.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"19771"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 07:46:41 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"19771"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/fun-bg.q35i4rbj7e.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\fun-bg.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"q35i4rbj7e"},{"Name":"integrity","Value":"sha256-VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc="},{"Name":"label","Value":"_content/AppointmentBooking/assets/img/fun-bg.jpg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"19771"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 07:46:41 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"19771"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022VioG2vl28LYuPgfwV12OK31mveoaG7JodNoqG0TYABc=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/logo-dark.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\logo-dark.png'))</AssetFile>
@@ -304,25 +304,25 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\slider.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"4fqeif0u5e"},{"Name":"integrity","Value":"sha256-wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ="},{"Name":"label","Value":"_content/AppointmentBooking/assets/img/slider.jpg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"34098"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 07:35:08 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"34098"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/slider.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\slider.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"34098"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 07:35:08 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"34098"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022wBTwbOk5on7CE7Xydx6NstFXnz5ngOWQLDA6O8DEybQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/slider2.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\slider2.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"46523"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ=\u0022"},{"Name":"Last-Modified","Value":"Mon, 12 Oct 2020 09:52:13 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"46523"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/slider2.z11jmvaz64.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\slider2.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"z11jmvaz64"},{"Name":"integrity","Value":"sha256-F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ="},{"Name":"label","Value":"_content/AppointmentBooking/assets/img/slider2.jpg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"46523"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ=\u0022"},{"Name":"Last-Modified","Value":"Mon, 12 Oct 2020 09:52:13 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"46523"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022F576dVo6czAQlev/N67HMBfsJSihQ88U5p0X3x9RwXQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/assets/img/user.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\assets\img\user.jpg'))</AssetFile>
@@ -736,13 +736,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\aboutus.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5250"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 08:08:01 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5250"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/css/aboutus.d0r9aw2n1o.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\aboutus.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"d0r9aw2n1o"},{"Name":"integrity","Value":"sha256-A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA="},{"Name":"label","Value":"_content/AppointmentBooking/css/aboutus.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5250"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA=\u0022"},{"Name":"Last-Modified","Value":"Tue, 23 Jul 2024 08:08:01 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5250"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022A2VNpC97S5aIBAnDCanGKeVS6qqwkqAN0VdnukvCJpA=\u0022"},{"Name":"Last-Modified","Value":"Wed, 07 May 2025 11:29:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/AppointmentBooking/css/site.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>

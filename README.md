@@ -64,3 +64,44 @@ AppointmentBooking/
 ├── wwwroot/                   # Static files
 ├── program.cs                 # Configuration & DI setup
 └── ...
+
+## 🖼️ Project Screenshots  
+
+### 🧾 OPD Booking (User Panel with Online Payment Integration)
+<p align="center">
+
+  <img src="screenshots/Hospital1.png" alt="OPD Booking Page" width="700">
+</p>
+
+---
+
+### 💵 Cash Receipt (Billing)  
+Data collected systematically for future reference.
+<p align="center">
+  <img src="screenshots/Hospital2.png" alt="Cash Receipt Billing" width="700">
+</p>
+
+---
+
+### 🏨 IPD Status Management  
+<p align="center">
+  <img src="screenshots/Hospital3.png" alt="IPD Status Management" width="700">
+</p>
+
+---
+
+### 🧪 Lab Result Entry  
+<p align="center">
+  <img src="screenshots/Hospital4.png" alt="Lab Result Entry" width="700">
+</p>
+
+---
+
+### 👨‍⚕️ Patient History View  
+When entering patient ID, their up-to-date history is shown with dates and consultant doctor.
+<p align="center">
+  <img src="screenshots/Hospital5.png" alt="Patient History View 1" width="340">
+  <img src="screenshots/Hospital6.png" alt="Patient History View 2" width="340">
+</p>
+
+---
