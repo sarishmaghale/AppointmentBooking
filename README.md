@@ -1,7 +1,11 @@
 **AppointmentBooking** is a hospital management system built using **ASP.NET Core**, designed to streamline and manage key hospital operations such as **OPD/IPD bookings**, **patient billing**, **lab data entry**, and **comprehensive patient history tracking**. It enables hospital staff to efficiently manage various departments and allows registered patients to book OPD appointments through an online payment gateway.
 
 ## 🖼️ Project Screenshots  
+### Dashboard
+<p align="center">
 
+  <img src="screenshots/hospitalDashboard.png" alt="OPD Booking Page" width="700">
+</p>
 ### 🧾 OPD Booking (User Panel with Online Payment Integration)
 <p align="center">
 
